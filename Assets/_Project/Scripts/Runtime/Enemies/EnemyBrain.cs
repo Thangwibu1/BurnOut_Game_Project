@@ -18,7 +18,9 @@ namespace BurnOut.Enemies
         [SerializeField] private float attackCooldown = 1f;
         [SerializeField] private GameObject energyProjectilePrefab;
         [SerializeField] private float projectileRange = 5.5f;
-        [SerializeField] private float projectileCooldown = 4.5f;
+        // Keep ranged pressure readable: one deliberate shot every three seconds,
+        // instead of a stream that makes dodging feel random.
+        [SerializeField] private float projectileCooldown = 3f;
         private Transform player;
         private EnemyHealth health;
         private float direction = 1f;
