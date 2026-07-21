@@ -13,7 +13,9 @@ namespace BurnOut.Player
         [SerializeField] private Sprite[] jumpFrames;
         [SerializeField] private Sprite[] lowSanityFrames;
         [SerializeField] private Sprite[] attackFrames;
-        [SerializeField] private Sprite[] skillFrames;
+        [SerializeField] private Sprite[] auraFrames;
+        [SerializeField] private Sprite[] rushFrames;
+        [SerializeField] private Sprite[] shockwaveFrames;
         [SerializeField] private Sprite[] dashFrames;
         [SerializeField] private Sprite[] deathFrames;
         [SerializeField] private float frameRate = 11f;
@@ -37,12 +39,22 @@ namespace BurnOut.Player
         {
             var frames = !health.IsAlive ? deathFrames
                 : movement.IsDashing ? dashFrames
-                : combat.IsUsingSkill ? skillFrames
+                : combat.IsUsingSkill ? SkillFrames(combat.ActiveSkill)
                 : combat.IsAttacking ? attackFrames
                 : !movement.IsGrounded ? jumpFrames
                 : sanity.IsLow ? lowSanityFrames
                 : Mathf.Abs(movement.HorizontalSpeed) > .15f ? runFrames : idleFrames;
             Play(frames);
+        }
+
+        private Sprite[] SkillFrames(PlayerCombat.SkillId skill)
+        {
+            return skill switch
+            {
+                PlayerCombat.SkillId.Aura => auraFrames != null && auraFrames.Length > 0 ? auraFrames : attackFrames,
+                PlayerCombat.SkillId.Shockwave => shockwaveFrames != null && shockwaveFrames.Length > 0 ? shockwaveFrames : attackFrames,
+                _ => rushFrames != null && rushFrames.Length > 0 ? rushFrames : attackFrames
+            };
         }
 
         private void Play(Sprite[] frames)

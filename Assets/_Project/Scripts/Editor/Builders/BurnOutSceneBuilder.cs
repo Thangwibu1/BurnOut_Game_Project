@@ -54,47 +54,52 @@ namespace BurnOut.Editor
             systems.transform.GetChild(systems.transform.childCount - 1).gameObject.AddComponent<CheckpointManager>();
 
             var backgrounds = Parent("Backgrounds");
-            // These paintings are full frames rather than tileable strips.  Keep them camera centred
-            // so travelling through the level cannot reveal an empty side of the image.
-            CreateBackground("BG_Far", "Assets/_Project/Art/Backgrounds/BG_Far_BurnoutRealm.png", Vector3.zero, -100, backgrounds.transform, 1.32f, Color.white);
-            CreateBackground("BG_Mid", "Assets/_Project/Art/Backgrounds/BG_Mid_Ruins.png", new Vector3(.35f, -.1f, 0f), -90, backgrounds.transform, 1.36f, new Color(1f, 1f, 1f, .35f));
+            // Four painted interiors placed edge to edge as fixed world backdrops — travelling right walks
+            // Lily through four rooms of a derelict multi-storey building. Platforms below echo each room's floors.
+            var bgTint = new Color(.88f, .9f, 1f);
+            CreateZoneBackground("BG_Zone1_ArrivalHall", "Assets/_Project/Art/Backgrounds/BG_Scene1.png", 13.5f, 4f, 53f, backgrounds.transform, bgTint);
+            CreateZoneBackground("BG_Zone2_Atrium", "Assets/_Project/Art/Backgrounds/BG_Scene2.png", 60f, 4f, 40f, backgrounds.transform, bgTint);
+            CreateZoneBackground("BG_Zone3_Corridor", "Assets/_Project/Art/Backgrounds/BG_Scene3.png", 100f, 4f, 40f, backgrounds.transform, bgTint);
+            CreateZoneBackground("BG_Zone4_Catacomb", "Assets/_Project/Art/Backgrounds/BG_Scene4.png", 145f, 4f, 50f, backgrounds.transform, bgTint);
             var environment = Parent("Environment"); var groundParent = Parent("Ground", environment.transform); var platforms = Parent("Platforms", environment.transform);
-            // A deliberate five-beat route: learn movement -> earn key -> breach gate -> survive encounters -> boss/exit.
+            // Solid landing floors are the safe beats; the connectors between them are staircases with real
+            // gaps. A missed jump drops Lily off-screen and respawns her at the last checkpoint — a setback, not a soft-lock.
             CreateGround("ArrivalFloor", new Vector2(1f, -1f), new Vector2(10f, 1f), groundParent.transform);
-            // These small joins keep the route continuous. Platforms still reward jumping,
-            // but a missed jump never drops Lily into an unexplained void.
-            CreateGround("SafePath01", new Vector2(6.55f, -1f), new Vector2(1.1f, 1f), groundParent.transform);
-            CreateStepIsland("LessonStep01", new Vector2(9f, -.3f), platforms.transform);
-            CreateGround("SafePath02", new Vector2(12f, -1f), new Vector2(2.25f, 1f), groundParent.transform);
-            CreateStepIsland("LessonStep02", new Vector2(15f, 1.25f), platforms.transform);
-            CreateGround("SafePath03", new Vector2(17.45f, -1f), new Vector2(1.1f, 1f), groundParent.transform);
             CreateGround("ReflectionFloor", new Vector2(23f, -1f), new Vector2(10f, 1f), groundParent.transform);
-            CreateStepIsland("KeyLedge", new Vector2(29f, .65f), platforms.transform);
-            CreateGround("SafePath04", new Vector2(32f, -1f), new Vector2(2.25f, 1f), groundParent.transform);
-            CreateStepIsland("KeyLedgeHigh", new Vector2(35f, 1.8f), platforms.transform);
             CreateGround("GateHallFloor", new Vector2(43f, -1f), new Vector2(11f, 1f), groundParent.transform);
-            CreateStepIsland("GateHallCover", new Vector2(47f, .15f), platforms.transform);
-            CreateGround("SafePath05", new Vector2(50.45f, -1f), new Vector2(3.1f, 1f), groundParent.transform);
             CreateGround("PressureFloor", new Vector2(60f, -1f), new Vector2(16f, 1f), groundParent.transform);
-            CreateStepIsland("PressureStep01", new Vector2(55f, .25f), platforms.transform);
-            CreateStepIsland("PressureStep02", new Vector2(65f, 1.25f), platforms.transform);
-            CreateStepIsland("PressureBridge", new Vector2(70f, .1f), platforms.transform);
-            CreateGround("SafePath06", new Vector2(73f, -1f), new Vector2(2.1f, 1f), groundParent.transform);
-            CreateGround("RooftopFloor", new Vector2(87f, -1f), new Vector2(26f, 1f), groundParent.transform);
-            CreateStepIsland("RooftopStep01", new Vector2(76f, .35f), platforms.transform);
-            CreateStepIsland("RooftopStep02", new Vector2(87f, 1.55f), platforms.transform);
-            CreateGround("ReliefExitFloor", new Vector2(108f, -1f), new Vector2(16f, 1f), groundParent.transform);
-            CreateStepIsland("ReliefExitStep", new Vector2(101f, .45f), platforms.transform);
-            CreateGround("SafePath07", new Vector2(117f, -1f), new Vector2(2.1f, 1f), groundParent.transform);
-            CreateGround("RecoveryFloor", new Vector2(127f, -1f), new Vector2(18f, 1f), groundParent.transform);
-            CreateStepIsland("RecoveryBridge", new Vector2(117f, .1f), platforms.transform);
-            CreateStepIsland("RecoveryStep01", new Vector2(121f, .2f), platforms.transform);
-            CreateStepIsland("RecoveryStep02", new Vector2(132f, 1.3f), platforms.transform);
-            CreateGround("GardenApproach", new Vector2(149f, -1f), new Vector2(20f, 1f), groundParent.transform);
-            CreateStepIsland("GardenBridge", new Vector2(137.5f, .1f), platforms.transform);
-            CreateStepIsland("GardenStep", new Vector2(143f, .35f), platforms.transform);
-            var hazard = InstantiatePrefab("PF_Hazard_Spikes", "Environment", environment.transform); hazard.transform.position = new Vector3(18.5f, -.28f, 0f);
-            var hazard2 = InstantiatePrefab("PF_Hazard_Spikes", "Environment", environment.transform); hazard2.transform.position = new Vector3(64f, -.28f, 0f);
+            CreateGround("RooftopFloor", new Vector2(89f, -1f), new Vector2(26f, 1f), groundParent.transform);
+            CreateGround("ReliefExitFloor", new Vector2(112f, -1f), new Vector2(14f, 1f), groundParent.transform);
+            CreateGround("RecoveryFloor", new Vector2(132f, -1f), new Vector2(14f, 1f), groundParent.transform);
+            CreateGround("GardenApproach", new Vector2(152f, -1f), new Vector2(16f, 1f), groundParent.transform);
+
+            // Arrival -> Reflection: climb a staircase over an open drop, then descend the far side.
+            CreateStaircase("ClimbA", new Vector2(8.5f, -.1f), 3, 3.2f, 1.15f, platforms.transform);
+            CreateStepIsland("ClimbA_Peak", new Vector2(18f, 2.1f), platforms.transform, 2.2f);
+            CreateStepIsland("ClimbA_Drop", new Vector2(20.5f, .7f), platforms.transform, 2.2f);
+            // Reflection -> GateHall: rising staircase to a high ledge, then step down.
+            CreateStaircase("ClimbB", new Vector2(30f, .1f), 3, 3.4f, 1.2f, platforms.transform);
+            CreateStepIsland("ClimbB_Down", new Vector2(40f, 1.1f), platforms.transform, 2.2f);
+            // GateHall -> Pressure: two quick treads across the gap.
+            CreateStaircase("BridgeC", new Vector2(50.5f, .1f), 2, 2.6f, .0f, platforms.transform, 2f);
+            // Pressure -> Rooftop: descend-then-ascend staircase over a spike gap.
+            CreateStaircase("StairD", new Vector2(70.5f, .4f), 3, 3.2f, .55f, platforms.transform);
+            // Rooftop -> ReliefExit: short hop across.
+            CreateStepIsland("BridgeE", new Vector2(103.5f, .3f), platforms.transform, 2.2f);
+            // ReliefExit -> Recovery: descending staircase.
+            CreateStaircase("StairF", new Vector2(120.5f, .8f), 3, 3.0f, -.35f, platforms.transform);
+            // Recovery -> Garden: a final demanding climb-and-drop to the gate.
+            CreateStaircase("ClimbG", new Vector2(140.5f, .3f), 2, 3.4f, 1.25f, platforms.transform, 2f);
+            CreateStepIsland("ClimbG_Drop", new Vector2(148f, .8f), platforms.transform, 2.2f);
+            // Optional high balconies — reward exploration with sanity orbs and a breather route.
+            CreateStepIsland("Zone1Balcony", new Vector2(24f, 3.4f), platforms.transform);
+            CreateStepIsland("Zone2Balcony", new Vector2(60f, 3.3f), platforms.transform);
+            CreateStepIsland("Zone3Balcony", new Vector2(97f, 3.1f), platforms.transform);
+            CreateStepIsland("Zone4Balcony", new Vector2(132f, 3.2f), platforms.transform);
+            // Spikes on the solid floors force well-timed jumps; the staircase gaps do the rest.
+            var hazard = InstantiatePrefab("PF_Hazard_Spikes", "Environment", environment.transform); hazard.transform.position = new Vector3(25f, -.28f, 0f);
+            var hazard2 = InstantiatePrefab("PF_Hazard_Spikes", "Environment", environment.transform); hazard2.transform.position = new Vector3(60f, -.28f, 0f);
+            var hazard3 = InstantiatePrefab("PF_Hazard_Spikes", "Environment", environment.transform); hazard3.transform.position = new Vector3(133f, -.28f, 0f);
 
             // Depth + mood: slow drifting motes across the whole level.
             var atmosphere = new GameObject("AtmosphereFX"); atmosphere.transform.SetParent(backgrounds.transform); atmosphere.AddComponent<BurnOut.World.AtmosphereFX>();
@@ -112,11 +117,10 @@ namespace BurnOut.Editor
             // Checkpoints: one mid-route and one just before the boss arena so death is a setback, not a restart.
             var checkpointMid = InstantiatePrefab("PF_Checkpoint", "Environment", interactables.transform); checkpointMid.transform.position = new Vector3(43f, 0f, 0f);
             var checkpointBoss = InstantiatePrefab("PF_Checkpoint", "Environment", interactables.transform); checkpointBoss.transform.position = new Vector3(84f, 0f, 0f);
-            var key = InstantiatePrefab("PF_Key", "Items", interactables.transform); key.transform.position = new Vector3(35f, 3.6f, 0f);
-            var door = InstantiatePrefab("PF_LockedDoor", "Environment", interactables.transform); door.transform.position = new Vector3(153f, .85f, 0f);
             var sanity = InstantiatePrefab("PF_SanityOrb", "Items", interactables.transform); sanity.transform.position = new Vector3(15f, 3.25f, 0f);
             var health = InstantiatePrefab("PF_HealthPickup", "Items", interactables.transform); health.transform.position = new Vector3(24f, .35f, 0f);
-            var exit = InstantiatePrefab("PF_LevelExit", "Environment", interactables.transform); exit.transform.position = new Vector3(158f, .85f, 0f);
+            // Single gate: carrying the boss's mental fragment through it wins the level immediately.
+            var exit = InstantiatePrefab("PF_LevelExit", "Environment", interactables.transform); exit.transform.position = new Vector3(156f, .85f, 0f);
 
             var enemies = Parent("Enemies");
             CreateEncounter("Encounter_Reflection", new Vector3(23f, 1f, 0f), new Vector2(5f, 5f), new[] { new Vector3(-1.5f, -.8f), new Vector3(2.2f, -.8f) }, 1, enemies.transform);
@@ -138,13 +142,14 @@ namespace BurnOut.Editor
             var arena = new GameObject("BossArenaTrigger"); arena.transform.SetParent(interactables.transform); arena.transform.position = new Vector3(89f, 1f, 0f); var trigger = arena.AddComponent<BoxCollider2D>(); trigger.size = new Vector2(2f, 5f); trigger.isTrigger = true;
             var arenaComponent = arena.AddComponent<BossArenaTrigger>();
             var arenaData = new SerializedObject(arenaComponent); arenaData.FindProperty("boss").objectReferenceValue = boss.GetComponent<MiniBossController>(); arenaData.FindProperty("bossHud").objectReferenceValue = ui.GetComponentInChildren<BossHUD>(true); arenaData.ApplyModifiedPropertiesWithoutUndo();
-            var miniBoss = boss.GetComponent<MiniBossController>(); var bossData = new SerializedObject(miniBoss); bossData.FindProperty("mentalFragmentPrefab").objectReferenceValue = BurnOutPrefabBuilder.LoadPrefab("PF_MentalFragment", "Items"); bossData.ApplyModifiedPropertiesWithoutUndo();
+            // The boss drops the key on death; carrying it to the single gate wins the level.
+            var miniBoss = boss.GetComponent<MiniBossController>(); var bossData = new SerializedObject(miniBoss); bossData.FindProperty("mentalFragmentPrefab").objectReferenceValue = BurnOutPrefabBuilder.LoadPrefab("PF_Key", "Items"); bossData.ApplyModifiedPropertiesWithoutUndo();
             CreateWorldText("Move: A/D or Arrows     Jump / Double Jump: Space     Dash: Left Ctrl", new Vector3(4f, 2.4f, 0f));
-            CreateWorldText("Attack: Left Shift / LMB     Skill lunge: K / RMB", new Vector3(4f, 1.6f, 0f));
+            CreateWorldText("Attack: Left Shift / LMB     Skills:  Z Shockwave   X Aura (heal+shield)   C Rush (lunge)", new Vector3(4f, 1.6f, 0f));
             CreateWorldText("Slaying shadows restores sanity. The lower your sanity, the harder you hit.", new Vector3(23f, 4.4f, 0f));
-            CreateWorldText("Find the key. Defeat the shadow to recover your fragment.", new Vector3(31f, 4f, 0f));
+            CreateWorldText("Climb the ruins. Watch your footing over the spikes.", new Vector3(31f, 4f, 0f));
             CreateWorldText("Survive the pressure hall. The rooftop is close.", new Vector3(68f, 4f, 0f));
-            CreateWorldText("Defeat the source of pressure, then carry the fragment to the Garden.", new Vector3(123f, 4f, 0f));
+            CreateWorldText("Defeat the shadow, grab the key it drops, then reach the gate to escape.", new Vector3(123f, 4f, 0f));
             EditorSceneManager.SaveScene(scene, SceneFolder + "/SC_Level01.unity");
         }
 
@@ -187,8 +192,17 @@ namespace BurnOut.Editor
             var overlay = CreatePanel("LowSanityOverlay", canvas.transform, new Vector2(1800, 1000)); overlay.GetComponent<Image>().color = new Color(.22f, 0f, .35f, .18f); overlay.SetActive(false);
             var hudData = new SerializedObject(hud); hudData.FindProperty("playerHealth").objectReferenceValue = player; hudData.FindProperty("playerSanity").objectReferenceValue = player.GetComponent<PlayerSanity>(); hudData.FindProperty("inventory").objectReferenceValue = player.GetComponent<PlayerInventory>(); hudData.FindProperty("healthBar").objectReferenceValue = health; hudData.FindProperty("sanityBar").objectReferenceValue = sanityMeter; hudData.FindProperty("healthText").objectReferenceValue = healthText; hudData.FindProperty("sanityText").objectReferenceValue = sanityText; hudData.FindProperty("keyIcon").objectReferenceValue = key; hudData.FindProperty("lowSanityOverlay").objectReferenceValue = overlay; hudData.ApplyModifiedPropertiesWithoutUndo();
             var bossPanel = CreatePanel("BossHUD", canvas.transform, new Vector2(450, 70)); bossPanel.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 245); var bossSlider = CreateSlider("BossHealth", bossPanel.transform, Vector2.zero); var bossHud = bossPanel.AddComponent<BossHUD>(); var bossData = new SerializedObject(bossHud); bossData.FindProperty("panel").objectReferenceValue = bossPanel; bossData.FindProperty("healthBar").objectReferenceValue = bossSlider; bossData.ApplyModifiedPropertiesWithoutUndo(); bossPanel.SetActive(false);
-            var pause = CreatePanel("PausePanel", canvas.transform, new Vector2(420, 300)); CreateLabel("PauseTitle", pause.transform, "PAUSED", 38, new Vector2(0, 75), new Vector2(300, 60)); var pauseMenu = pause.AddComponent<PauseMenu>(); var resume = CreateButton("Resume", pause.transform, "RESUME", new Vector2(0, 0)); UnityEventTools.AddPersistentListener(resume.onClick, pauseMenu.Resume); var restart = CreateButton("Restart", pause.transform, "RESTART", new Vector2(0, -70)); UnityEventTools.AddPersistentListener(restart.onClick, pauseMenu.Restart); pause.SetActive(false);
-            var complete = CreatePanel("LevelCompletePanel", canvas.transform, new Vector2(550, 300)); CreateLabel("Complete", complete.transform, "MENTAL FRAGMENT RECOVERED\nLEVEL COMPLETE", 31, new Vector2(0, 45), new Vector2(500, 120)); complete.SetActive(false);
+            // Skill cooldown bar at the bottom so the three abilities read clearly.
+            var skillBar = new GameObject("SkillCooldownHUD", typeof(RectTransform)); skillBar.transform.SetParent(canvas.transform, false);
+            var skillRect = skillBar.GetComponent<RectTransform>(); skillRect.anchorMin = skillRect.anchorMax = new Vector2(.5f, 0f); skillRect.anchoredPosition = Vector2.zero; skillRect.sizeDelta = new Vector2(400, 160);
+            skillBar.AddComponent<SkillCooldownHUD>();
+            // PauseMenu lives on the always-active canvas (not the hidden panel) so its Start() runs and ESC works.
+            var pauseMenu = canvas.gameObject.AddComponent<PauseMenu>();
+            var pause = CreatePanel("PausePanel", canvas.transform, new Vector2(420, 420)); CreateLabel("PauseTitle", pause.transform, "PAUSED", 38, new Vector2(0, 120), new Vector2(300, 60)); var resume = CreateButton("Resume", pause.transform, "RESUME", new Vector2(0, 0)); UnityEventTools.AddPersistentListener(resume.onClick, pauseMenu.Resume); var restart = CreateButton("Restart", pause.transform, "RESTART", new Vector2(0, -70)); UnityEventTools.AddPersistentListener(restart.onClick, pauseMenu.Restart); var pauseMenuBtn = CreateButton("PauseMainMenu", pause.transform, "MAIN MENU", new Vector2(0, -140)); UnityEventTools.AddPersistentListener(pauseMenuBtn.onClick, pauseMenu.MainMenu); pause.SetActive(false);
+            var complete = CreatePanel("LevelCompletePanel", canvas.transform, new Vector2(560, 340)); CreateLabel("Complete", complete.transform, "MENTAL FRAGMENT RECOVERED\nLEVEL COMPLETE", 31, new Vector2(0, 90), new Vector2(500, 120));
+            var completeRestart = CreateButton("CompleteRestart", complete.transform, "PLAY AGAIN", new Vector2(0, -20)); UnityEventTools.AddPersistentListener(completeRestart.onClick, manager.RestartLevel);
+            var completeMenu = CreateButton("CompleteMenu", complete.transform, "MAIN MENU", new Vector2(0, -90)); UnityEventTools.AddPersistentListener(completeMenu.onClick, manager.GoToMainMenu);
+            complete.SetActive(false);
             var over = CreatePanel("GameOverPanel", canvas.transform, new Vector2(450, 250)); CreateLabel("Over", over.transform, "LOST IN THE VOID", 32, new Vector2(0, 40), new Vector2(400, 100)); over.SetActive(false);
             var managerData = new SerializedObject(manager); managerData.FindProperty("pausePanel").objectReferenceValue = pause; managerData.FindProperty("gameOverPanel").objectReferenceValue = over; managerData.FindProperty("levelCompletePanel").objectReferenceValue = complete; managerData.ApplyModifiedPropertiesWithoutUndo();
             return canvas.gameObject;
@@ -266,8 +280,35 @@ namespace BurnOut.Editor
         private static GameObject InstantiatePrefab(string name, string category, Transform parent) { return (GameObject)PrefabUtility.InstantiatePrefab(BurnOutPrefabBuilder.LoadPrefab(name, category), parent); }
         private static void SpawnPrefab(string name, string category, Transform parent, Vector3 position) { var go = InstantiatePrefab(name, category, parent); go.transform.position = position; }
         private static void CreateGround(string name, Vector2 position, Vector2 size, Transform parent) { var go = new GameObject(name); go.transform.SetParent(parent); go.transform.position = position; go.layer = LayerMask.NameToLayer("Ground"); var renderer = go.AddComponent<SpriteRenderer>(); renderer.sprite = BurnOutSpriteFactory.GetPlatformSprite(); renderer.color = Color.white; renderer.drawMode = SpriteDrawMode.Sliced; renderer.size = size; var collider = go.AddComponent<BoxCollider2D>(); collider.size = size; }
-        private static void CreateStepIsland(string name, Vector2 position, Transform parent) { var go = new GameObject(name); go.transform.SetParent(parent); go.transform.position = position; go.layer = LayerMask.NameToLayer("Ground"); var renderer = go.AddComponent<SpriteRenderer>(); renderer.sprite = BurnOutSpriteFactory.GetPlatformSprite(); renderer.color = Color.white; renderer.drawMode = SpriteDrawMode.Sliced; renderer.size = new Vector2(3.8f, .52f); renderer.sortingOrder = 3; var collider = go.AddComponent<BoxCollider2D>(); collider.size = renderer.size; }
+        private static void CreateStepIsland(string name, Vector2 position, Transform parent) { CreateStepIsland(name, position, parent, 3.8f); }
+        private static void CreateStepIsland(string name, Vector2 position, Transform parent, float width) { var go = new GameObject(name); go.transform.SetParent(parent); go.transform.position = position; go.layer = LayerMask.NameToLayer("Ground"); var renderer = go.AddComponent<SpriteRenderer>(); renderer.sprite = BurnOutSpriteFactory.GetPlatformSprite(); renderer.color = Color.white; renderer.drawMode = SpriteDrawMode.Sliced; renderer.size = new Vector2(width, .52f); renderer.sortingOrder = 3; var collider = go.AddComponent<BoxCollider2D>(); collider.size = renderer.size; }
+
+        // A run of evenly-spaced steps climbing (or descending) like a staircase. Narrower treads = trickier footing.
+        private static void CreateStaircase(string name, Vector2 start, int count, float dx, float dy, Transform parent, float width = 2.2f)
+        {
+            for (var i = 0; i < count; i++)
+                CreateStepIsland($"{name}{i:00}", new Vector2(start.x + dx * i, start.y + dy * i), parent, width);
+        }
         private static void CreateEncounter(string name, Vector3 position, Vector2 size, Vector3[] spawnOffsets, int waves, Transform parent) { var go = new GameObject(name); go.transform.SetParent(parent); go.transform.position = position; var trigger = go.AddComponent<BoxCollider2D>(); trigger.size = size; trigger.isTrigger = true; var encounter = go.AddComponent<EncounterSpawner>(); var data = new SerializedObject(encounter); data.FindProperty("enemyPrefab").objectReferenceValue = BurnOutPrefabBuilder.LoadPrefab("PF_Enemy_Shadow", "Enemies"); data.FindProperty("rewardPrefab").objectReferenceValue = BurnOutPrefabBuilder.LoadPrefab("PF_SanityOrb", "Items"); data.FindProperty("waveCount").intValue = waves; var offsets = data.FindProperty("spawnOffsets"); offsets.arraySize = spawnOffsets.Length; for (var i = 0; i < spawnOffsets.Length; i++) offsets.GetArrayElementAtIndex(i).vector3Value = spawnOffsets[i]; data.ApplyModifiedPropertiesWithoutUndo(); }
+        // A fixed-in-world painted room backdrop scaled to a target world width, sat behind everything.
+        private static void CreateZoneBackground(string name, string path, float centerX, float centerY, float width, Transform parent, Color tint)
+        {
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+            var go = new GameObject(name);
+            go.transform.SetParent(parent);
+            go.transform.position = new Vector3(centerX, centerY, 0f);
+            var renderer = go.AddComponent<SpriteRenderer>();
+            renderer.sprite = sprite;
+            renderer.sortingOrder = -100;
+            renderer.color = tint;
+            if (sprite != null)
+            {
+                float nativeWidth = sprite.bounds.size.x;
+                float scale = nativeWidth > 0f ? width / nativeWidth : 1f;
+                go.transform.localScale = new Vector3(scale, scale, 1f);
+            }
+        }
+
         private static void CreateBackground(string name, string path, Vector3 offset, int sortingOrder, Transform parent, float scale, Color tint) { var go = new GameObject(name); go.transform.SetParent(parent); go.transform.position = new Vector3(offset.x, offset.y, 0f); var renderer = go.AddComponent<SpriteRenderer>(); renderer.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path); renderer.sortingOrder = sortingOrder; renderer.color = tint; go.transform.localScale = Vector3.one * scale; var backdrop = go.AddComponent<CameraBackdrop2D>(); var data = new SerializedObject(backdrop); data.FindProperty("offset").vector2Value = offset; data.FindProperty("cameraInfluence").floatValue = 1f; data.ApplyModifiedPropertiesWithoutUndo(); }
         private static Image CreateHudArtwork(string name, Transform parent, Sprite sprite, Vector2 position, Vector2 size, bool rightAnchored = false) { var go = new GameObject(name, typeof(RectTransform), typeof(Image)); go.transform.SetParent(parent, false); var rect = go.GetComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = rightAnchored ? new Vector2(1f, 1f) : new Vector2(0f, 1f); rect.pivot = rightAnchored ? new Vector2(1f, 1f) : new Vector2(0f, 1f); rect.anchoredPosition = position; rect.sizeDelta = size; var image = go.GetComponent<Image>(); image.sprite = sprite; image.preserveAspect = true; image.raycastTarget = false; return image; }
         private static Slider CreateHudMeter(string name, Transform parent, Vector2 position, Vector2 size, Color fillColor) { var go = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Slider)); go.transform.SetParent(parent, false); var rect = go.GetComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(0f, 1f); rect.pivot = new Vector2(0f, 1f); rect.anchoredPosition = position; rect.sizeDelta = size; var background = go.GetComponent<Image>(); background.color = new Color(.04f, .02f, .08f, .6f); background.raycastTarget = false; var fill = new GameObject("Fill", typeof(RectTransform), typeof(Image)); fill.transform.SetParent(go.transform, false); var fillRect = fill.GetComponent<RectTransform>(); fillRect.anchorMin = Vector2.zero; fillRect.anchorMax = Vector2.one; fillRect.offsetMin = new Vector2(2f, 2f); fillRect.offsetMax = new Vector2(-2f, -2f); var fillImage = fill.GetComponent<Image>(); fillImage.color = fillColor; fillImage.raycastTarget = false; var slider = go.GetComponent<Slider>(); slider.fillRect = fillRect; slider.direction = Slider.Direction.LeftToRight; slider.value = 1f; return slider; }

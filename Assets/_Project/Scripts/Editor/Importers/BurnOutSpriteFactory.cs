@@ -76,6 +76,36 @@ namespace BurnOut.Editor
             return GetCroppedSprite(PlatformSourcePath, "Assets/_Project/Art/Environment/Platforms/ENV_Hazard_Cropped.png", 1110, 70, 310, 120, 100f);
         }
 
+        // A procedural dust shockwave: a forward-leaning crescent of soft particles, so the
+        // Shockwave skill reads as a travelling ground wave rather than a solid box.
+        public static Sprite GetShockwaveSprite()
+        {
+            const string outputPath = "Assets/_Project/Art/Effects/FX_Shockwave.png";
+            var existing = AssetDatabase.LoadAssetAtPath<Sprite>(outputPath);
+            if (existing != null) return existing;
+            const int w = 192, h = 128;
+            var tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
+            for (int y = 0; y < h; y++)
+            for (int x = 0; x < w; x++)
+            {
+                // Crescent: bright vertical front on the right, trailing dust to the left.
+                float nx = x / (float)(w - 1), ny = (y / (float)(h - 1)) * 2f - 1f;
+                float front = Mathf.Exp(-Mathf.Pow((nx - .82f) * 5.5f, 2f));      // leading edge
+                float arc = Mathf.Exp(-Mathf.Pow(ny / (.85f - nx * .5f), 2f));    // curved body, taller at front
+                float trail = Mathf.Clamp01(nx) * (1f - Mathf.Abs(ny));           // dusty tail
+                float a = Mathf.Clamp01(front * 1.1f + arc * .55f) * arc + trail * .25f * arc;
+                var c = Color.Lerp(new Color(1f, .82f, .5f), new Color(1f, .55f, .25f), 1f - nx);
+                tex.SetPixel(x, y, new Color(c.r, c.g, c.b, Mathf.Clamp01(a)));
+            }
+            tex.Apply();
+            Directory.CreateDirectory(Path.Combine(Application.dataPath, "_Project/Art/Effects"));
+            File.WriteAllBytes(Path.Combine(Application.dataPath, outputPath.Substring("Assets/".Length)), tex.EncodeToPNG());
+            AssetDatabase.ImportAsset(outputPath);
+            var importer = AssetImporter.GetAtPath(outputPath) as TextureImporter;
+            if (importer != null) { importer.textureType = TextureImporterType.Sprite; importer.spritePixelsPerUnit = 100f; importer.SaveAndReimport(); }
+            return AssetDatabase.LoadAssetAtPath<Sprite>(outputPath);
+        }
+
         public static Sprite GetStepIslandSprite()
         {
             return GetCroppedSprite("Assets/_Project/Art/Environment/Platforms/ENV_Steps.png", "Assets/_Project/Art/Environment/Platforms/ENV_StepIsland_Cropped.png", 370, 600, 460, 330, 100f);

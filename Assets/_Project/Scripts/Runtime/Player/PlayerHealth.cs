@@ -61,6 +61,20 @@ namespace BurnOut.Player
             HealthChanged?.Invoke(CurrentHealth, maxHealth);
         }
 
+        /// <summary>Grants a temporary invulnerability window — used by the Aura focus skill.</summary>
+        public void GrantShield(float seconds)
+        {
+            if (!IsAlive || seconds <= 0f) return;
+            StartCoroutine(ShieldRoutine(seconds));
+        }
+
+        private IEnumerator ShieldRoutine(float seconds)
+        {
+            invincible = true;
+            yield return new WaitForSeconds(seconds);
+            invincible = false;
+        }
+
         public void RestoreFull()
         {
             CurrentHealth = maxHealth;

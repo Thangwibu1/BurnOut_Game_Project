@@ -9,9 +9,9 @@ namespace BurnOut.Player
     public sealed class PlayerSanity : MonoBehaviour
     {
         [SerializeField] private float maxSanity = 100f;
-        [SerializeField] private float passiveDrainPerSecond = .35f;
-        [SerializeField] private float nearbyEnemyDrainPerSecond = 2.2f;
-        [SerializeField] private float enemyDetectionRadius = 5f;
+        [SerializeField] private float passiveDrainPerSecond = .2f;
+        [SerializeField] private float nearbyEnemyDrainPerSecond = 1.1f;
+        [SerializeField] private float enemyDetectionRadius = 4.5f;
         [SerializeField] private LayerMask enemyLayer;
         private readonly Collider2D[] nearbyEnemies = new Collider2D[12];
         private ContactFilter2D enemyFilter;

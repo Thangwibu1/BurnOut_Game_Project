@@ -11,7 +11,8 @@ namespace BurnOut.World
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.GetComponent<PlayerHealth>() == null) return;
-            if (other.GetComponent<PlayerInventory>()?.HasMentalFragment == true) GameManager.Instance?.CompleteLevel();
+            // The gate opens for the key dropped by the defeated boss.
+            if (other.GetComponent<PlayerInventory>()?.HasKey == true) GameManager.Instance?.CompleteLevel();
         }
     }
 }

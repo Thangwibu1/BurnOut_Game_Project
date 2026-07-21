@@ -33,6 +33,7 @@ namespace BurnOut.Editor
             BurnOutSpriteFactory.GetStepIslandSprite();
             BurnOutSpriteFactory.GetTrimmedSprite("Assets/_Project/Art/Items/ITEM_Key.png", "Assets/_Project/Art/Items/ITEM_Key_Cropped.png", 56f);
             BurnOutSpriteFactory.GetTrimmedSprite("Assets/_Project/Art/Items/ITEM_SanityOrb.png", "Assets/_Project/Art/Items/ITEM_SanityOrb_Cropped.png", 56f);
+            CreateShockwave();
             CreatePlayer();
             CreateEnemyProjectile();
             CreateEnemy("PF_Enemy_Shadow", false);
@@ -50,7 +51,7 @@ namespace BurnOut.Editor
         {
             var generatedPrefabs = new[]
             {
-                "Player/PF_Player", "Enemies/PF_Enemy_Shadow", "Enemies/PF_MiniBoss_Shadow", "Enemies/PF_EnemyProjectile",
+                "Player/PF_Player", "Player/PF_Shockwave", "Enemies/PF_Enemy_Shadow", "Enemies/PF_MiniBoss_Shadow", "Enemies/PF_EnemyProjectile",
                 "Items/PF_SanityOrb", "Items/PF_HealthPickup", "Items/PF_Key", "Items/PF_MentalFragment",
                 "Environment/PF_Checkpoint", "Environment/PF_LockedDoor", "Environment/PF_LevelExit", "Environment/PF_Hazard_Spikes",
                 "Systems/PF_GameManager", "Systems/PF_AudioManager", "UI/PF_PlayerHUD", "UI/PF_BossHUD"
@@ -97,8 +98,9 @@ namespace BurnOut.Editor
             var visualAnimator = go.AddComponent<PlayerVisualAnimator>();
             go.AddComponent<PlayerFeedbackFX>();
             var ground = new GameObject("GroundCheck").transform; ground.SetParent(go.transform); ground.localPosition = new Vector3(0f, -.72f, 0f);
-            var attack = CreateHitbox("AttackHitbox", go.transform, 1, .8f, 1); attack.transform.localPosition = new Vector3(.72f, .1f, 0f);
-            var skill = CreateHitbox("SkillHitbox", go.transform, 2, 1.2f, 2); skill.transform.localPosition = new Vector3(.95f, .1f, 0f);
+            // Hitbox reach tuned to the visible slash/lunge arcs so strikes land where the animation shows them.
+            var attack = CreateHitbox("AttackHitbox", go.transform, 2, .8f, 1.5f); attack.transform.localPosition = new Vector3(.85f, .05f, 0f);
+            var rush = CreateHitbox("RushHitbox", go.transform, 2, 1.2f, 2.2f); rush.transform.localPosition = new Vector3(1f, .05f, 0f);
             var movementObject = new SerializedObject(movement);
             movementObject.FindProperty("config").objectReferenceValue = AssetDatabase.LoadAssetAtPath<PlayerMovementConfig>(Root + "/ScriptableObjects/PlayerMovementConfig.asset");
             movementObject.FindProperty("groundCheck").objectReferenceValue = ground;
@@ -107,7 +109,8 @@ namespace BurnOut.Editor
             movementObject.ApplyModifiedPropertiesWithoutUndo();
             var combatObject = new SerializedObject(combat);
             combatObject.FindProperty("normalAttackHitbox").objectReferenceValue = attack;
-            combatObject.FindProperty("skillHitbox").objectReferenceValue = skill;
+            combatObject.FindProperty("rushHitbox").objectReferenceValue = rush;
+            combatObject.FindProperty("shockwavePrefab").objectReferenceValue = LoadPrefab("PF_Shockwave", "Player");
             combatObject.ApplyModifiedPropertiesWithoutUndo();
             ConfigurePlayerAnimation(visualAnimator, go.GetComponent<SpriteRenderer>());
             SavePrefab(go, path);
@@ -145,7 +148,7 @@ namespace BurnOut.Editor
         private static Hitbox2D CreateHitbox(string name, Transform parent, int damage, float knockback, float size)
         {
             var hit = new GameObject(name); hit.transform.SetParent(parent); hit.layer = LayerMask.NameToLayer("PlayerAttack");
-            var box = hit.AddComponent<BoxCollider2D>(); box.size = new Vector2(size, .7f); box.isTrigger = true;
+            var box = hit.AddComponent<BoxCollider2D>(); box.size = new Vector2(size, .95f); box.isTrigger = true;
             var hitbox = hit.AddComponent<Hitbox2D>();
             var serialized = new SerializedObject(hitbox);
             serialized.FindProperty("damage").intValue = damage;
@@ -174,7 +177,8 @@ namespace BurnOut.Editor
                 bossData.ApplyModifiedPropertiesWithoutUndo();
             }
             if (!boss) { var animator = go.AddComponent<EnemyVisualAnimator>(); ConfigureEnemyAnimation(animator, go.GetComponent<SpriteRenderer>()); }
-            var healthData = new SerializedObject(health); healthData.FindProperty("maxHealth").intValue = boss ? 28 : 3; healthData.ApplyModifiedPropertiesWithoutUndo();
+            go.AddComponent<EnemyHealthBar>();
+            var healthData = new SerializedObject(health); healthData.FindProperty("maxHealth").intValue = boss ? 12 : 1; healthData.ApplyModifiedPropertiesWithoutUndo();
             if (brain != null) { var brainData = new SerializedObject(brain); brainData.FindProperty("energyProjectilePrefab").objectReferenceValue = LoadPrefab("PF_EnemyProjectile", "Enemies"); brainData.ApplyModifiedPropertiesWithoutUndo(); }
             SavePrefab(go, path);
         }
@@ -186,6 +190,32 @@ namespace BurnOut.Editor
             var go = CreateVisual(name, color, "Item", tag, new Vector2(.45f, .45f));
             go.AddComponent<CircleCollider2D>().isTrigger = true;
             go.AddComponent<T>();
+            SavePrefab(go, path);
+        }
+
+        private static void CreateShockwave()
+        {
+            const string path = Root + "/Prefabs/Player/PF_Shockwave.prefab";
+            if (AssetDatabase.LoadAssetAtPath<GameObject>(path) != null) return;
+            // A travelling ground wave on the PlayerAttack layer that damages every enemy it passes through.
+            var go = new GameObject("PF_Shockwave"); go.layer = LayerMask.NameToLayer("PlayerAttack");
+            var renderer = go.AddComponent<SpriteRenderer>(); renderer.sprite = BurnOutSpriteFactory.GetShockwaveSprite(); renderer.sortingOrder = 30;
+            // A kinematic Rigidbody2D is required for OnTriggerEnter2D to fire against the (static) enemy colliders.
+            var rb = go.AddComponent<Rigidbody2D>(); rb.bodyType = RigidbodyType2D.Kinematic; rb.gravityScale = 0f;
+            var collider = go.AddComponent<BoxCollider2D>(); collider.isTrigger = true; collider.size = new Vector2(1.6f, 1.1f);
+            var hitbox = go.AddComponent<Hitbox2D>();
+            var projectile = go.AddComponent<Projectile>();
+            var hitboxData = new SerializedObject(hitbox);
+            hitboxData.FindProperty("damage").intValue = 2;
+            hitboxData.FindProperty("knockback").floatValue = 7f;
+            hitboxData.FindProperty("targetLayers").intValue = 1 << LayerMask.NameToLayer("Enemy");
+            hitboxData.FindProperty("hitboxCollider").objectReferenceValue = collider;
+            hitboxData.ApplyModifiedPropertiesWithoutUndo();
+            var projData = new SerializedObject(projectile);
+            projData.FindProperty("speed").floatValue = 12f;
+            projData.FindProperty("lifetime").floatValue = .6f;
+            projData.FindProperty("hitbox").objectReferenceValue = hitbox;
+            projData.ApplyModifiedPropertiesWithoutUndo();
             SavePrefab(go, path);
         }
 
@@ -308,8 +338,10 @@ namespace BurnOut.Editor
             SetSprites(data, "runFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Move.png", "Assets/_Project/Art/Characters/Player/Frames/Run", 48f));
             SetSprites(data, "jumpFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Jump.png", "Assets/_Project/Art/Characters/Player/Frames/Jump", 48f));
             SetSprites(data, "lowSanityFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_LowSanity.png", "Assets/_Project/Art/Characters/Player/Frames/LowSanity", 48f));
-            SetSprites(data, "attackFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Skill02.png", "Assets/_Project/Art/Characters/Player/Frames/Attack", 48f));
-            SetSprites(data, "skillFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Skill03.png", "Assets/_Project/Art/Characters/Player/Frames/Skill", 48f));
+            SetSprites(data, "attackFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Skill01.png", "Assets/_Project/Art/Characters/Player/Frames/Attack", 48f));
+            SetSprites(data, "auraFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Skill02.png", "Assets/_Project/Art/Characters/Player/Frames/Aura", 48f));
+            SetSprites(data, "rushFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Skill03.png", "Assets/_Project/Art/Characters/Player/Frames/Rush", 48f));
+            SetSprites(data, "shockwaveFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Skill01.png", "Assets/_Project/Art/Characters/Player/Frames/Shockwave", 48f));
             SetSprites(data, "dashFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Skill03.png", "Assets/_Project/Art/Characters/Player/Frames/Dash", 48f));
             SetSprites(data, "deathFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Death.png", "Assets/_Project/Art/Characters/Player/Frames/Death", 48f));
             data.ApplyModifiedPropertiesWithoutUndo();
