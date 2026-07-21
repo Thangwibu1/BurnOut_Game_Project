@@ -19,6 +19,9 @@ namespace BurnOut.Core
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
             Time.timeScale = 1f;
+            // Damage between Player and Enemy is distance-based (EnemyBrain/MiniBossController),
+            // so the physical push from their solid colliders is unwanted friction, not gameplay.
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), true);
             SetPanel(pausePanel, false);
             SetPanel(gameOverPanel, false);
             SetPanel(levelCompletePanel, false);
