@@ -20,6 +20,7 @@ namespace BurnOut.Player
         public event Action<float, float> SanityChanged;
         public event Action<bool> LowSanityChanged;
         public float CurrentSanity { get; private set; }
+        public bool IsLow => lowSanity;
 
         private void Awake()
         {

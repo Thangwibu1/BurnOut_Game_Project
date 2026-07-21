@@ -8,7 +8,9 @@ namespace BurnOut.World
     {
         [SerializeField] private Collider2D blockingCollider;
         [SerializeField] private SpriteRenderer visual;
-        [SerializeField] private Color openColor = new(.35f, 1f, .7f, .25f);
+        [SerializeField] private Sprite openSprite;
+        [SerializeField] private Color openColor = new(.65f, 1f, .9f, 1f);
+        private bool opened;
         private void Awake()
         {
             blockingCollider ??= GetComponent<Collider2D>();
@@ -17,10 +19,11 @@ namespace BurnOut.World
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (!other.TryGetComponent<PlayerInventory>(out var inventory) || !inventory.ConsumeKey()) return;
+            if (opened || !other.TryGetComponent<PlayerInventory>(out var inventory) || !inventory.ConsumeKey()) return;
+            opened = true;
             blockingCollider.enabled = false;
-            if (visual != null) visual.color = openColor;
-            Destroy(gameObject, .35f);
+            if (visual != null) { if (openSprite != null) visual.sprite = openSprite; visual.color = openColor; }
+            Destroy(gameObject, .7f);
         }
     }
 }

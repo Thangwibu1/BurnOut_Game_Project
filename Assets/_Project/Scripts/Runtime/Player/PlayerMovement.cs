@@ -24,6 +24,9 @@ namespace BurnOut.Player
         public bool IsGrounded { get; private set; }
         public bool IsDashing => dashTimer > 0f;
         public bool FacingRight { get; private set; } = true;
+        public float HorizontalSpeed => body == null ? 0f : body.linearVelocity.x;
+        public event System.Action Dashed;
+        public event System.Action Jumped;
 
         private void Awake()
         {
@@ -84,6 +87,7 @@ namespace BurnOut.Player
             if (!groundedJump) usedDoubleJump = true;
             coyoteCounter = 0f;
             jumpBufferCounter = 0f;
+            Jumped?.Invoke();
         }
 
         private void TryDash()
@@ -91,6 +95,7 @@ namespace BurnOut.Player
             if (dashCooldownTimer > 0f || IsDashing) return;
             dashTimer = config.DashDuration;
             dashCooldownTimer = config.DashCooldown;
+            Dashed?.Invoke();
         }
 
         private void Flip()

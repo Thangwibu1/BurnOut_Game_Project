@@ -60,12 +60,18 @@ namespace BurnOut.Editor
             CreateBackground("BG_Mid", "Assets/_Project/Art/Backgrounds/BG_Mid_Ruins.png", new Vector3(.35f, -.1f, 0f), -90, backgrounds.transform, 1.36f, new Color(1f, 1f, 1f, .35f));
             var environment = Parent("Environment"); var groundParent = Parent("Ground", environment.transform); var platforms = Parent("Platforms", environment.transform);
             CreateGround("StartGround", new Vector2(2f, -1f), new Vector2(10f, 1f), groundParent.transform);
-            CreateGround("PlatformA", new Vector2(9f, 1f), new Vector2(3f, .45f), platforms.transform);
-            CreateGround("PlatformB", new Vector2(14f, 2.6f), new Vector2(3f, .45f), platforms.transform);
+            CreateStepIsland("PlatformA", new Vector2(9f, -.3f), platforms.transform);
+            CreateStepIsland("PlatformB", new Vector2(14.5f, 1.25f), platforms.transform);
             CreateGround("MidGround", new Vector2(20f, -1f), new Vector2(13f, 1f), groundParent.transform);
-            CreateGround("KeyPlatform", new Vector2(27f, 2.1f), new Vector2(3f, .45f), platforms.transform);
+            CreateStepIsland("KeyPlatform", new Vector2(27f, .8f), platforms.transform);
             CreateGround("ArenaGround", new Vector2(38f, -1f), new Vector2(14f, 1f), groundParent.transform);
-            CreateGround("ExitGround", new Vector2(50f, -1f), new Vector2(8f, 1f), groundParent.transform);
+            CreateStepIsland("ArenaIslandA", new Vector2(39f, .2f), platforms.transform);
+            CreateStepIsland("ArenaIslandB", new Vector2(46f, 1.35f), platforms.transform);
+            CreateGround("ExitGround", new Vector2(53f, -1f), new Vector2(12f, 1f), groundParent.transform);
+            CreateStepIsland("ExitIsland", new Vector2(56f, .35f), platforms.transform);
+            CreateGround("RooftopApproach", new Vector2(68f, -1f), new Vector2(14f, 1f), groundParent.transform);
+            CreateStepIsland("RooftopIslandA", new Vector2(64f, .3f), platforms.transform);
+            CreateStepIsland("RooftopIslandB", new Vector2(70f, 1.55f), platforms.transform);
             var hazard = InstantiatePrefab("PF_Hazard_Spikes", "Environment", environment.transform); hazard.transform.position = new Vector3(17f, -.32f, 0f);
 
             var interactables = Parent("Interactables");
@@ -75,12 +81,14 @@ namespace BurnOut.Editor
             var bossCheckpoint = InstantiatePrefab("PF_Checkpoint", "Environment", interactables.transform); bossCheckpoint.transform.position = new Vector3(33f, .35f, 0f);
             var sanity = InstantiatePrefab("PF_SanityOrb", "Items", interactables.transform); sanity.transform.position = new Vector3(14f, 3.25f, 0f);
             var health = InstantiatePrefab("PF_HealthPickup", "Items", interactables.transform); health.transform.position = new Vector3(22f, .35f, 0f);
-            var exit = InstantiatePrefab("PF_LevelExit", "Environment", interactables.transform); exit.transform.position = new Vector3(52f, .5f, 0f);
+            var exit = InstantiatePrefab("PF_LevelExit", "Environment", interactables.transform); exit.transform.position = new Vector3(74f, .55f, 0f);
 
             var enemies = Parent("Enemies");
             SpawnPrefab("PF_Enemy_Shadow", "Enemies", enemies.transform, new Vector3(21f, .2f, 0f));
             SpawnPrefab("PF_Enemy_Shadow", "Enemies", enemies.transform, new Vector3(24f, .2f, 0f));
-            var boss = InstantiatePrefab("PF_MiniBoss_Shadow", "Enemies", enemies.transform); boss.name = "MiniBoss"; boss.transform.position = new Vector3(42f, .4f, 0f); boss.SetActive(false);
+            SpawnPrefab("PF_Enemy_Shadow", "Enemies", enemies.transform, new Vector3(48f, .2f, 0f));
+            SpawnPrefab("PF_Enemy_Shadow", "Enemies", enemies.transform, new Vector3(58f, .2f, 0f));
+            var boss = InstantiatePrefab("PF_MiniBoss_Shadow", "Enemies", enemies.transform); boss.name = "MiniBoss"; boss.transform.position = new Vector3(66f, .4f, 0f); boss.SetActive(false);
             var player = InstantiatePrefab("PF_Player", "Player", null); player.name = "Player"; player.transform.position = new Vector3(1f, .5f, 0f);
 
             var cameras = Parent("Cameras");
@@ -92,12 +100,13 @@ namespace BurnOut.Editor
             var cameraData = new SerializedObject(cameraFollow); cameraData.FindProperty("target").objectReferenceValue = player.transform; cameraData.ApplyModifiedPropertiesWithoutUndo();
 
             var ui = CreateLevelUi(manager, player.GetComponent<PlayerHealth>());
-            var arena = new GameObject("BossArenaTrigger"); arena.transform.SetParent(interactables.transform); arena.transform.position = new Vector3(35f, 1f, 0f); var trigger = arena.AddComponent<BoxCollider2D>(); trigger.size = new Vector2(2f, 5f); trigger.isTrigger = true;
+            var arena = new GameObject("BossArenaTrigger"); arena.transform.SetParent(interactables.transform); arena.transform.position = new Vector3(61f, 1f, 0f); var trigger = arena.AddComponent<BoxCollider2D>(); trigger.size = new Vector2(2f, 5f); trigger.isTrigger = true;
             var arenaComponent = arena.AddComponent<BossArenaTrigger>();
             var arenaData = new SerializedObject(arenaComponent); arenaData.FindProperty("boss").objectReferenceValue = boss.GetComponent<MiniBossController>(); arenaData.FindProperty("bossHud").objectReferenceValue = ui.GetComponentInChildren<BossHUD>(true); arenaData.ApplyModifiedPropertiesWithoutUndo();
             var miniBoss = boss.GetComponent<MiniBossController>(); var bossData = new SerializedObject(miniBoss); bossData.FindProperty("mentalFragmentPrefab").objectReferenceValue = BurnOutPrefabBuilder.LoadPrefab("PF_MentalFragment", "Items"); bossData.ApplyModifiedPropertiesWithoutUndo();
             CreateWorldText("Move: A/D or Arrow Keys     Jump: Space     Dash: Left Shift", new Vector3(4f, 2f, 0f));
             CreateWorldText("Find the key. Defeat the shadow to recover your fragment.", new Vector3(28f, 4f, 0f));
+            CreateWorldText("The rooftop is close. Your courage is the way through.", new Vector3(64f, 4f, 0f));
             EditorSceneManager.SaveScene(scene, SceneFolder + "/SC_Level01.unity");
         }
 
@@ -213,6 +222,7 @@ namespace BurnOut.Editor
         private static GameObject InstantiatePrefab(string name, string category, Transform parent) { return (GameObject)PrefabUtility.InstantiatePrefab(BurnOutPrefabBuilder.LoadPrefab(name, category), parent); }
         private static void SpawnPrefab(string name, string category, Transform parent, Vector3 position) { var go = InstantiatePrefab(name, category, parent); go.transform.position = position; }
         private static void CreateGround(string name, Vector2 position, Vector2 size, Transform parent) { var go = new GameObject(name); go.transform.SetParent(parent); go.transform.position = position; go.layer = LayerMask.NameToLayer("Ground"); var renderer = go.AddComponent<SpriteRenderer>(); renderer.sprite = BurnOutSpriteFactory.GetPlatformSprite(); renderer.color = Color.white; renderer.drawMode = SpriteDrawMode.Sliced; renderer.size = size; var collider = go.AddComponent<BoxCollider2D>(); collider.size = size; }
+        private static void CreateStepIsland(string name, Vector2 position, Transform parent) { var go = new GameObject(name); go.transform.SetParent(parent); go.transform.position = position; go.layer = LayerMask.NameToLayer("Ground"); var renderer = go.AddComponent<SpriteRenderer>(); renderer.sprite = BurnOutSpriteFactory.GetStepIslandSprite(); renderer.sortingOrder = 3; var collider = go.AddComponent<BoxCollider2D>(); collider.size = new Vector2(4.1f, .36f); collider.offset = new Vector2(0f, 1.4f); }
         private static void CreateBackground(string name, string path, Vector3 offset, int sortingOrder, Transform parent, float scale, Color tint) { var go = new GameObject(name); go.transform.SetParent(parent); go.transform.position = new Vector3(offset.x, offset.y, 0f); var renderer = go.AddComponent<SpriteRenderer>(); renderer.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path); renderer.sortingOrder = sortingOrder; renderer.color = tint; go.transform.localScale = Vector3.one * scale; var backdrop = go.AddComponent<CameraBackdrop2D>(); var data = new SerializedObject(backdrop); data.FindProperty("offset").vector2Value = offset; data.FindProperty("cameraInfluence").floatValue = 1f; data.ApplyModifiedPropertiesWithoutUndo(); }
         private static Image CreateHudArtwork(string name, Transform parent, Sprite sprite, Vector2 position, Vector2 size, bool rightAnchored = false) { var go = new GameObject(name, typeof(RectTransform), typeof(Image)); go.transform.SetParent(parent, false); var rect = go.GetComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = rightAnchored ? new Vector2(1f, 1f) : new Vector2(0f, 1f); rect.pivot = rightAnchored ? new Vector2(1f, 1f) : new Vector2(0f, 1f); rect.anchoredPosition = position; rect.sizeDelta = size; var image = go.GetComponent<Image>(); image.sprite = sprite; image.preserveAspect = true; image.raycastTarget = false; return image; }
         private static void CreateWorldText(string text, Vector3 position) { var go = new GameObject("TutorialText", typeof(TextMeshPro)); go.transform.position = position; var label = go.GetComponent<TextMeshPro>(); label.text = text; label.fontSize = 2.2f; label.alignment = TextAlignmentOptions.Center; label.color = new Color(.9f, .8f, 1f); }

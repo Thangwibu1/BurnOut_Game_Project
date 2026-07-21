@@ -27,8 +27,10 @@ namespace BurnOut.Editor
             BurnOutSpriteFactory.GetEnemySprite();
             BurnOutSpriteFactory.GetCheckpointSprite();
             BurnOutSpriteFactory.GetDoorSprite();
+            BurnOutSpriteFactory.GetOpenDoorSprite();
             BurnOutSpriteFactory.GetFragmentSprite();
             BurnOutSpriteFactory.GetHazardSprite();
+            BurnOutSpriteFactory.GetStepIslandSprite();
             BurnOutSpriteFactory.GetTrimmedSprite("Assets/_Project/Art/Items/ITEM_Key.png", "Assets/_Project/Art/Items/ITEM_Key_Cropped.png", 56f);
             BurnOutSpriteFactory.GetTrimmedSprite("Assets/_Project/Art/Items/ITEM_SanityOrb.png", "Assets/_Project/Art/Items/ITEM_SanityOrb_Cropped.png", 56f);
             CreatePlayer();
@@ -92,6 +94,8 @@ namespace BurnOut.Editor
             var health = go.AddComponent<PlayerHealth>();
             go.AddComponent<PlayerInventory>();
             var combat = go.AddComponent<PlayerCombat>();
+            var visualAnimator = go.AddComponent<PlayerVisualAnimator>();
+            go.AddComponent<PlayerFeedbackFX>();
             var ground = new GameObject("GroundCheck").transform; ground.SetParent(go.transform); ground.localPosition = new Vector3(0f, -.72f, 0f);
             var attack = CreateHitbox("AttackHitbox", go.transform, 1, .8f, 1); attack.transform.localPosition = new Vector3(.72f, .1f, 0f);
             var skill = CreateHitbox("SkillHitbox", go.transform, 2, 1.2f, 2); skill.transform.localPosition = new Vector3(.95f, .1f, 0f);
@@ -105,6 +109,7 @@ namespace BurnOut.Editor
             combatObject.FindProperty("normalAttackHitbox").objectReferenceValue = attack;
             combatObject.FindProperty("skillHitbox").objectReferenceValue = skill;
             combatObject.ApplyModifiedPropertiesWithoutUndo();
+            ConfigurePlayerAnimation(visualAnimator, go.GetComponent<SpriteRenderer>());
             SavePrefab(go, path);
         }
 
@@ -159,6 +164,7 @@ namespace BurnOut.Editor
             go.AddComponent<BoxCollider2D>();
             var health = go.AddComponent<EnemyHealth>();
             if (!boss) go.AddComponent<EnemyBrain>(); else go.AddComponent<MiniBossController>();
+            if (!boss) { var animator = go.AddComponent<EnemyVisualAnimator>(); ConfigureEnemyAnimation(animator, go.GetComponent<SpriteRenderer>()); }
             var healthData = new SerializedObject(health); healthData.FindProperty("maxHealth").intValue = boss ? 20 : 3; healthData.ApplyModifiedPropertiesWithoutUndo();
             SavePrefab(go, path);
         }
@@ -203,7 +209,7 @@ namespace BurnOut.Editor
             var go = CreateVisual("PF_LockedDoor", new Color(.85f, .7f, .15f), "Interactable", "Untagged", new Vector2(.55f, 2.6f));
             var box = go.AddComponent<BoxCollider2D>(); box.isTrigger = true;
             var component = go.AddComponent<LockedDoor>();
-            var data = new SerializedObject(component); data.FindProperty("blockingCollider").objectReferenceValue = box; data.FindProperty("visual").objectReferenceValue = go.GetComponent<SpriteRenderer>(); data.ApplyModifiedPropertiesWithoutUndo();
+            var data = new SerializedObject(component); data.FindProperty("blockingCollider").objectReferenceValue = box; data.FindProperty("visual").objectReferenceValue = go.GetComponent<SpriteRenderer>(); data.FindProperty("openSprite").objectReferenceValue = BurnOutSpriteFactory.GetOpenDoorSprite(); data.ApplyModifiedPropertiesWithoutUndo();
             SavePrefab(go, path);
         }
 
@@ -279,6 +285,40 @@ namespace BurnOut.Editor
         {
             if (whiteSprite == null) whiteSprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
             return whiteSprite;
+        }
+
+        private static void ConfigurePlayerAnimation(PlayerVisualAnimator animator, SpriteRenderer renderer)
+        {
+            var data = new SerializedObject(animator);
+            data.FindProperty("spriteRenderer").objectReferenceValue = renderer;
+            SetSprites(data, "idleFrames", new[] { BurnOutSpriteFactory.GetPlayerIdleSprite() });
+            SetSprites(data, "runFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Move.png", "Assets/_Project/Art/Characters/Player/Frames/Run", 48f));
+            SetSprites(data, "jumpFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Jump.png", "Assets/_Project/Art/Characters/Player/Frames/Jump", 48f));
+            SetSprites(data, "lowSanityFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_LowSanity.png", "Assets/_Project/Art/Characters/Player/Frames/LowSanity", 48f));
+            SetSprites(data, "attackFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Skill02.png", "Assets/_Project/Art/Characters/Player/Frames/Attack", 48f));
+            SetSprites(data, "skillFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Skill03.png", "Assets/_Project/Art/Characters/Player/Frames/Skill", 48f));
+            SetSprites(data, "dashFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Skill03.png", "Assets/_Project/Art/Characters/Player/Frames/Dash", 48f));
+            SetSprites(data, "deathFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Death.png", "Assets/_Project/Art/Characters/Player/Frames/Death", 48f));
+            data.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void ConfigureEnemyAnimation(EnemyVisualAnimator animator, SpriteRenderer renderer)
+        {
+            var data = new SerializedObject(animator);
+            var move = BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Enemies/Enemy_Move.png", "Assets/_Project/Art/Characters/Enemies/Frames/Move", 64f);
+            data.FindProperty("spriteRenderer").objectReferenceValue = renderer;
+            SetSprites(data, "idleFrames", move.Length > 0 ? new[] { move[0] } : System.Array.Empty<Sprite>());
+            SetSprites(data, "moveFrames", move);
+            SetSprites(data, "attackFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Enemies/Enemy_Attack.png", "Assets/_Project/Art/Characters/Enemies/Frames/Attack", 64f));
+            SetSprites(data, "deathFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Enemies/Enemy_Death.png", "Assets/_Project/Art/Characters/Enemies/Frames/Death", 64f));
+            data.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void SetSprites(SerializedObject target, string propertyName, Sprite[] sprites)
+        {
+            var property = target.FindProperty(propertyName);
+            property.arraySize = sprites.Length;
+            for (var i = 0; i < sprites.Length; i++) property.GetArrayElementAtIndex(i).objectReferenceValue = sprites[i];
         }
 
         private static void SavePrefab(GameObject go, string path)

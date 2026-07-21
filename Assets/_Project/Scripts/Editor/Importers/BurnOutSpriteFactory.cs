@@ -1,4 +1,5 @@
 using System.IO;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -42,6 +43,11 @@ namespace BurnOut.Editor
             return GetCroppedSprite(InteractableSourcePath, "Assets/_Project/Art/Environment/Interactables/ENV_Door_Cropped.png", 475, 650, 265, 380, 100f);
         }
 
+        public static Sprite GetOpenDoorSprite()
+        {
+            return GetCroppedSprite(InteractableSourcePath, "Assets/_Project/Art/Environment/Interactables/ENV_Door_Open_Cropped.png", 750, 650, 270, 380, 100f);
+        }
+
         public static Sprite GetFragmentSprite()
         {
             return GetCroppedSprite(InteractableSourcePath, "Assets/_Project/Art/Environment/Interactables/ENV_Fragment_Cropped.png", 1125, 335, 205, 305, 100f);
@@ -50,6 +56,11 @@ namespace BurnOut.Editor
         public static Sprite GetHazardSprite()
         {
             return GetCroppedSprite(PlatformSourcePath, "Assets/_Project/Art/Environment/Platforms/ENV_Hazard_Cropped.png", 1110, 70, 310, 120, 100f);
+        }
+
+        public static Sprite GetStepIslandSprite()
+        {
+            return GetCroppedSprite("Assets/_Project/Art/Environment/Platforms/ENV_Steps.png", "Assets/_Project/Art/Environment/Platforms/ENV_StepIsland_Cropped.png", 370, 600, 460, 330, 100f);
         }
 
         public static Sprite GetTrimmedSprite(string sourcePath, string outputPath, float pixelsPerUnit)
@@ -78,6 +89,63 @@ namespace BurnOut.Editor
             minX = Mathf.Max(0, minX - padding); minY = Mathf.Max(0, minY - padding);
             maxX = Mathf.Min(source.width - 1, maxX + padding); maxY = Mathf.Min(source.height - 1, maxY + padding);
             return GetCroppedSprite(sourcePath, outputPath, minX, minY, maxX - minX + 1, maxY - minY + 1, pixelsPerUnit);
+        }
+
+        /// <summary>Extracts the separated frames in an artist supplied transparent animation strip.</summary>
+        public static Sprite[] GetAnimationFrames(string sourcePath, string outputFolder, float pixelsPerUnit)
+        {
+            var importer = AssetImporter.GetAtPath(sourcePath) as TextureImporter;
+            if (importer == null) return System.Array.Empty<Sprite>();
+            importer.isReadable = true;
+            importer.textureType = TextureImporterType.Default;
+            importer.SaveAndReimport();
+            var source = AssetDatabase.LoadAssetAtPath<Texture2D>(sourcePath);
+            if (source == null) return System.Array.Empty<Sprite>();
+
+            var pixels = source.GetPixels32();
+            var occupiedColumns = new bool[source.width];
+            for (var x = 0; x < source.width; x++)
+                for (var y = 0; y < source.height; y++)
+                    if (pixels[y * source.width + x].a >= 12) { occupiedColumns[x] = true; break; }
+
+            const int splitGap = 12;
+            var segments = new List<(int start, int end)>();
+            var start = -1; var end = -1; var gap = 0;
+            for (var x = 0; x < occupiedColumns.Length; x++)
+            {
+                if (occupiedColumns[x])
+                {
+                    if (start < 0) start = x;
+                    end = x; gap = 0;
+                }
+                else if (start >= 0 && ++gap >= splitGap)
+                {
+                    segments.Add((start, end)); start = -1; end = -1; gap = 0;
+                }
+            }
+            if (start >= 0) segments.Add((start, end));
+            if (segments.Count == 0) return System.Array.Empty<Sprite>();
+
+            Directory.CreateDirectory(Path.Combine(Application.dataPath, outputFolder.Substring("Assets/".Length)));
+            var frames = new List<Sprite>();
+            for (var index = 0; index < segments.Count; index++)
+            {
+                var segment = segments[index];
+                var minY = source.height; var maxY = -1;
+                for (var x = segment.start; x <= segment.end; x++)
+                for (var y = 0; y < source.height; y++)
+                    if (pixels[y * source.width + x].a >= 12) { minY = Mathf.Min(minY, y); maxY = Mathf.Max(maxY, y); }
+                if (maxY < minY) continue;
+                const int padding = 4;
+                var left = Mathf.Max(0, segment.start - padding);
+                var bottom = Mathf.Max(0, minY - padding);
+                var right = Mathf.Min(source.width - 1, segment.end + padding);
+                var top = Mathf.Min(source.height - 1, maxY + padding);
+                var outputPath = $"{outputFolder}/Frame_{index:00}.png";
+                var frame = GetCroppedSprite(sourcePath, outputPath, left, bottom, right - left + 1, top - bottom + 1, pixelsPerUnit);
+                if (frame != null) frames.Add(frame);
+            }
+            return frames.ToArray();
         }
 
         private static Sprite GetCroppedSprite(string sourcePath, string outputPath, int x, int y, int width, int height, float pixelsPerUnit)

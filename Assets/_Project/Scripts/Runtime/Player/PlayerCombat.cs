@@ -16,18 +16,26 @@ namespace BurnOut.Player
         private PlayerInputReader input;
         private float attackCooldownTimer;
         private float skillCooldownTimer;
+        private float attackVisualTimer;
+        private float skillVisualTimer;
 
         public float SkillCooldownRemaining => skillCooldownTimer;
+        public bool IsAttacking => attackVisualTimer > 0f;
+        public bool IsUsingSkill => skillVisualTimer > 0f;
+        public event System.Action AttackPerformed;
+        public event System.Action SkillPerformed;
 
         private void Awake() => input = GetComponent<PlayerInputReader>();
         private void OnEnable() { input.AttackPressed += Attack; input.SkillPressed += Skill; }
         private void OnDisable() { input.AttackPressed -= Attack; input.SkillPressed -= Skill; }
-        private void Update() { attackCooldownTimer = Mathf.Max(0f, attackCooldownTimer - Time.deltaTime); skillCooldownTimer = Mathf.Max(0f, skillCooldownTimer - Time.deltaTime); }
+        private void Update() { attackCooldownTimer = Mathf.Max(0f, attackCooldownTimer - Time.deltaTime); skillCooldownTimer = Mathf.Max(0f, skillCooldownTimer - Time.deltaTime); attackVisualTimer = Mathf.Max(0f, attackVisualTimer - Time.deltaTime); skillVisualTimer = Mathf.Max(0f, skillVisualTimer - Time.deltaTime); }
 
         private void Attack()
         {
             if (attackCooldownTimer > 0f || normalAttackHitbox == null) return;
             attackCooldownTimer = attackCooldown;
+            attackVisualTimer = attackActiveTime + .12f;
+            AttackPerformed?.Invoke();
             StartCoroutine(ActivateHitbox(normalAttackHitbox));
         }
 
@@ -35,6 +43,8 @@ namespace BurnOut.Player
         {
             if (skillCooldownTimer > 0f || skillHitbox == null) return;
             skillCooldownTimer = skillCooldown;
+            skillVisualTimer = attackActiveTime + .28f;
+            SkillPerformed?.Invoke();
             StartCoroutine(ActivateHitbox(skillHitbox));
         }
 

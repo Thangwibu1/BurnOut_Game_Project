@@ -32,6 +32,7 @@ namespace BurnOut.Enemies
 
         private void Update()
         {
+            if (player == null) player = FindAnyObjectByType<PlayerHealth>()?.transform;
             if (!health.IsAlive || player == null) return;
             var distance = Vector2.Distance(transform.position, player.position);
             if (distance <= attackRange) { CurrentState = State.Attack; TryAttack(); return; }
@@ -52,6 +53,9 @@ namespace BurnOut.Enemies
         {
             direction = Mathf.Sign(targetX - transform.position.x);
             transform.Translate(Vector2.right * direction * speed * Time.deltaTime);
+            var scale = transform.localScale;
+            scale.x = Mathf.Abs(scale.x) * (direction >= 0f ? 1f : -1f);
+            transform.localScale = scale;
         }
 
         private void TryAttack()
