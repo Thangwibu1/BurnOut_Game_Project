@@ -34,9 +34,9 @@ namespace BurnOut.Editor
             BurnOutSpriteFactory.GetTrimmedSprite("Assets/_Project/Art/Items/ITEM_Key.png", "Assets/_Project/Art/Items/ITEM_Key_Cropped.png", 56f);
             BurnOutSpriteFactory.GetTrimmedSprite("Assets/_Project/Art/Items/ITEM_SanityOrb.png", "Assets/_Project/Art/Items/ITEM_SanityOrb_Cropped.png", 56f);
             CreatePlayer();
+            CreateEnemyProjectile();
             CreateEnemy("PF_Enemy_Shadow", false);
             CreateEnemy("PF_MiniBoss_Shadow", true);
-            CreateEnemyProjectile();
             CreatePickup<SanityPickup>("PF_SanityOrb", "Items", Color.cyan, "SanityItem");
             CreatePickup<HealthPickup>("PF_HealthPickup", "Items", Color.red, "Untagged");
             CreatePickup<KeyPickup>("PF_Key", "Items", Color.yellow, "Key");
@@ -163,9 +163,11 @@ namespace BurnOut.Editor
             var go = CreateVisual(name, boss ? new Color(.7f, .15f, .55f) : new Color(.7f, .25f, .3f), "Enemy", "Enemy", boss ? new Vector2(1.5f, 2.1f) : new Vector2(.9f, 1.3f));
             go.AddComponent<BoxCollider2D>();
             var health = go.AddComponent<EnemyHealth>();
-            if (!boss) go.AddComponent<EnemyBrain>(); else go.AddComponent<MiniBossController>();
+            var brain = !boss ? go.AddComponent<EnemyBrain>() : null;
+            if (boss) go.AddComponent<MiniBossController>();
             if (!boss) { var animator = go.AddComponent<EnemyVisualAnimator>(); ConfigureEnemyAnimation(animator, go.GetComponent<SpriteRenderer>()); }
             var healthData = new SerializedObject(health); healthData.FindProperty("maxHealth").intValue = boss ? 20 : 3; healthData.ApplyModifiedPropertiesWithoutUndo();
+            if (brain != null) { var brainData = new SerializedObject(brain); brainData.FindProperty("energyProjectilePrefab").objectReferenceValue = LoadPrefab("PF_EnemyProjectile", "Enemies"); brainData.ApplyModifiedPropertiesWithoutUndo(); }
             SavePrefab(go, path);
         }
 
@@ -184,8 +186,10 @@ namespace BurnOut.Editor
             const string path = Root + "/Prefabs/Enemies/PF_EnemyProjectile.prefab";
             if (AssetDatabase.LoadAssetAtPath<GameObject>(path) != null) return;
             var go = CreateVisual("PF_EnemyProjectile", Color.magenta, "EnemyAttack", "Untagged", new Vector2(.3f, .3f));
-            go.AddComponent<CircleCollider2D>().isTrigger = true;
-            go.AddComponent<Hitbox2D>(); go.AddComponent<Projectile>(); go.AddComponent<EnemyProjectile>();
+            var collider = go.AddComponent<CircleCollider2D>(); collider.isTrigger = true;
+            var hitbox = go.AddComponent<Hitbox2D>(); go.AddComponent<Projectile>(); go.AddComponent<EnemyProjectile>();
+            var hitboxData = new SerializedObject(hitbox); hitboxData.FindProperty("damage").intValue = 1; hitboxData.FindProperty("knockback").floatValue = 5f; hitboxData.FindProperty("targetLayers").intValue = 1 << LayerMask.NameToLayer("Player"); hitboxData.FindProperty("hitboxCollider").objectReferenceValue = collider; hitboxData.ApplyModifiedPropertiesWithoutUndo();
+            var trail = go.AddComponent<TrailRenderer>(); trail.time = .28f; trail.startWidth = .18f; trail.endWidth = .02f; trail.startColor = new Color(.25f, .95f, 1f, .9f); trail.endColor = new Color(.5f, .1f, 1f, 0f);
             SavePrefab(go, path);
         }
 

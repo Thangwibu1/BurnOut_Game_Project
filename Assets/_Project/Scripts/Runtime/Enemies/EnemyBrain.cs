@@ -16,10 +16,14 @@ namespace BurnOut.Enemies
         [SerializeField] private float attackRange = 1.05f;
         [SerializeField] private int contactDamage = 1;
         [SerializeField] private float attackCooldown = 1f;
+        [SerializeField] private GameObject energyProjectilePrefab;
+        [SerializeField] private float projectileRange = 7.5f;
+        [SerializeField] private float projectileCooldown = 2.1f;
         private Transform player;
         private EnemyHealth health;
         private float direction = 1f;
         private float nextAttackTime;
+        private float nextProjectileTime;
 
         public State CurrentState { get; private set; } = State.Patrol;
 
@@ -36,6 +40,7 @@ namespace BurnOut.Enemies
             if (!health.IsAlive || player == null) return;
             var distance = Vector2.Distance(transform.position, player.position);
             if (distance <= attackRange) { CurrentState = State.Attack; TryAttack(); return; }
+            if (distance <= projectileRange) { CurrentState = State.Attack; FireEnergy(); MoveTowards(player.position.x, patrolSpeed * .45f); return; }
             if (distance <= detectionRange) { CurrentState = State.Chase; MoveTowards(player.position.x, chaseSpeed); return; }
             CurrentState = State.Patrol;
             Patrol();
@@ -63,6 +68,15 @@ namespace BurnOut.Enemies
             if (Time.time < nextAttackTime) return;
             nextAttackTime = Time.time + attackCooldown;
             player.GetComponent<PlayerHealth>()?.TakeDamage(new DamageInfo(contactDamage, transform.position, 5f));
+        }
+
+        private void FireEnergy()
+        {
+            if (energyProjectilePrefab == null || Time.time < nextProjectileTime) return;
+            nextProjectileTime = Time.time + projectileCooldown;
+            direction = Mathf.Sign(player.position.x - transform.position.x);
+            var projectile = Instantiate(energyProjectilePrefab, transform.position + new Vector3(direction * .55f, .15f, 0f), Quaternion.identity);
+            projectile.GetComponent<EnemyProjectile>()?.FireAt(player.position + Vector3.up * .25f);
         }
     }
 }

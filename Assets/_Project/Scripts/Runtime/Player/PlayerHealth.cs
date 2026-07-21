@@ -37,7 +37,8 @@ namespace BurnOut.Player
 
         public void TakeDamage(DamageInfo damage)
         {
-            if (!IsAlive || invincible || damage.Amount == 0) return;
+            // Dash is the player's committed dodge: projectiles and traps pass through during its short window.
+            if (!IsAlive || invincible || movement.IsDashing || damage.Amount == 0) return;
             CurrentHealth = Mathf.Max(0, CurrentHealth - damage.Amount);
             HealthChanged?.Invoke(CurrentHealth, maxHealth);
             sanity?.ApplyDamagePenalty(damage.Amount);
