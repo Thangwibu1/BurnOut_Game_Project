@@ -17,8 +17,8 @@ namespace BurnOut.Enemies
         [SerializeField] private int contactDamage = 1;
         [SerializeField] private float attackCooldown = 1f;
         [SerializeField] private GameObject energyProjectilePrefab;
-        [SerializeField] private float projectileRange = 7.5f;
-        [SerializeField] private float projectileCooldown = 2.1f;
+        [SerializeField] private float projectileRange = 5.5f;
+        [SerializeField] private float projectileCooldown = 4.5f;
         private Transform player;
         private EnemyHealth health;
         private float direction = 1f;

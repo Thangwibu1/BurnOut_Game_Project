@@ -9,7 +9,7 @@ namespace BurnOut.World
         [SerializeField] private Collider2D blockingCollider;
         [SerializeField] private SpriteRenderer visual;
         [SerializeField] private Sprite openSprite;
-        [SerializeField] private Color openColor = new(.65f, 1f, .9f, 1f);
+        [SerializeField] private Color openColor = Color.white;
         private bool opened;
         private void Awake()
         {

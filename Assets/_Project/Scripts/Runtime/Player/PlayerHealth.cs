@@ -9,8 +9,8 @@ namespace BurnOut.Player
     [RequireComponent(typeof(PlayerMovement), typeof(Rigidbody2D))]
     public sealed class PlayerHealth : MonoBehaviour, IDamageable, IHealable
     {
-        [SerializeField] private int maxHealth = 5;
-        [SerializeField] private float invincibilityDuration = .7f;
+        [SerializeField] private int maxHealth = 8;
+        [SerializeField] private float invincibilityDuration = 1.05f;
         [SerializeField] private PlayerSanity sanity;
         private PlayerMovement movement;
         private Rigidbody2D body;
@@ -32,7 +32,7 @@ namespace BurnOut.Player
 
         private void Update()
         {
-            if (IsAlive && transform.position.y < -12f) CheckpointManager.Instance?.Respawn(this);
+            if (IsAlive && transform.position.y < -22f) CheckpointManager.Instance?.Respawn(this);
         }
 
         public void TakeDamage(DamageInfo damage)
