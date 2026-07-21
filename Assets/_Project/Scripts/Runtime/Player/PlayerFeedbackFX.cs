@@ -63,6 +63,8 @@ namespace BurnOut.Player
         }
 
         private void StopFootsteps() { if (footstepSource != null && footstepSource.isPlaying) footstepSource.Stop(); }
+        // Called by GameManager when timeScale goes to 0 (level complete / pause) so Update() can't do it.
+        public void ForceStopFootsteps() => StopFootsteps();
 
         private void ShowAttack() => CreateEcho(transform.position + Vector3.right * (movement.FacingRight ? .55f : -.55f), new Color(.92f, .82f, 1f, .68f), .18f, 1.3f);
         private void ShowSkill() => CreateEcho(transform.position + Vector3.right * (movement.FacingRight ? .7f : -.7f), new Color(.35f, 1f, .85f, .8f), .35f, 1.8f);

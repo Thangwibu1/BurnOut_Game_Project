@@ -39,6 +39,7 @@ namespace BurnOut.Player
         private float frameTimer;
         private float idleTime;
         private bool yawning;    // true = played yawn anim, holding on last frame until player moves
+        private AudioSource yawnAudioSource;
 
         private void Awake()
         {
@@ -67,8 +68,8 @@ namespace BurnOut.Player
 
             if (!restingIdle)
             {
-                // Any action cancels the yawn; player must stand still another 5s for the next one.
-                yawning = false;
+                // Any action cancels the yawn — stop audio immediately.
+                if (yawning) CancelYawn();
                 idleTime = 0f;
             }
             else if (!yawning)
@@ -95,8 +96,29 @@ namespace BurnOut.Player
         private void StartYawn()
         {
             yawning = true;
-            idleTime = 0f;   // next yawn needs another full 5s after this one ends
-            RuntimeSfx.PlayClip(RuntimeSfx.LoadClip("SFX/player_yawn"), .9f);
+            idleTime = 0f;
+            // Loop the yawn audio continuously until the player moves — stopped in CancelYawn().
+            var clip = RuntimeSfx.LoadClip("SFX/player_yawn");
+            if (clip != null)
+            {
+                if (yawnAudioSource == null)
+                {
+                    yawnAudioSource = gameObject.AddComponent<AudioSource>();
+                    yawnAudioSource.spatialBlend = 0f;
+                    yawnAudioSource.playOnAwake = false;
+                    yawnAudioSource.volume = .9f;
+                    yawnAudioSource.loop = true;
+                }
+                yawnAudioSource.clip = clip;
+                if (!yawnAudioSource.isPlaying) yawnAudioSource.Play();
+            }
+        }
+
+        private void CancelYawn()
+        {
+            yawning = false;
+            idleTime = 0f;
+            if (yawnAudioSource != null && yawnAudioSource.isPlaying) yawnAudioSource.Stop();
         }
 
         private Sprite[] SkillFrames(PlayerCombat.SkillId skill)

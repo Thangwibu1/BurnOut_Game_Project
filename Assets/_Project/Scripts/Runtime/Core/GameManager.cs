@@ -1,4 +1,5 @@
 using BurnOut.Audio;
+using BurnOut.Player;
 using BurnOut.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -44,6 +45,9 @@ namespace BurnOut.Core
         public void CompleteLevel()
         {
             RuntimeSfx.Play(RuntimeSfx.Sound.Complete);
+            // Stop footsteps before freezing time — Update() won't run after timeScale = 0
+            // so PlayerFeedbackFX can't stop the loop itself.
+            FindAnyObjectByType<PlayerFeedbackFX>()?.ForceStopFootsteps();
             Time.timeScale = 0f;
             SetPanel(levelCompletePanel, true);
         }
