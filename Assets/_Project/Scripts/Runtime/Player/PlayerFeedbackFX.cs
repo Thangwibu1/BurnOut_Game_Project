@@ -46,7 +46,7 @@ namespace BurnOut.Player
         private void Update()
         {
             elapsed += Time.deltaTime;
-            if (target != null) { var c = target.color; c.a *= Mathf.Clamp01(1f - Time.deltaTime / lifetime); target.color = c; transform.localScale = Vector3.Lerp(transform.localScale, transform.localScale * growth, Time.deltaTime * 8f); }
+            if (target != null) { var c = target.color; c.a *= Mathf.Clamp01(1f - Time.deltaTime / lifetime); target.color = c; transform.localScale = Vector3.Lerp(transform.localScale, Vector3.Scale(transform.localScale, growth), Time.deltaTime * 8f); }
             if (elapsed >= lifetime) Destroy(gameObject);
         }
     }
