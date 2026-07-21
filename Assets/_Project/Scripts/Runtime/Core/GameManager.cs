@@ -1,3 +1,4 @@
+using BurnOut.Audio;
 using BurnOut.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -39,6 +40,7 @@ namespace BurnOut.Core
 
         public void CompleteLevel()
         {
+            RuntimeSfx.Play(RuntimeSfx.Sound.Complete);
             Time.timeScale = 0f;
             SetPanel(levelCompletePanel, true);
         }

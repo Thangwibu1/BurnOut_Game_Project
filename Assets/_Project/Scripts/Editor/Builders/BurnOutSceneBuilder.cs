@@ -94,8 +94,24 @@ namespace BurnOut.Editor
             CreateStepIsland("GardenBridge", new Vector2(137.5f, .1f), platforms.transform);
             CreateStepIsland("GardenStep", new Vector2(143f, .35f), platforms.transform);
             var hazard = InstantiatePrefab("PF_Hazard_Spikes", "Environment", environment.transform); hazard.transform.position = new Vector3(18.5f, -.28f, 0f);
+            var hazard2 = InstantiatePrefab("PF_Hazard_Spikes", "Environment", environment.transform); hazard2.transform.position = new Vector3(64f, -.28f, 0f);
+
+            // Depth + mood: slow drifting motes across the whole level.
+            var atmosphere = new GameObject("AtmosphereFX"); atmosphere.transform.SetParent(backgrounds.transform); atmosphere.AddComponent<BurnOut.World.AtmosphereFX>();
+
+            // Dress the ground with scattered rubble and lore papers so the route reads as living ruins, not a bare slab.
+            var props = Parent("Props", environment.transform);
+            var rock = BurnOutSpriteFactory.GetRockSprite();
+            var rockSpots = new[] { new Vector3(4f, -.42f, 0f), new Vector3(20f, -.4f, 0f), new Vector3(26f, -.45f, 0f), new Vector3(41f, -.4f, 0f), new Vector3(58f, -.42f, 0f), new Vector3(84f, -.4f, 0f), new Vector3(92f, -.45f, 0f), new Vector3(106f, -.4f, 0f), new Vector3(126f, -.42f, 0f), new Vector3(148f, -.4f, 0f) };
+            for (var i = 0; i < rockSpots.Length; i++) CreateProp("Rubble", rock, rockSpots[i], (i % 3 == 0 ? 1.15f : i % 3 == 1 ? .85f : 1f), props.transform, -18, new Color(.78f, .8f, .92f));
+            var note = BurnOutSpriteFactory.GetLoreNoteSprite();
+            CreateProp("LoreNote", note, new Vector3(29f, 1.15f, 0f), .8f, props.transform, -5, Color.white);
+            CreateProp("LoreNote", note, new Vector3(101f, .95f, 0f), .8f, props.transform, -5, Color.white);
 
             var interactables = Parent("Interactables");
+            // Checkpoints: one mid-route and one just before the boss arena so death is a setback, not a restart.
+            var checkpointMid = InstantiatePrefab("PF_Checkpoint", "Environment", interactables.transform); checkpointMid.transform.position = new Vector3(43f, 0f, 0f);
+            var checkpointBoss = InstantiatePrefab("PF_Checkpoint", "Environment", interactables.transform); checkpointBoss.transform.position = new Vector3(84f, 0f, 0f);
             var key = InstantiatePrefab("PF_Key", "Items", interactables.transform); key.transform.position = new Vector3(35f, 3.6f, 0f);
             var door = InstantiatePrefab("PF_LockedDoor", "Environment", interactables.transform); door.transform.position = new Vector3(153f, .85f, 0f);
             var sanity = InstantiatePrefab("PF_SanityOrb", "Items", interactables.transform); sanity.transform.position = new Vector3(15f, 3.25f, 0f);
@@ -123,7 +139,9 @@ namespace BurnOut.Editor
             var arenaComponent = arena.AddComponent<BossArenaTrigger>();
             var arenaData = new SerializedObject(arenaComponent); arenaData.FindProperty("boss").objectReferenceValue = boss.GetComponent<MiniBossController>(); arenaData.FindProperty("bossHud").objectReferenceValue = ui.GetComponentInChildren<BossHUD>(true); arenaData.ApplyModifiedPropertiesWithoutUndo();
             var miniBoss = boss.GetComponent<MiniBossController>(); var bossData = new SerializedObject(miniBoss); bossData.FindProperty("mentalFragmentPrefab").objectReferenceValue = BurnOutPrefabBuilder.LoadPrefab("PF_MentalFragment", "Items"); bossData.ApplyModifiedPropertiesWithoutUndo();
-            CreateWorldText("Move: A/D or Arrow Keys     Jump: Space     Attack: Left Shift     Dash: Left Ctrl", new Vector3(4f, 2f, 0f));
+            CreateWorldText("Move: A/D or Arrows     Jump / Double Jump: Space     Dash: Left Ctrl", new Vector3(4f, 2.4f, 0f));
+            CreateWorldText("Attack: Left Shift / LMB     Skill lunge: K / RMB", new Vector3(4f, 1.6f, 0f));
+            CreateWorldText("Slaying shadows restores sanity. The lower your sanity, the harder you hit.", new Vector3(23f, 4.4f, 0f));
             CreateWorldText("Find the key. Defeat the shadow to recover your fragment.", new Vector3(31f, 4f, 0f));
             CreateWorldText("Survive the pressure hall. The rooftop is close.", new Vector3(68f, 4f, 0f));
             CreateWorldText("Defeat the source of pressure, then carry the fragment to the Garden.", new Vector3(123f, 4f, 0f));
@@ -255,6 +273,7 @@ namespace BurnOut.Editor
         private static Slider CreateHudMeter(string name, Transform parent, Vector2 position, Vector2 size, Color fillColor) { var go = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Slider)); go.transform.SetParent(parent, false); var rect = go.GetComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(0f, 1f); rect.pivot = new Vector2(0f, 1f); rect.anchoredPosition = position; rect.sizeDelta = size; var background = go.GetComponent<Image>(); background.color = new Color(.04f, .02f, .08f, .6f); background.raycastTarget = false; var fill = new GameObject("Fill", typeof(RectTransform), typeof(Image)); fill.transform.SetParent(go.transform, false); var fillRect = fill.GetComponent<RectTransform>(); fillRect.anchorMin = Vector2.zero; fillRect.anchorMax = Vector2.one; fillRect.offsetMin = new Vector2(2f, 2f); fillRect.offsetMax = new Vector2(-2f, -2f); var fillImage = fill.GetComponent<Image>(); fillImage.color = fillColor; fillImage.raycastTarget = false; var slider = go.GetComponent<Slider>(); slider.fillRect = fillRect; slider.direction = Slider.Direction.LeftToRight; slider.value = 1f; return slider; }
         private static TextMeshProUGUI CreateHudCounter(string name, Transform parent, Vector2 position, Vector2 size) { var go = new GameObject(name, typeof(RectTransform), typeof(TextMeshProUGUI)); go.transform.SetParent(parent, false); var rect = go.GetComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(0f, 1f); rect.pivot = new Vector2(0f, 1f); rect.anchoredPosition = position; rect.sizeDelta = size; var text = go.GetComponent<TextMeshProUGUI>(); text.fontSize = 15; text.alignment = TextAlignmentOptions.Left; text.color = Color.white; text.raycastTarget = false; return text; }
         private static void CreateWorldText(string text, Vector3 position) { var go = new GameObject("TutorialText", typeof(TextMeshPro)); go.transform.position = position; var label = go.GetComponent<TextMeshPro>(); label.text = text; label.fontSize = 2.2f; label.alignment = TextAlignmentOptions.Center; label.color = new Color(.9f, .8f, 1f); }
+        private static void CreateProp(string name, Sprite sprite, Vector3 position, float scale, Transform parent, int sortingOrder, Color tint) { if (sprite == null) return; var go = new GameObject(name); go.transform.SetParent(parent); go.transform.position = position; go.transform.localScale = Vector3.one * scale; var renderer = go.AddComponent<SpriteRenderer>(); renderer.sprite = sprite; renderer.sortingOrder = sortingOrder; renderer.color = tint; }
         private static Sprite GetWhiteSprite() { if (whiteSprite == null) whiteSprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd"); return whiteSprite; }
     }
 }

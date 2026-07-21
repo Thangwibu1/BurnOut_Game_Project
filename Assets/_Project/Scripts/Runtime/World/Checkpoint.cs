@@ -1,3 +1,5 @@
+using BurnOut.Audio;
+using BurnOut.Combat;
 using BurnOut.Core;
 using BurnOut.Player;
 using UnityEngine;
@@ -8,7 +10,8 @@ namespace BurnOut.World
     public sealed class Checkpoint : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer visual;
-        [SerializeField] private Color activeColor = new(0.35f, 1f, .85f);
+        [SerializeField] private Sprite activeSprite;
+        [SerializeField] private Color activeColor = Color.white;
         private bool activated;
 
         private void Awake() => GetComponent<Collider2D>().isTrigger = true;
@@ -19,7 +22,14 @@ namespace BurnOut.World
             CheckpointManager.Instance?.SetCheckpoint(transform.position + Vector3.up);
             player.RestoreFull();
             player.GetComponent<PlayerSanity>()?.RestoreFull();
-            if (visual != null) visual.color = activeColor;
+            if (visual != null)
+            {
+                if (activeSprite != null) visual.sprite = activeSprite;
+                visual.color = activeColor;
+            }
+            RuntimeSfx.Play(RuntimeSfx.Sound.Checkpoint);
+            ImpactFX.Expand(transform.position, new Color(.4f, 1f, .85f), 2.6f);
+            Juice.Shake(.1f, .16f);
         }
     }
 }

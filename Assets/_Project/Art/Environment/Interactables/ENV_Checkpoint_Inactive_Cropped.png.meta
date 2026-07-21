@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 5add69d9b56ac8c4db3114be0aa7fde0
+guid: 1da6a42e3c243294a9857bb0bf94fd73
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1276903136585752221
-    second: ITEM_LoreNote_0
+      213: -7036668703739454672
+    second: ENV_Checkpoint_Inactive_Cropped_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -24,7 +24,7 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
     flipGreenChannel: 0
-  isReadable: 1
+  isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ITEM_LoreNote_0
+      name: ENV_Checkpoint_Inactive_Cropped_0
       rect:
         serializedVersion: 2
-        x: 519
-        y: 773
-        width: 48
-        height: 45
+        x: 37
+        y: 37
+        width: 228
+        height: 262
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d9e96cc23a878b110800000000000000
-      internalID: 1276903136585752221
+      spriteID: 03b5087881bb85e90800000000000000
+      internalID: -7036668703739454672
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ITEM_LoreNote_0: 1276903136585752221
+      ENV_Checkpoint_Inactive_Cropped_0: -7036668703739454672
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

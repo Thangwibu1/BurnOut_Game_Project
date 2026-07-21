@@ -1,3 +1,6 @@
+using BurnOut.Audio;
+using BurnOut.Combat;
+using BurnOut.Core;
 using BurnOut.Player;
 using UnityEngine;
 
@@ -23,6 +26,9 @@ namespace BurnOut.World
             opened = true;
             blockingCollider.enabled = false;
             if (visual != null) { if (openSprite != null) visual.sprite = openSprite; visual.color = openColor; }
+            RuntimeSfx.Play(RuntimeSfx.Sound.DoorOpen);
+            ImpactFX.Burst(transform.position, new Color(.9f, .8f, .5f), 10, 4f, .3f);
+            Juice.Shake(.18f, .2f);
             Destroy(gameObject, .7f);
         }
     }

@@ -164,9 +164,17 @@ namespace BurnOut.Editor
             go.AddComponent<BoxCollider2D>();
             var health = go.AddComponent<EnemyHealth>();
             var brain = !boss ? go.AddComponent<EnemyBrain>() : null;
-            if (boss) go.AddComponent<MiniBossController>();
+            if (boss)
+            {
+                var bossController = go.AddComponent<MiniBossController>();
+                var bossAnimator = go.AddComponent<BossVisualAnimator>();
+                ConfigureBossAnimation(bossAnimator, go.GetComponent<SpriteRenderer>());
+                var bossData = new SerializedObject(bossController);
+                bossData.FindProperty("energyProjectilePrefab").objectReferenceValue = LoadPrefab("PF_EnemyProjectile", "Enemies");
+                bossData.ApplyModifiedPropertiesWithoutUndo();
+            }
             if (!boss) { var animator = go.AddComponent<EnemyVisualAnimator>(); ConfigureEnemyAnimation(animator, go.GetComponent<SpriteRenderer>()); }
-            var healthData = new SerializedObject(health); healthData.FindProperty("maxHealth").intValue = boss ? 20 : 3; healthData.ApplyModifiedPropertiesWithoutUndo();
+            var healthData = new SerializedObject(health); healthData.FindProperty("maxHealth").intValue = boss ? 28 : 3; healthData.ApplyModifiedPropertiesWithoutUndo();
             if (brain != null) { var brainData = new SerializedObject(brain); brainData.FindProperty("energyProjectilePrefab").objectReferenceValue = LoadPrefab("PF_EnemyProjectile", "Enemies"); brainData.ApplyModifiedPropertiesWithoutUndo(); }
             SavePrefab(go, path);
         }
@@ -202,6 +210,7 @@ namespace BurnOut.Editor
             var component = go.AddComponent<Checkpoint>();
             var data = new SerializedObject(component);
             data.FindProperty("visual").objectReferenceValue = go.GetComponent<SpriteRenderer>();
+            data.FindProperty("activeSprite").objectReferenceValue = BurnOutSpriteFactory.GetCheckpointSprite();
             data.ApplyModifiedPropertiesWithoutUndo();
             SavePrefab(go, path);
         }
@@ -256,7 +265,7 @@ namespace BurnOut.Editor
                     ? BurnOutSpriteFactory.GetTrimmedSprite("Assets/_Project/Art/Items/ITEM_SanityOrb.png", "Assets/_Project/Art/Items/ITEM_SanityOrb_Cropped.png", 56f)
                     : null;
             var environmentSprite = name == "PF_Enemy_Shadow" || name == "PF_MiniBoss_Shadow" ? BurnOutSpriteFactory.GetEnemySprite()
-                : name == "PF_Checkpoint" ? BurnOutSpriteFactory.GetCheckpointSprite()
+                : name == "PF_Checkpoint" ? BurnOutSpriteFactory.GetCheckpointInactiveSprite()
                 : name == "PF_LockedDoor" || name == "PF_LevelExit" ? BurnOutSpriteFactory.GetDoorSprite()
                 : name == "PF_MentalFragment" ? BurnOutSpriteFactory.GetFragmentSprite()
                 : name == "PF_Hazard_Spikes" ? BurnOutSpriteFactory.GetHazardSprite()
@@ -307,6 +316,18 @@ namespace BurnOut.Editor
         }
 
         private static void ConfigureEnemyAnimation(EnemyVisualAnimator animator, SpriteRenderer renderer)
+        {
+            var data = new SerializedObject(animator);
+            var move = BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Enemies/Enemy_Move.png", "Assets/_Project/Art/Characters/Enemies/Frames/Move", 64f);
+            data.FindProperty("spriteRenderer").objectReferenceValue = renderer;
+            SetSprites(data, "idleFrames", move.Length > 0 ? new[] { move[0] } : System.Array.Empty<Sprite>());
+            SetSprites(data, "moveFrames", move);
+            SetSprites(data, "attackFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Enemies/Enemy_Attack.png", "Assets/_Project/Art/Characters/Enemies/Frames/Attack", 64f));
+            SetSprites(data, "deathFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Enemies/Enemy_Death.png", "Assets/_Project/Art/Characters/Enemies/Frames/Death", 64f));
+            data.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void ConfigureBossAnimation(BossVisualAnimator animator, SpriteRenderer renderer)
         {
             var data = new SerializedObject(animator);
             var move = BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Enemies/Enemy_Move.png", "Assets/_Project/Art/Characters/Enemies/Frames/Move", 64f);

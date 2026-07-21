@@ -38,6 +38,24 @@ namespace BurnOut.Editor
             return GetCroppedSprite(InteractableSourcePath, "Assets/_Project/Art/Environment/Interactables/ENV_Checkpoint_Cropped.png", 748, 325, 265, 315, 100f);
         }
 
+        // The dim, unlit resting shrine on the left of the interactables sheet — the checkpoint before it is touched.
+        public static Sprite GetCheckpointInactiveSprite()
+        {
+            return GetCroppedSprite(InteractableSourcePath, "Assets/_Project/Art/Environment/Interactables/ENV_Checkpoint_Inactive_Cropped.png", 470, 325, 265, 315, 100f);
+        }
+
+        // A standalone rubble rock used to dress the ground so the route is not a bare slab.
+        public static Sprite GetRockSprite()
+        {
+            return GetTrimmedSprite("Assets/_Project/Art/Environment/Props/ENV_Rock.png", "Assets/_Project/Art/Environment/Props/ENV_Rock_Cropped.png", 100f);
+        }
+
+        // The artist's lore paper — previously imported but unused. Dresses ledges as scattered notes.
+        public static Sprite GetLoreNoteSprite()
+        {
+            return GetTrimmedSprite("Assets/_Project/Art/Items/ITEM_LoreNote.png", "Assets/_Project/Art/Items/ITEM_LoreNote_Cropped.png", 90f);
+        }
+
         public static Sprite GetDoorSprite()
         {
             return GetCroppedSprite(InteractableSourcePath, "Assets/_Project/Art/Environment/Interactables/ENV_Door_Cropped.png", 475, 650, 265, 380, 100f);

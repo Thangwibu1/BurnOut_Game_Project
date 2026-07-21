@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using BurnOut.Audio;
 using BurnOut.Combat;
 using BurnOut.Core;
 using UnityEngine;
@@ -46,6 +47,10 @@ namespace BurnOut.Player
             var direction = ((Vector2)transform.position - damage.SourcePosition).normalized;
             body.AddForce(direction * damage.Knockback, ForceMode2D.Impulse);
             StartCoroutine(FlashDamage());
+            ImpactFX.Spark(transform.position, new Color(1f, .3f, .38f));
+            RuntimeSfx.Play(RuntimeSfx.Sound.Hurt);
+            Juice.Shake(.3f, .24f);
+            Juice.HitStop(.04f);
             if (CurrentHealth == 0) StartCoroutine(DieRoutine()); else StartCoroutine(InvincibilityRoutine());
         }
 
@@ -84,6 +89,9 @@ namespace BurnOut.Player
         {
             IsAlive = false;
             Died?.Invoke();
+            ImpactFX.Burst(transform.position, new Color(1f, .35f, .4f), 16, 6.5f, .4f);
+            RuntimeSfx.Play(RuntimeSfx.Sound.GameOver);
+            Juice.Shake(.45f, .4f);
             GameManager.Instance?.ShowGameOver();
             yield return new WaitForSeconds(.65f);
             CheckpointManager.Instance?.Respawn(this);

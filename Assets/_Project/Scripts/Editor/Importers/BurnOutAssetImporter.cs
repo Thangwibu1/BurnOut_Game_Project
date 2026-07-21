@@ -33,6 +33,16 @@ namespace BurnOut.Editor
             ["main menu.png"] = "Art/UI/UI_MainMenu.png"
         };
 
+        // Wide multi-storey scene backdrops (separate source folder the user connected).
+        private const string BackgroundSourceDirectory = "D:/code/nlinh/background_new";
+        private static readonly Dictionary<string, string> BackgroundImports = new()
+        {
+            ["bg1.png"] = "Art/Backgrounds/BG_Scene1.png",
+            ["bg2.png"] = "Art/Backgrounds/BG_Scene2.png",
+            ["bg3.png"] = "Art/Backgrounds/BG_Scene3.png",
+            ["bg4.png"] = "Art/Backgrounds/BG_Scene4.png"
+        };
+
         [MenuItem("BurnOut/02 Import And Organize Assets")]
         public static void ImportAndOrganizeAssets()
         {
@@ -45,9 +55,24 @@ namespace BurnOut.Editor
                 Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
                 if (!File.Exists(destination)) File.Copy(source, destination, false);
             }
+            ImportFolder(BackgroundSourceDirectory, BackgroundImports);
             AssetDatabase.Refresh();
             foreach (var relative in Imports.Values) ApplySettings("Assets/_Project/" + relative);
+            foreach (var relative in BackgroundImports.Values) ApplySettings("Assets/_Project/" + relative);
             AssetDatabase.SaveAssets();
+        }
+
+        private static void ImportFolder(string sourceDirectory, Dictionary<string, string> imports)
+        {
+            if (!Directory.Exists(sourceDirectory)) { Debug.LogWarning($"[BurnOut] Optional source folder not found (skipping): {sourceDirectory}"); return; }
+            foreach (var pair in imports)
+            {
+                var source = Path.Combine(sourceDirectory, pair.Key);
+                var destination = Path.Combine(Application.dataPath, "_Project", pair.Value);
+                if (!File.Exists(source)) { Debug.LogWarning($"[BurnOut] Expected source art not found: {pair.Key}"); continue; }
+                Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+                if (!File.Exists(destination)) File.Copy(source, destination, false);
+            }
         }
 
         private static void ApplySettings(string assetPath)

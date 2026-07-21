@@ -14,6 +14,9 @@ namespace BurnOut.Combat
         private readonly HashSet<IDamageable> hitTargets = new();
         private bool activeHitbox;
 
+        /// <summary>Runtime damage scaling — e.g. the player hits harder while low on sanity.</summary>
+        public float DamageMultiplier { get; set; } = 1f;
+
         private void Awake()
         {
             hitboxCollider ??= GetComponent<Collider2D>();
@@ -42,7 +45,8 @@ namespace BurnOut.Combat
             if (!activeHitbox || (targetLayers.value & (1 << other.gameObject.layer)) == 0) return;
             var damageable = other.GetComponentInParent<IDamageable>();
             if (damageable == null || !hitTargets.Add(damageable)) return;
-            damageable.TakeDamage(new DamageInfo(damage, transform.position, knockback));
+            int dealt = Mathf.Max(1, Mathf.RoundToInt(damage * DamageMultiplier));
+            damageable.TakeDamage(new DamageInfo(dealt, transform.position, knockback));
         }
     }
 }

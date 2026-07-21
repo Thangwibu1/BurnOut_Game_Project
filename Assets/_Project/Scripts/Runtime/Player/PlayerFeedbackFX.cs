@@ -1,8 +1,10 @@
+using BurnOut.Audio;
+using BurnOut.Combat;
 using UnityEngine;
 
 namespace BurnOut.Player
 {
-    /// <summary>Lightweight in-game feedback for dashes, pillow impacts and skill casts.</summary>
+    /// <summary>Lightweight in-game feedback for jumps, dashes, impacts and skill casts.</summary>
     [RequireComponent(typeof(PlayerMovement), typeof(PlayerCombat), typeof(SpriteRenderer))]
     public sealed class PlayerFeedbackFX : MonoBehaviour
     {
@@ -12,8 +14,15 @@ namespace BurnOut.Player
         private float nextAfterimage;
 
         private void Awake() { sourceRenderer ??= GetComponent<SpriteRenderer>(); movement = GetComponent<PlayerMovement>(); combat = GetComponent<PlayerCombat>(); }
-        private void OnEnable() { combat.AttackPerformed += ShowAttack; combat.SkillPerformed += ShowSkill; }
-        private void OnDisable() { combat.AttackPerformed -= ShowAttack; combat.SkillPerformed -= ShowSkill; }
+        private void OnEnable() { combat.AttackPerformed += ShowAttack; combat.SkillPerformed += ShowSkill; movement.Jumped += ShowJump; movement.Dashed += ShowDash; }
+        private void OnDisable() { combat.AttackPerformed -= ShowAttack; combat.SkillPerformed -= ShowSkill; movement.Jumped -= ShowJump; movement.Dashed -= ShowDash; }
+
+        private void ShowJump() => RuntimeSfx.Play(RuntimeSfx.Sound.Jump, .6f);
+        private void ShowDash()
+        {
+            RuntimeSfx.Play(RuntimeSfx.Sound.Dash, .8f);
+            ImpactFX.Expand(transform.position, new Color(.3f, .9f, 1f, .7f), 1.4f);
+        }
         private void Update()
         {
             if (!movement.IsDashing || Time.time < nextAfterimage) return;

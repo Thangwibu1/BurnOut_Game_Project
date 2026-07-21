@@ -1,3 +1,4 @@
+using BurnOut.Audio;
 using BurnOut.Combat;
 using BurnOut.Player;
 using UnityEngine;
@@ -34,6 +35,22 @@ namespace BurnOut.Enemies
             health = GetComponent<EnemyHealth>();
             player = FindAnyObjectByType<PlayerHealth>()?.transform;
             health.Died += () => CurrentState = State.Dead;
+            ApplySpawnVariety();
+        }
+
+        // Light per-spawn variation so repeated encounters never feel like clones:
+        // some shadows are small and quick, others larger and slower, with a cool/warm tint.
+        private void ApplySpawnVariety()
+        {
+            float v = Random.value;
+            patrolSpeed *= Mathf.Lerp(.85f, 1.25f, v);
+            chaseSpeed *= Mathf.Lerp(.9f, 1.4f, v);
+            attackCooldown *= Mathf.Lerp(1.15f, .8f, v);
+            var scale = transform.localScale;
+            float size = Mathf.Lerp(1.15f, .88f, v);
+            transform.localScale = new Vector3(Mathf.Abs(scale.x) * size, Mathf.Abs(scale.y) * size, scale.z);
+            var renderer = GetComponent<SpriteRenderer>();
+            if (renderer != null) renderer.color = Color.Lerp(new Color(1f, .88f, .88f), new Color(.82f, .86f, 1f), v);
         }
 
         private void Update()
@@ -69,6 +86,10 @@ namespace BurnOut.Enemies
         {
             if (Time.time < nextAttackTime) return;
             nextAttackTime = Time.time + attackCooldown;
+            // A small lunge so the strike reads as a deliberate lunge, not a passive touch.
+            direction = Mathf.Sign(player.position.x - transform.position.x);
+            transform.Translate(Vector2.right * direction * .35f);
+            RuntimeSfx.Play(RuntimeSfx.Sound.Attack, .5f);
             player.GetComponent<PlayerHealth>()?.TakeDamage(new DamageInfo(contactDamage, transform.position, 5f));
         }
 
