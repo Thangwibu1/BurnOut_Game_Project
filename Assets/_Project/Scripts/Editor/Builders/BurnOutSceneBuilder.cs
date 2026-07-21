@@ -144,8 +144,8 @@ namespace BurnOut.Editor
             var arenaData = new SerializedObject(arenaComponent); arenaData.FindProperty("boss").objectReferenceValue = boss.GetComponent<MiniBossController>(); arenaData.FindProperty("bossHud").objectReferenceValue = ui.GetComponentInChildren<BossHUD>(true); arenaData.ApplyModifiedPropertiesWithoutUndo();
             // The boss drops the key on death; carrying it to the single gate wins the level.
             var miniBoss = boss.GetComponent<MiniBossController>(); var bossData = new SerializedObject(miniBoss); bossData.FindProperty("mentalFragmentPrefab").objectReferenceValue = BurnOutPrefabBuilder.LoadPrefab("PF_Key", "Items"); bossData.ApplyModifiedPropertiesWithoutUndo();
-            CreateWorldText("Move: A/D or Arrows     Jump / Double Jump: Space     Dash: Left Ctrl", new Vector3(4f, 2.4f, 0f));
-            CreateWorldText("Attack: Left Shift / LMB     Skills:  Z Shockwave   X Aura (heal+shield)   C Rush (lunge)", new Vector3(4f, 1.6f, 0f));
+            CreateWorldText("Move: A/D or Arrows\nJump / Double Jump: Space     Dash: Left Ctrl", new Vector3(4f, 2.6f, 0f), 14f);
+            CreateWorldText("Attack: Left Shift / LMB\nSkills:  Z Shockwave    X Aura (heal+shield)    C Rush (lunge)", new Vector3(4f, 1.4f, 0f), 16f);
             CreateWorldText("Slaying shadows restores sanity. The lower your sanity, the harder you hit.", new Vector3(23f, 4.4f, 0f));
             CreateWorldText("Climb the ruins. Watch your footing over the spikes.", new Vector3(31f, 4f, 0f));
             CreateWorldText("Survive the pressure hall. The rooftop is close.", new Vector3(68f, 4f, 0f));
@@ -313,7 +313,24 @@ namespace BurnOut.Editor
         private static Image CreateHudArtwork(string name, Transform parent, Sprite sprite, Vector2 position, Vector2 size, bool rightAnchored = false) { var go = new GameObject(name, typeof(RectTransform), typeof(Image)); go.transform.SetParent(parent, false); var rect = go.GetComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = rightAnchored ? new Vector2(1f, 1f) : new Vector2(0f, 1f); rect.pivot = rightAnchored ? new Vector2(1f, 1f) : new Vector2(0f, 1f); rect.anchoredPosition = position; rect.sizeDelta = size; var image = go.GetComponent<Image>(); image.sprite = sprite; image.preserveAspect = true; image.raycastTarget = false; return image; }
         private static Slider CreateHudMeter(string name, Transform parent, Vector2 position, Vector2 size, Color fillColor) { var go = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Slider)); go.transform.SetParent(parent, false); var rect = go.GetComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(0f, 1f); rect.pivot = new Vector2(0f, 1f); rect.anchoredPosition = position; rect.sizeDelta = size; var background = go.GetComponent<Image>(); background.color = new Color(.04f, .02f, .08f, .6f); background.raycastTarget = false; var fill = new GameObject("Fill", typeof(RectTransform), typeof(Image)); fill.transform.SetParent(go.transform, false); var fillRect = fill.GetComponent<RectTransform>(); fillRect.anchorMin = Vector2.zero; fillRect.anchorMax = Vector2.one; fillRect.offsetMin = new Vector2(2f, 2f); fillRect.offsetMax = new Vector2(-2f, -2f); var fillImage = fill.GetComponent<Image>(); fillImage.color = fillColor; fillImage.raycastTarget = false; var slider = go.GetComponent<Slider>(); slider.fillRect = fillRect; slider.direction = Slider.Direction.LeftToRight; slider.value = 1f; return slider; }
         private static TextMeshProUGUI CreateHudCounter(string name, Transform parent, Vector2 position, Vector2 size) { var go = new GameObject(name, typeof(RectTransform), typeof(TextMeshProUGUI)); go.transform.SetParent(parent, false); var rect = go.GetComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(0f, 1f); rect.pivot = new Vector2(0f, 1f); rect.anchoredPosition = position; rect.sizeDelta = size; var text = go.GetComponent<TextMeshProUGUI>(); text.fontSize = 15; text.alignment = TextAlignmentOptions.Left; text.color = Color.white; text.raycastTarget = false; return text; }
-        private static void CreateWorldText(string text, Vector3 position) { var go = new GameObject("TutorialText", typeof(TextMeshPro)); go.transform.position = position; var label = go.GetComponent<TextMeshPro>(); label.text = text; label.fontSize = 2.2f; label.alignment = TextAlignmentOptions.Center; label.color = new Color(.9f, .8f, 1f); }
+        private static void CreateWorldText(string text, Vector3 position) { CreateWorldText(text, position, 12f); }
+        // World-space tutorial text. A TextMeshPro with no sized RectTransform stretches every string onto a
+        // single runaway line; we give it a bounded width and enable wrapping so long lines flow into a
+        // readable multi-line block centred on the anchor.
+        private static void CreateWorldText(string text, Vector3 position, float width)
+        {
+            var go = new GameObject("TutorialText", typeof(TextMeshPro));
+            go.transform.position = position;
+            var label = go.GetComponent<TextMeshPro>();
+            var rect = label.rectTransform;
+            rect.sizeDelta = new Vector2(width, 3f);
+            rect.pivot = new Vector2(.5f, .5f);
+            label.text = text;
+            label.fontSize = 2.2f;
+            label.alignment = TextAlignmentOptions.Center;
+            label.textWrappingMode = TextWrappingModes.Normal;
+            label.color = new Color(.9f, .8f, 1f);
+        }
         private static void CreateProp(string name, Sprite sprite, Vector3 position, float scale, Transform parent, int sortingOrder, Color tint) { if (sprite == null) return; var go = new GameObject(name); go.transform.SetParent(parent); go.transform.position = position; go.transform.localScale = Vector3.one * scale; var renderer = go.AddComponent<SpriteRenderer>(); renderer.sprite = sprite; renderer.sortingOrder = sortingOrder; renderer.color = tint; }
         private static Sprite GetWhiteSprite() { if (whiteSprite == null) whiteSprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd"); return whiteSprite; }
     }

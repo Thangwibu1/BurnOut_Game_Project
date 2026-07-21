@@ -22,15 +22,20 @@ namespace BurnOut.UI
         }
 
         // Build a TMP font from the bundled Chiller TTF (Resources/Fonts/Chiller) so the menu
-        // captions share the grungy horror tone of the BURN OUT title. Cached after first build.
+        // captions share the grungy horror tone of the BURN OUT title.
+        // We null-check the cache instead of using a "loaded" flag: a runtime-created font asset can be
+        // unloaded on scene reload, and Unity reports a destroyed object as == null. A stale flag would
+        // hand back that dead reference and the label would silently fall back to the default font
+        // (the "correct on first load, old font after re-entering the menu" bug). Rebuilding when the
+        // cache is null keeps it valid, and DontUnloadUnusedAsset lets it survive normal scene loads.
         private static TMP_FontAsset menuFontCache;
-        private static bool menuFontLoaded;
         private static TMP_FontAsset LoadMenuFont()
         {
-            if (menuFontLoaded) return menuFontCache;
-            menuFontLoaded = true;
+            if (menuFontCache != null) return menuFontCache;
             var ttf = Resources.Load<Font>("Fonts/Chiller");
-            if (ttf != null) menuFontCache = TMP_FontAsset.CreateFontAsset(ttf);
+            if (ttf == null) return null;
+            menuFontCache = TMP_FontAsset.CreateFontAsset(ttf);
+            if (menuFontCache != null) menuFontCache.hideFlags = HideFlags.DontUnloadUnusedAsset;
             return menuFontCache;
         }
 
