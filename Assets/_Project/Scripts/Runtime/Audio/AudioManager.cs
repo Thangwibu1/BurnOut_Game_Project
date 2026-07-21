@@ -18,7 +18,7 @@ namespace BurnOut.Audio
         }
 
         public void SetMaster(float value) { masterVolume = value; ApplyVolumes(); }
-        public void SetMusic(float value) { musicVolume = value; ApplyVolumes(); }
+        public void SetMusic(float value) { musicVolume = value; ApplyVolumes(); MusicPlayer.Instance?.SetVolume(value); }
         public void SetSfx(float value) => sfxVolume = value;
         public void PlaySfx(AudioClip clip, Vector3 position)
         {
