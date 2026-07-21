@@ -40,6 +40,24 @@ namespace BurnOut.Audio
             if (clip != null) player.Play(clip, volume);
         }
 
+        // Plays an authored clip already loaded elsewhere (e.g. from Resources) through the shared pool.
+        public static void PlayClip(AudioClip clip, float volume = 1f)
+        {
+            if (clip == null) return;
+            if (player == null) Bootstrap();
+            player?.Play(clip, volume);
+        }
+
+        // Loads and caches an authored clip from a Resources path (no extension), e.g. "SFX/player_yawn".
+        private static readonly Dictionary<string, AudioClip> resourceCache = new();
+        public static AudioClip LoadClip(string resourcePath)
+        {
+            if (resourceCache.TryGetValue(resourcePath, out var c) && c != null) return c;
+            c = Resources.Load<AudioClip>(resourcePath);
+            resourceCache[resourcePath] = c;
+            return c;
+        }
+
         public static AudioClip Ambience()
         {
             if (ambienceClip != null) return ambienceClip;

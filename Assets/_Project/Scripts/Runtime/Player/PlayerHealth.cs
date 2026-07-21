@@ -101,13 +101,15 @@ namespace BurnOut.Player
 
         private IEnumerator DieRoutine()
         {
-            IsAlive = false;
+            IsAlive = false;   // PlayerVisualAnimator switches to deathFrames immediately
             Died?.Invoke();
             ImpactFX.Burst(transform.position, new Color(1f, .35f, .4f), 16, 6.5f, .4f);
+            RuntimeSfx.PlayClip(RuntimeSfx.LoadClip("SFX/player_die"), 1f);
             RuntimeSfx.Play(RuntimeSfx.Sound.GameOver);
             Juice.Shake(.45f, .4f);
             GameManager.Instance?.ShowGameOver();
-            yield return new WaitForSeconds(.65f);
+            // Hold for 2 s so the death animation (and voice clip) plays out fully before respawning.
+            yield return new WaitForSeconds(2f);
             CheckpointManager.Instance?.Respawn(this);
         }
 

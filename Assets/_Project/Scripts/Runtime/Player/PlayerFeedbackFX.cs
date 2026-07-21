@@ -13,9 +13,31 @@ namespace BurnOut.Player
         private PlayerCombat combat;
         private float nextAfterimage;
 
-        private void Awake() { sourceRenderer ??= GetComponent<SpriteRenderer>(); movement = GetComponent<PlayerMovement>(); combat = GetComponent<PlayerCombat>(); }
-        private void OnEnable() { combat.AttackPerformed += ShowAttack; combat.SkillPerformed += ShowSkill; movement.Jumped += ShowJump; movement.Dashed += ShowDash; }
-        private void OnDisable() { combat.AttackPerformed -= ShowAttack; combat.SkillPerformed -= ShowSkill; movement.Jumped -= ShowJump; movement.Dashed -= ShowDash; }
+        // Dedicated looping AudioSource for footsteps — separate from the one-shot pool so
+        // it starts/stops cleanly without interrupting other sounds.
+        private AudioSource footstepSource;
+
+        private void Awake()
+        {
+            sourceRenderer ??= GetComponent<SpriteRenderer>();
+            movement = GetComponent<PlayerMovement>();
+            combat = GetComponent<PlayerCombat>();
+            BuildFootstepSource();
+        }
+
+        private void BuildFootstepSource()
+        {
+            var clip = RuntimeSfx.LoadClip("SFX/footsteps");
+            if (clip == null) return;
+            footstepSource = gameObject.AddComponent<AudioSource>();
+            footstepSource.clip = clip;
+            footstepSource.loop = true;
+            footstepSource.playOnAwake = false;
+            footstepSource.spatialBlend = 0f;
+            footstepSource.volume = 0.55f;
+        }
+        private void OnEnable()  { combat.AttackPerformed += ShowAttack; combat.SkillPerformed += ShowSkill; movement.Jumped += ShowJump; movement.Dashed += ShowDash; }
+        private void OnDisable() { combat.AttackPerformed -= ShowAttack; combat.SkillPerformed -= ShowSkill; movement.Jumped -= ShowJump; movement.Dashed -= ShowDash; StopFootsteps(); }
 
         private void ShowJump() => RuntimeSfx.Play(RuntimeSfx.Sound.Jump, .6f);
         private void ShowDash()
@@ -23,12 +45,24 @@ namespace BurnOut.Player
             RuntimeSfx.Play(RuntimeSfx.Sound.Dash, .8f);
             ImpactFX.Expand(transform.position, new Color(.3f, .9f, 1f, .7f), 1.4f);
         }
+
         private void Update()
         {
+            // Footsteps: loop while grounded + moving; stop when airborne, dashing, or still.
+            if (footstepSource != null)
+            {
+                bool shouldStep = movement.IsGrounded && !movement.IsDashing
+                                  && Mathf.Abs(movement.HorizontalSpeed) > .15f;
+                if (shouldStep  && !footstepSource.isPlaying) footstepSource.Play();
+                if (!shouldStep &&  footstepSource.isPlaying) StopFootsteps();
+            }
+
             if (!movement.IsDashing || Time.time < nextAfterimage) return;
             nextAfterimage = Time.time + .045f;
             CreateEcho(transform.position, new Color(.28f, .9f, 1f, .42f), .3f, 1.15f);
         }
+
+        private void StopFootsteps() { if (footstepSource != null && footstepSource.isPlaying) footstepSource.Stop(); }
 
         private void ShowAttack() => CreateEcho(transform.position + Vector3.right * (movement.FacingRight ? .55f : -.55f), new Color(.92f, .82f, 1f, .68f), .18f, 1.3f);
         private void ShowSkill() => CreateEcho(transform.position + Vector3.right * (movement.FacingRight ? .7f : -.7f), new Color(.35f, 1f, .85f, .8f), .35f, 1.8f);
