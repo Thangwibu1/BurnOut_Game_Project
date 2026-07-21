@@ -12,6 +12,8 @@ namespace BurnOut.UI
         {
             input = FindAnyObjectByType<PlayerInputReader>();
             if (input != null) input.PausePressed += Toggle;
+            // Add the power-icon "quit to main menu" button with confirmation, built at runtime.
+            if (GetComponent<QuitConfirmButton>() == null) gameObject.AddComponent<QuitConfirmButton>();
         }
         private void OnDestroy() { if (input != null) input.PausePressed -= Toggle; }
         public void Toggle() => GameManager.Instance?.TogglePause();
