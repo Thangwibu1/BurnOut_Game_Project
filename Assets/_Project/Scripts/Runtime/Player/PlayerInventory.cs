@@ -6,6 +6,8 @@ namespace BurnOut.Player
     {
         public event Action<bool> KeyStateChanged;
         public bool HasKey { get; private set; }
+        public int MentalFragments { get; private set; }
+        public bool HasMentalFragment => MentalFragments > 0;
 
         public void AddKey()
         {
@@ -20,5 +22,7 @@ namespace BurnOut.Player
             KeyStateChanged?.Invoke(false);
             return true;
         }
+
+        public void AddMentalFragment() => MentalFragments++;
     }
 }

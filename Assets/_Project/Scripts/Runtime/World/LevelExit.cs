@@ -10,7 +10,8 @@ namespace BurnOut.World
         private void Awake() => GetComponent<Collider2D>().isTrigger = true;
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.GetComponent<PlayerHealth>() != null) GameManager.Instance?.CompleteLevel();
+            if (other.GetComponent<PlayerHealth>() == null) return;
+            if (other.GetComponent<PlayerInventory>()?.HasMentalFragment == true) GameManager.Instance?.CompleteLevel();
         }
     }
 }
