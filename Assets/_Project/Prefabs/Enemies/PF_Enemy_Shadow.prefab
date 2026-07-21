@@ -179,7 +179,7 @@ MonoBehaviour:
   attackCooldown: 1
   energyProjectilePrefab: {fileID: 124619448486752253, guid: aee3e716aded17c44ba5d9b8c0d57b6d, type: 3}
   projectileRange: 5.5
-  projectileCooldown: 4.5
+  projectileCooldown: 3
 --- !u!114 &4493817284027308379
 MonoBehaviour:
   m_ObjectHideFlags: 0
