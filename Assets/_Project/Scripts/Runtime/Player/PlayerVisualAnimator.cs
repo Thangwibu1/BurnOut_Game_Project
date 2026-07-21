@@ -3,7 +3,8 @@ using UnityEngine;
 namespace BurnOut.Player
 {
     /// <summary>Plays Lily's authored sprite frames according to her live movement and combat state.</summary>
-    [RequireComponent(typeof(SpriteRenderer), typeof(PlayerMovement), typeof(PlayerCombat), typeof(PlayerSanity), typeof(PlayerHealth))]
+    [RequireComponent(typeof(SpriteRenderer), typeof(PlayerMovement), typeof(PlayerCombat))]
+    [RequireComponent(typeof(PlayerSanity), typeof(PlayerHealth))]
     public sealed class PlayerVisualAnimator : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer spriteRenderer;
