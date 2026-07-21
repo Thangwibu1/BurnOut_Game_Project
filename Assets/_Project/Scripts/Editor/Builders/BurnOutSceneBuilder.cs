@@ -89,7 +89,7 @@ namespace BurnOut.Editor
             var interactables = Parent("Interactables");
             var spawnCheckpoint = InstantiatePrefab("PF_Checkpoint", "Environment", interactables.transform); spawnCheckpoint.transform.position = new Vector3(1f, .35f, 0f);
             var key = InstantiatePrefab("PF_Key", "Items", interactables.transform); key.transform.position = new Vector3(35f, 3.6f, 0f);
-            var door = InstantiatePrefab("PF_LockedDoor", "Environment", interactables.transform); door.transform.position = new Vector3(39f, .85f, 0f);
+            var door = InstantiatePrefab("PF_LockedDoor", "Environment", interactables.transform); door.transform.position = new Vector3(153f, .85f, 0f);
             var bossCheckpoint = InstantiatePrefab("PF_Checkpoint", "Environment", interactables.transform); bossCheckpoint.transform.position = new Vector3(50f, .35f, 0f);
             var sanity = InstantiatePrefab("PF_SanityOrb", "Items", interactables.transform); sanity.transform.position = new Vector3(15f, 3.25f, 0f);
             var health = InstantiatePrefab("PF_HealthPickup", "Items", interactables.transform); health.transform.position = new Vector3(24f, .35f, 0f);

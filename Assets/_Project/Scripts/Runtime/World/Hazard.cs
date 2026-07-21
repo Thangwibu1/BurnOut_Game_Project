@@ -10,7 +10,21 @@ namespace BurnOut.World
         [SerializeField] private int damage = 1;
         [SerializeField] private float damageInterval = .7f;
         private float nextDamageTime;
-        private void Awake() => GetComponent<Collider2D>().isTrigger = true;
+        private Collider2D hazardCollider;
+        private PlayerHealth player;
+
+        private void Awake()
+        {
+            hazardCollider = GetComponent<Collider2D>();
+            hazardCollider.isTrigger = true;
+        }
+
+        private void Update()
+        {
+            player ??= FindAnyObjectByType<PlayerHealth>();
+            // Fallback damage check: project layer settings can never silence spike damage.
+            if (player != null && hazardCollider != null && hazardCollider.bounds.Contains(player.transform.position)) TryDamage(player);
+        }
         private void OnTriggerEnter2D(Collider2D other)
         {
             TryDamage(other);
@@ -20,9 +34,15 @@ namespace BurnOut.World
 
         private void TryDamage(Collider2D other)
         {
-            if (Time.time < nextDamageTime || !other.TryGetComponent<PlayerHealth>(out var player)) return;
+            if (!other.TryGetComponent<PlayerHealth>(out var hitPlayer)) return;
+            TryDamage(hitPlayer);
+        }
+
+        private void TryDamage(PlayerHealth hitPlayer)
+        {
+            if (Time.time < nextDamageTime) return;
             nextDamageTime = Time.time + damageInterval;
-            player.TakeDamage(new DamageInfo(damage, transform.position, 6f));
+            hitPlayer.TakeDamage(new DamageInfo(damage, transform.position, 6f));
         }
     }
 }
