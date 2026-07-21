@@ -1,4 +1,5 @@
 using BurnOut.Player;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,8 @@ namespace BurnOut.UI
         [SerializeField] private PlayerInventory inventory;
         [SerializeField] private Slider healthBar;
         [SerializeField] private Slider sanityBar;
+        [SerializeField] private TextMeshProUGUI healthText;
+        [SerializeField] private TextMeshProUGUI sanityText;
         [SerializeField] private GameObject keyIcon;
         [SerializeField] private GameObject lowSanityOverlay;
 
@@ -22,6 +25,8 @@ namespace BurnOut.UI
             if (playerHealth != null) playerHealth.HealthChanged += SetHealth;
             if (playerSanity != null) { playerSanity.SanityChanged += SetSanity; playerSanity.LowSanityChanged += SetLowSanity; }
             if (inventory != null) inventory.KeyStateChanged += SetKey;
+            if (playerHealth != null) SetHealth(playerHealth.CurrentHealth, playerHealth.MaximumHealth);
+            if (playerSanity != null) SetSanity(playerSanity.CurrentSanity, playerSanity.MaximumSanity);
             SetKey(false); SetLowSanity(false);
         }
 
@@ -32,8 +37,8 @@ namespace BurnOut.UI
             if (inventory != null) inventory.KeyStateChanged -= SetKey;
         }
 
-        private void SetHealth(int current, int maximum) { if (healthBar != null) healthBar.value = maximum == 0 ? 0f : (float)current / maximum; }
-        private void SetSanity(float current, float maximum) { if (sanityBar != null) sanityBar.value = maximum == 0f ? 0f : current / maximum; }
+        private void SetHealth(int current, int maximum) { if (healthBar != null) healthBar.value = maximum == 0 ? 0f : (float)current / maximum; if (healthText != null) healthText.text = $"HP {current}/{maximum}"; }
+        private void SetSanity(float current, float maximum) { if (sanityBar != null) sanityBar.value = maximum == 0f ? 0f : current / maximum; if (sanityText != null) sanityText.text = $"SANITY {Mathf.CeilToInt(current)}"; }
         private void SetKey(bool hasKey) { if (keyIcon != null) keyIcon.SetActive(hasKey); }
         private void SetLowSanity(bool low) { if (lowSanityOverlay != null) lowSanityOverlay.SetActive(low); }
     }

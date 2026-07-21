@@ -19,6 +19,7 @@ namespace BurnOut.Player
         public event Action<int, int> HealthChanged;
         public event Action Died;
         public int CurrentHealth { get; private set; }
+        public int MaximumHealth => maxHealth;
         public bool IsAlive { get; private set; } = true;
         public Vector3 InitialSpawnPosition { get; private set; }
 
@@ -44,6 +45,7 @@ namespace BurnOut.Player
             sanity?.ApplyDamagePenalty(damage.Amount);
             var direction = ((Vector2)transform.position - damage.SourcePosition).normalized;
             body.AddForce(direction * damage.Knockback, ForceMode2D.Impulse);
+            StartCoroutine(FlashDamage());
             if (CurrentHealth == 0) StartCoroutine(DieRoutine()); else StartCoroutine(InvincibilityRoutine());
         }
 
@@ -85,6 +87,16 @@ namespace BurnOut.Player
             GameManager.Instance?.ShowGameOver();
             yield return new WaitForSeconds(.65f);
             CheckpointManager.Instance?.Respawn(this);
+        }
+
+        private IEnumerator FlashDamage()
+        {
+            var renderer = GetComponent<SpriteRenderer>();
+            if (renderer == null) yield break;
+            var original = renderer.color;
+            renderer.color = new Color(1f, .25f, .35f, 1f);
+            yield return new WaitForSeconds(.12f);
+            if (renderer != null) renderer.color = original;
         }
     }
 }
