@@ -1,21 +1,19 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
 
 namespace BurnOut.UI
 {
-    // Bottom-of-screen reader box for lore papers. A paper the player touches pushes its line here,
-    // shown in the Chiller display font. The box holds for a few seconds then hides so it never
-    // blocks the view; touching a paper again brings it straight back.
+    // Bottom-of-screen reader box for lore papers. A paper shows its line here while the player stands
+    // on it, in the Chiller display font, and clears the moment the player steps off. Tracks which
+    // paper owns the current line so leaving one paper never wipes a line another just put up.
     public sealed class PaperMessageBox : MonoBehaviour
     {
         public static PaperMessageBox Instance { get; private set; }
 
         [SerializeField] private GameObject panel;
         [SerializeField] private TextMeshProUGUI label;
-        [SerializeField] private float holdSeconds = 6f;
 
-        private Coroutine hideRoutine;
+        private Object currentOwner;
 
         private void Awake()
         {
@@ -28,20 +26,20 @@ namespace BurnOut.UI
 
         private void OnDestroy() { if (Instance == this) Instance = null; }
 
-        public void Show(string message)
+        // Shows a line and remembers the paper that requested it.
+        public void Show(Object owner, string message)
         {
+            currentOwner = owner;
             if (label != null) label.text = message;
             if (panel != null) panel.SetActive(true);
-            if (hideRoutine != null) StopCoroutine(hideRoutine);
-            hideRoutine = StartCoroutine(HideAfterDelay());
         }
 
-        private IEnumerator HideAfterDelay()
+        // Hides only if the given paper is the one currently displayed.
+        public void Hide(Object owner)
         {
-            // Unscaled so the line stays readable even if the game is paused mid-read.
-            yield return new WaitForSecondsRealtime(holdSeconds);
+            if (owner != currentOwner) return;
+            currentOwner = null;
             if (panel != null) panel.SetActive(false);
-            hideRoutine = null;
         }
     }
 }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &661819903247972742
+--- !u!1 &2953444386200616240
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,13 +8,13 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7832873067500235315}
-  - component: {fileID: 342985720432419429}
-  - component: {fileID: 9080216550936270809}
-  - component: {fileID: 198788649394144206}
-  - component: {fileID: 6171172486630862556}
-  - component: {fileID: 4211768596239309642}
-  - component: {fileID: 6371088392408637436}
+  - component: {fileID: 4605161391904860475}
+  - component: {fileID: 5482204088145175901}
+  - component: {fileID: 398785124335663502}
+  - component: {fileID: 4926119442639662803}
+  - component: {fileID: 5242889528392993888}
+  - component: {fileID: 3186132569059066323}
+  - component: {fileID: 678139373726136491}
   m_Layer: 9
   m_Name: PF_MiniBoss_Shadow
   m_TagString: Enemy
@@ -22,13 +22,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7832873067500235315
+--- !u!4 &4605161391904860475
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 661819903247972742}
+  m_GameObject: {fileID: 2953444386200616240}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -37,14 +37,14 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &342985720432419429
+--- !u!212 &5482204088145175901
 SpriteRenderer:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 661819903247972742}
+  m_GameObject: {fileID: 2953444386200616240}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -97,13 +97,13 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
---- !u!61 &9080216550936270809
+--- !u!61 &398785124335663502
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 661819903247972742}
+  m_GameObject: {fileID: 2953444386200616240}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -143,13 +143,13 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 2.265625, y: 2.578125}
   m_EdgeRadius: 0
---- !u!114 &198788649394144206
+--- !u!114 &4926119442639662803
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 661819903247972742}
+  m_GameObject: {fileID: 2953444386200616240}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 03ab39fa413a0a24a90058b7ab4dcdd1, type: 3}
@@ -159,13 +159,13 @@ MonoBehaviour:
   deathDropPrefab: {fileID: 0}
   deathAnimationDuration: 0.42
   sanityRewardOnKill: 10
---- !u!114 &6171172486630862556
+--- !u!114 &5242889528392993888
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 661819903247972742}
+  m_GameObject: {fileID: 2953444386200616240}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff458f9fc53aa7b4e8010b7ed8c3073c, type: 3}
@@ -182,22 +182,22 @@ MonoBehaviour:
   contactRange: 1.15
   contactVerticalRange: 1.7
   contactCooldown: 0.9
-  energyProjectilePrefab: {fileID: 4567243809736276176, guid: aee3e716aded17c44ba5d9b8c0d57b6d, type: 3}
+  energyProjectilePrefab: {fileID: 1631588667629201462, guid: aee3e716aded17c44ba5d9b8c0d57b6d, type: 3}
   mentalFragmentPrefab: {fileID: 0}
   enrageTint: {r: 1, g: 0.38, b: 0.38, a: 1}
---- !u!114 &4211768596239309642
+--- !u!114 &3186132569059066323
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 661819903247972742}
+  m_GameObject: {fileID: 2953444386200616240}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 94e272ed4106b8a4aa0b5795b439a273, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BurnOut.Enemies.BossVisualAnimator
-  spriteRenderer: {fileID: 342985720432419429}
+  spriteRenderer: {fileID: 5482204088145175901}
   idleFrames:
   - {fileID: 21300000, guid: e7e001eb8632f0f468367e3fa6b399ed, type: 3}
   moveFrames:
@@ -223,13 +223,13 @@ MonoBehaviour:
   - {fileID: 21300000, guid: acc68a3b707e3744694013070557ee73, type: 3}
   - {fileID: 21300000, guid: 902a7deee3af1d2458217d18ca1841a9, type: 3}
   frameRate: 9
---- !u!114 &6371088392408637436
+--- !u!114 &678139373726136491
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 661819903247972742}
+  m_GameObject: {fileID: 2953444386200616240}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9fc614fa618d9d4a92921c84202aa38, type: 3}

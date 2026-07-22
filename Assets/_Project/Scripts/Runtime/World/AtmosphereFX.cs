@@ -3,14 +3,14 @@ using UnityEngine;
 namespace BurnOut.World
 {
     /// <summary>
-    /// Fills the space around the camera with slow drifting motes to add depth and mood.
+    /// Fills the space around the camera with dense falling snow to add depth and mood.
     /// Generates its own soft dot sprite; needs no art assets. Purely cosmetic.
     /// </summary>
     public sealed class AtmosphereFX : MonoBehaviour
     {
-        [SerializeField] private int moteCount = 32;
-        [SerializeField] private Color moteColor = new(.72f, .76f, .96f, .16f);
-        [SerializeField] private float driftSpeed = .4f;
+        [SerializeField] private int moteCount = 140;
+        [SerializeField] private Color moteColor = new(.92f, .95f, 1f, .55f);
+        [SerializeField] private float driftSpeed = 1.4f;
         [SerializeField] private float area = 16f;
         [SerializeField] private int sortingOrder = -8;
 
@@ -32,10 +32,11 @@ namespace BurnOut.World
                 r.sprite = dot;
                 r.color = new Color(moteColor.r, moteColor.g, moteColor.b, moteColor.a * Random.Range(.4f, 1.3f));
                 r.sortingOrder = sortingOrder;
-                go.transform.localScale = Vector3.one * Random.Range(.08f, .3f);
+                go.transform.localScale = Vector3.one * Random.Range(.06f, .22f);
                 go.transform.position = RandomPosition();
                 motes[i] = go.transform;
-                velocities[i] = new Vector2(Random.Range(-.25f, .25f), Random.Range(.25f, 1f)) * driftSpeed;
+                // Snow falls: gentle sideways sway plus a steady downward drift.
+                velocities[i] = new Vector2(Random.Range(-.35f, .35f), Random.Range(-1f, -.5f)) * driftSpeed;
             }
         }
 
@@ -54,8 +55,9 @@ namespace BurnOut.World
                 if (motes[i] == null) continue;
                 motes[i].position += (Vector3)(velocities[i] * Time.deltaTime);
                 var p = motes[i].position;
-                if (p.y > c.y + area * .6f || Mathf.Abs(p.x - c.x) > area)
-                    motes[i].position = new Vector3(c.x + Random.Range(-area, area), c.y - area * .6f, 0f);
+                // Recycle flakes back to the top once they fall past the bottom or drift out sideways.
+                if (p.y < c.y - area * .6f || Mathf.Abs(p.x - c.x) > area)
+                    motes[i].position = new Vector3(c.x + Random.Range(-area, area), c.y + area * .6f, 0f);
             }
         }
 

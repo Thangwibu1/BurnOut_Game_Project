@@ -20,8 +20,16 @@ namespace BurnOut.World
         {
             if (other.GetComponent<PlayerHealth>() == null) return;
             if (PaperMessageBox.Instance == null || string.IsNullOrEmpty(message)) return;
-            PaperMessageBox.Instance.Show(message);
+            PaperMessageBox.Instance.Show(this, message);
             RuntimeSfx.Play(RuntimeSfx.Sound.Pickup, .6f);
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.GetComponent<PlayerHealth>() == null) return;
+            // Only clear the box if it's still showing this paper's line — leaving one paper must
+            // not wipe a message another paper just put up.
+            PaperMessageBox.Instance?.Hide(this);
         }
     }
 }
