@@ -48,6 +48,11 @@ namespace BurnOut.Audio
             player?.Play(clip, volume);
         }
 
+        // UI feedback: one sound when a button is clicked/confirmed, another when hovered.
+        // Both are authored clips under Resources/SFX, loaded and cached on first use.
+        public static void PlayUiClick() => PlayClip(LoadClip("SFX/button-click"), 1f);
+        public static void PlayUiHover() => PlayClip(LoadClip("SFX/button-hover"), 0.7f);
+
         // Loads and caches an authored clip from a Resources path (no extension), e.g. "SFX/player_yawn".
         private static readonly Dictionary<string, AudioClip> resourceCache = new();
         public static AudioClip LoadClip(string resourcePath)

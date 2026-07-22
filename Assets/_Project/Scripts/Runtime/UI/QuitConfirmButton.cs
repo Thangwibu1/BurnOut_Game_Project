@@ -1,6 +1,8 @@
+using BurnOut.Audio;
 using BurnOut.Core;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace BurnOut.UI
@@ -33,7 +35,10 @@ namespace BurnOut.UI
             rect.anchoredPosition = new Vector2(-24f, -24f);
             rect.sizeDelta = new Vector2(58f, 58f);
             go.GetComponent<Image>().sprite = PowerSprite();
-            go.GetComponent<Button>().onClick.AddListener(ShowDialog);
+            var button = go.GetComponent<Button>();
+            button.onClick.AddListener(RuntimeSfx.PlayUiClick);
+            button.onClick.AddListener(ShowDialog);
+            AddHoverSound(go);
         }
 
         // Freeze the game while the confirmation is up so the world doesn't keep moving behind it.
@@ -69,8 +74,10 @@ namespace BurnOut.UI
 
             AddLabel(box, "QUIT TO MAIN MENU?", 40, new Vector2(0f, 62f), new Vector2(480f, 70f));
             var yes = AddButton(box, "YES", new Vector2(-115f, -55f));
+            yes.onClick.AddListener(RuntimeSfx.PlayUiClick);
             yes.onClick.AddListener(QuitToMenu);
             var no = AddButton(box, "NO", new Vector2(115f, -55f));
+            no.onClick.AddListener(RuntimeSfx.PlayUiClick);
             no.onClick.AddListener(HideDialog);
 
             dialog.SetActive(false);
@@ -109,8 +116,13 @@ namespace BurnOut.UI
             rt.SetParent(parent, false); rt.anchoredPosition = pos; rt.sizeDelta = new Vector2(190f, 70f);
             go.GetComponent<Image>().color = new Color(.22f, .13f, .35f, 1f);
             AddLabel(rt, caption, 46, Vector2.zero, new Vector2(190f, 70f));
+            AddHoverSound(go);
             return go.GetComponent<Button>();
         }
+
+        // Unity's Button has no hover callback, so attach a tiny handler that plays the hover
+        // sound on pointer-enter for any button we build here.
+        private static void AddHoverSound(GameObject go) => go.AddComponent<HoverSfx>();
 
         // Draws a classic power symbol (ring with a top gap + vertical bar) into a small texture,
         // so the button needs no imported art asset.
@@ -138,5 +150,12 @@ namespace BurnOut.UI
             powerSprite = Sprite.Create(tex, new Rect(0, 0, n, n), new Vector2(.5f, .5f), 100f);
             return powerSprite;
         }
+    }
+
+    // Plays the UI hover sound whenever the pointer enters this element. Attached to runtime-built
+    // buttons that lack their own hover feedback.
+    public sealed class HoverSfx : MonoBehaviour, IPointerEnterHandler
+    {
+        public void OnPointerEnter(PointerEventData eventData) => RuntimeSfx.PlayUiHover();
     }
 }
