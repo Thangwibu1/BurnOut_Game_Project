@@ -1,3 +1,4 @@
+using BurnOut.Audio;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -38,6 +39,7 @@ namespace BurnOut.UI
             hovering = true;
             targetScale = hoverScale;
             ApplyColor(hoverColor);
+            RuntimeSfx.PlayUiHover();
         }
 
         public void OnPointerExit(PointerEventData eventData)
@@ -47,7 +49,7 @@ namespace BurnOut.UI
             ApplyColor(normalColor);
         }
 
-        public void OnPointerDown(PointerEventData eventData) => targetScale = pressScale;
+        public void OnPointerDown(PointerEventData eventData) { targetScale = pressScale; RuntimeSfx.PlayUiClick(); }
         public void OnPointerUp(PointerEventData eventData) => targetScale = hovering ? hoverScale : 1f;
 
         private void ApplyColor(Color color) { if (label != null) label.color = color; }
