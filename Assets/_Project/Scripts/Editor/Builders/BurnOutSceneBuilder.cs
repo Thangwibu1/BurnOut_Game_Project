@@ -290,13 +290,20 @@ namespace BurnOut.Editor
                 CreateStepIsland($"{name}{i:00}", new Vector2(start.x + dx * i, start.y + dy * i), parent, width);
         }
         private static void CreateEncounter(string name, Vector3 position, Vector2 size, Vector3[] spawnOffsets, int waves, Transform parent) { var go = new GameObject(name); go.transform.SetParent(parent); go.transform.position = position; var trigger = go.AddComponent<BoxCollider2D>(); trigger.size = size; trigger.isTrigger = true; var encounter = go.AddComponent<EncounterSpawner>(); var data = new SerializedObject(encounter); data.FindProperty("enemyPrefab").objectReferenceValue = BurnOutPrefabBuilder.LoadPrefab("PF_Enemy_Shadow", "Enemies"); data.FindProperty("rewardPrefab").objectReferenceValue = BurnOutPrefabBuilder.LoadPrefab("PF_SanityOrb", "Items"); data.FindProperty("waveCount").intValue = waves; var offsets = data.FindProperty("spawnOffsets"); offsets.arraySize = spawnOffsets.Length; for (var i = 0; i < spawnOffsets.Length; i++) offsets.GetArrayElementAtIndex(i).vector3Value = spawnOffsets[i]; data.ApplyModifiedPropertiesWithoutUndo(); }
-        // A fixed-in-world painted room backdrop scaled to a target world width, sat behind everything.
+        // Every zone backdrop is stretched to this exact world height and vertical centre so the four
+        // rooms line up flush after stitching (no jagged top edge) and always overfill the camera's
+        // vertical view (orthographicSize 5.5 → 11 tall, plus headroom for jumps) — no black band above.
+        private const float ZoneBackgroundHeight = 20f;
+        private const float ZoneBackgroundCenterY = 4f;
+
+        // A fixed-in-world painted room backdrop. Width is scaled to fill its zone (so adjacent rooms
+        // tile edge to edge); height is scaled independently to a shared value so all zones are even.
         private static void CreateZoneBackground(string name, string path, float centerX, float centerY, float width, Transform parent, Color tint)
         {
             var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
             var go = new GameObject(name);
             go.transform.SetParent(parent);
-            go.transform.position = new Vector3(centerX, centerY, 0f);
+            go.transform.position = new Vector3(centerX, ZoneBackgroundCenterY, 0f);
             var renderer = go.AddComponent<SpriteRenderer>();
             renderer.sprite = sprite;
             renderer.sortingOrder = -100;
@@ -304,8 +311,10 @@ namespace BurnOut.Editor
             if (sprite != null)
             {
                 float nativeWidth = sprite.bounds.size.x;
-                float scale = nativeWidth > 0f ? width / nativeWidth : 1f;
-                go.transform.localScale = new Vector3(scale, scale, 1f);
+                float nativeHeight = sprite.bounds.size.y;
+                float scaleX = nativeWidth > 0f ? width / nativeWidth : 1f;
+                float scaleY = nativeHeight > 0f ? ZoneBackgroundHeight / nativeHeight : 1f;
+                go.transform.localScale = new Vector3(scaleX, scaleY, 1f);
             }
         }
 
