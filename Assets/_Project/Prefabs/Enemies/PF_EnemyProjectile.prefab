@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8179959293952188265
+--- !u!1 &4567243809736276176
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,13 +8,13 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4273601369980989177}
-  - component: {fileID: 7559016435061577863}
-  - component: {fileID: 4261407068965347229}
-  - component: {fileID: 7861149104573706033}
-  - component: {fileID: 5152987308896719293}
-  - component: {fileID: 8079203561362126464}
-  - component: {fileID: 4064044466393281312}
+  - component: {fileID: 5820900031376024205}
+  - component: {fileID: 6635977797422260687}
+  - component: {fileID: 3998789070375399185}
+  - component: {fileID: 8526437559069544212}
+  - component: {fileID: 3473895256837056612}
+  - component: {fileID: 5439218344572965136}
+  - component: {fileID: 4228329900888504413}
   m_Layer: 12
   m_Name: PF_EnemyProjectile
   m_TagString: Untagged
@@ -22,13 +22,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4273601369980989177
+--- !u!4 &5820900031376024205
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8179959293952188265}
+  m_GameObject: {fileID: 4567243809736276176}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -37,14 +37,14 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &7559016435061577863
+--- !u!212 &6635977797422260687
 SpriteRenderer:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8179959293952188265}
+  m_GameObject: {fileID: 4567243809736276176}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -97,13 +97,13 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
---- !u!58 &4261407068965347229
+--- !u!58 &3998789070375399185
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8179959293952188265}
+  m_GameObject: {fileID: 4567243809736276176}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -133,13 +133,13 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.15
---- !u!114 &7861149104573706033
+--- !u!114 &8526437559069544212
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8179959293952188265}
+  m_GameObject: {fileID: 4567243809736276176}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbd8f074f9b3a514d86a385b5d12dd8e, type: 3}
@@ -150,14 +150,14 @@ MonoBehaviour:
   targetLayers:
     serializedVersion: 2
     m_Bits: 256
-  hitboxCollider: {fileID: 4261407068965347229}
---- !u!114 &5152987308896719293
+  hitboxCollider: {fileID: 3998789070375399185}
+--- !u!114 &3473895256837056612
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8179959293952188265}
+  m_GameObject: {fileID: 4567243809736276176}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af95dcec17a46404392cc792a5bffe11, type: 3}
@@ -166,13 +166,13 @@ MonoBehaviour:
   speed: 9
   lifetime: 3
   hitbox: {fileID: 0}
---- !u!114 &8079203561362126464
+--- !u!114 &5439218344572965136
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8179959293952188265}
+  m_GameObject: {fileID: 4567243809736276176}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56e89217b5217ed49bd1765f3d5a7397, type: 3}
@@ -180,14 +180,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BurnOut.Enemies.EnemyProjectile
   damage: 1
   hitRadius: 0.42
---- !u!96 &4064044466393281312
+--- !u!96 &4228329900888504413
 TrailRenderer:
   serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8179959293952188265}
+  m_GameObject: {fileID: 4567243809736276176}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1

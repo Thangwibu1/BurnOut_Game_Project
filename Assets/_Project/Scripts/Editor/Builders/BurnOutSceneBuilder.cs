@@ -109,9 +109,11 @@ namespace BurnOut.Editor
             var rock = BurnOutSpriteFactory.GetRockSprite();
             var rockSpots = new[] { new Vector3(4f, -.42f, 0f), new Vector3(20f, -.4f, 0f), new Vector3(26f, -.45f, 0f), new Vector3(41f, -.4f, 0f), new Vector3(58f, -.42f, 0f), new Vector3(84f, -.4f, 0f), new Vector3(92f, -.45f, 0f), new Vector3(106f, -.4f, 0f), new Vector3(126f, -.42f, 0f), new Vector3(148f, -.4f, 0f) };
             for (var i = 0; i < rockSpots.Length; i++) CreateProp("Rubble", rock, rockSpots[i], (i % 3 == 0 ? 1.15f : i % 3 == 1 ? .85f : 1f), props.transform, -18, new Color(.78f, .8f, .92f));
-            var note = BurnOutSpriteFactory.GetLoreNoteSprite();
-            CreateProp("LoreNote", note, new Vector3(29f, 1.15f, 0f), .8f, props.transform, -5, Color.white);
-            CreateProp("LoreNote", note, new Vector3(101f, .95f, 0f), .8f, props.transform, -5, Color.white);
+            // Three readable lore papers at story beats: before the first shadows, in the second room,
+            // and past the boss arena. Each shows its line in the bottom message box on touch.
+            CreateLorePaper(new Vector3(4.5f, .35f, 0f), "When the silence feels heavy, take a breath.", props.transform);
+            CreateLorePaper(new Vector3(56f, .35f, 0f), "Not every shadow is yours to carry.", props.transform);
+            CreateLorePaper(new Vector3(128f, .35f, 0f), "Even in darkness, rest keeps the heart alive.", props.transform);
 
             var interactables = Parent("Interactables");
             // Checkpoints: one mid-route and one just before the boss arena so death is a setback, not a restart.
@@ -204,6 +206,7 @@ namespace BurnOut.Editor
             var completeMenu = CreateButton("CompleteMenu", complete.transform, "MAIN MENU", new Vector2(0, -90)); UnityEventTools.AddPersistentListener(completeMenu.onClick, manager.GoToMainMenu);
             complete.SetActive(false);
             var over = CreatePanel("GameOverPanel", canvas.transform, new Vector2(450, 250)); CreateLabel("Over", over.transform, "LOST IN THE VOID", 32, new Vector2(0, 40), new Vector2(400, 100)); over.SetActive(false);
+            CreatePaperMessageBox(canvas.transform);
             var managerData = new SerializedObject(manager); managerData.FindProperty("pausePanel").objectReferenceValue = pause; managerData.FindProperty("gameOverPanel").objectReferenceValue = over; managerData.FindProperty("levelCompletePanel").objectReferenceValue = complete; managerData.ApplyModifiedPropertiesWithoutUndo();
             return canvas.gameObject;
         }
@@ -246,6 +249,30 @@ namespace BurnOut.Editor
         private static GameObject CreatePanel(string name, Transform parent, Vector2 size)
         {
             var go = new GameObject(name, typeof(RectTransform), typeof(Image)); go.transform.SetParent(parent, false); var rect = go.GetComponent<RectTransform>(); rect.sizeDelta = size; go.GetComponent<Image>().color = new Color(.04f, .03f, .1f, .88f); return go;
+        }
+
+        // Bottom-centre reader box for lore papers. Anchored to the screen bottom so it sits under the
+        // action like the mockup, hidden until a paper is touched. Chiller font is applied at runtime.
+        private static void CreatePaperMessageBox(Transform parent)
+        {
+            var box = new GameObject("PaperMessageBox", typeof(RectTransform), typeof(Image), typeof(PaperMessageBox));
+            box.transform.SetParent(parent, false);
+            var rect = box.GetComponent<RectTransform>();
+            rect.anchorMin = rect.anchorMax = new Vector2(.5f, 0f);
+            rect.pivot = new Vector2(.5f, 0f);
+            rect.anchoredPosition = new Vector2(0f, 40f);
+            rect.sizeDelta = new Vector2(1100f, 130f);
+            box.GetComponent<Image>().color = new Color(.04f, .03f, .1f, .9f);
+
+            var label = CreateLabel("PaperText", box.transform, string.Empty, 40, Vector2.zero, new Vector2(1040f, 110f));
+            label.color = new Color(.92f, .86f, .66f);
+            label.textWrappingMode = TextWrappingModes.Normal;
+
+            var component = box.GetComponent<PaperMessageBox>();
+            var data = new SerializedObject(component);
+            data.FindProperty("panel").objectReferenceValue = box;
+            data.FindProperty("label").objectReferenceValue = label;
+            data.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private static TextMeshProUGUI CreateLabel(string name, Transform parent, string text, float size, Vector2 position, Vector2 dimensions)
@@ -341,6 +368,21 @@ namespace BurnOut.Editor
             label.color = new Color(.9f, .8f, 1f);
         }
         private static void CreateProp(string name, Sprite sprite, Vector3 position, float scale, Transform parent, int sortingOrder, Color tint) { if (sprite == null) return; var go = new GameObject(name); go.transform.SetParent(parent); go.transform.position = position; go.transform.localScale = Vector3.one * scale; var renderer = go.AddComponent<SpriteRenderer>(); renderer.sprite = sprite; renderer.sortingOrder = sortingOrder; renderer.color = tint; }
+
+        // A readable lore paper: the artist's note sprite plus a trigger collider and its line of text.
+        // Touching it shows the message in the bottom PaperMessageBox; the paper stays for re-reading.
+        private static void CreateLorePaper(Vector3 position, string message, Transform parent)
+        {
+            var sprite = BurnOutSpriteFactory.GetLoreNoteSprite();
+            var go = new GameObject("LorePaper");
+            go.transform.SetParent(parent);
+            go.transform.position = position;
+            go.transform.localScale = Vector3.one * .8f;
+            if (sprite != null) { var renderer = go.AddComponent<SpriteRenderer>(); renderer.sprite = sprite; renderer.sortingOrder = -5; renderer.color = Color.white; }
+            var trigger = go.AddComponent<BoxCollider2D>(); trigger.isTrigger = true; trigger.size = new Vector2(1.4f, 1.6f);
+            var paper = go.AddComponent<LorePaper>();
+            var data = new SerializedObject(paper); data.FindProperty("message").stringValue = message; data.ApplyModifiedPropertiesWithoutUndo();
+        }
         private static Sprite GetWhiteSprite() { if (whiteSprite == null) whiteSprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd"); return whiteSprite; }
     }
 }
