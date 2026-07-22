@@ -20,13 +20,24 @@ namespace BurnOut.Enemies
         private Transform fill;
         private float fullWidth;
 
+        // Set true (in the prefab) for sprites whose pivot is at the feet, so the bar clears the head
+        // by the full sprite height instead of a small offset from the body centre.
+        [SerializeField] private bool pivotAtFeet;
+
         private void Awake()
         {
             health = GetComponent<EnemyHealth>();
             // Boss reads bigger, so scale the bar with the enemy's footprint.
             float s = Mathf.Max(1f, Mathf.Abs(transform.localScale.x));
             fullWidth = width * s;
-            heightAbove *= s;
+            if (pivotAtFeet)
+            {
+                // transform.position is at the feet; lift the bar above the sprite's actual top edge.
+                var sr = GetComponent<SpriteRenderer>();
+                float spriteWorldHeight = sr != null && sr.sprite != null ? sr.sprite.bounds.size.y * Mathf.Abs(transform.localScale.y) : heightAbove * s;
+                heightAbove = spriteWorldHeight + .25f;
+            }
+            else heightAbove *= s;
             Build(s);
             health.HealthChanged += OnHealthChanged;
             health.Died += Hide;

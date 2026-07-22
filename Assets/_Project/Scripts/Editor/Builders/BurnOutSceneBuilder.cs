@@ -113,7 +113,7 @@ namespace BurnOut.Editor
             // and past the boss arena. Each shows its line in the bottom message box on touch.
             CreateLorePaper(new Vector3(4.5f, .35f, 0f), "When the silence feels heavy, take a breath.", props.transform);
             CreateLorePaper(new Vector3(56f, .35f, 0f), "Not every shadow is yours to carry.", props.transform);
-            CreateLorePaper(new Vector3(128f, .35f, 0f), "Even in darkness, rest keeps the heart alive.", props.transform);
+            CreateLorePaper(new Vector3(151f, .35f, 0f), "Even in darkness, rest keeps the heart alive.", props.transform);
 
             var interactables = Parent("Interactables");
             // Checkpoints: one mid-route and one just before the boss arena so death is a setback, not a restart.
@@ -125,10 +125,13 @@ namespace BurnOut.Editor
             var exit = InstantiatePrefab("PF_LevelExit", "Environment", interactables.transform); exit.transform.position = new Vector3(156f, .85f, 0f);
 
             var enemies = Parent("Enemies");
-            CreateEncounter("Encounter_Reflection", new Vector3(23f, 1f, 0f), new Vector2(5f, 5f), new[] { new Vector3(-1.5f, -.8f), new Vector3(2.2f, -.8f) }, 1, enemies.transform);
-            CreateEncounter("Encounter_GateHall", new Vector3(44f, 1f, 0f), new Vector2(6f, 5f), new[] { new Vector3(-2.5f, -.8f), new Vector3(2.5f, -.8f) }, 2, enemies.transform);
-            CreateEncounter("Encounter_Pressure", new Vector3(61f, 1f, 0f), new Vector2(8f, 5f), new[] { new Vector3(-3f, -.8f), new Vector3(3f, -.8f) }, 1, enemies.transform);
-            CreateEncounter("Encounter_Rooftop", new Vector3(77f, 1f, 0f), new Vector2(8f, 5f), new[] { new Vector3(-3f, -.8f), new Vector3(2f, -.8f) }, 1, enemies.transform);
+            // Map 1 (zone 1): melee monster. Map 2 (zones 2–3 of the route): the bomber that explodes on death.
+            // Spawn Y offset −1.5 puts the monster's feet on the floor top (encounter y=1 → y=−0.5): the
+            // sheet monsters use a bottom-centre pivot, so the transform origin is their feet, not their middle.
+            CreateEncounter("Encounter_Reflection", new Vector3(23f, 1f, 0f), new Vector2(5f, 5f), new[] { new Vector3(-1.5f, -1.5f), new Vector3(2.2f, -1.5f) }, 1, enemies.transform, "PF_Enemy_Melee");
+            CreateEncounter("Encounter_GateHall", new Vector3(44f, 1f, 0f), new Vector2(6f, 5f), new[] { new Vector3(-2.5f, -1.5f), new Vector3(2.5f, -1.5f) }, 2, enemies.transform, "PF_Enemy_Bomber");
+            CreateEncounter("Encounter_Pressure", new Vector3(61f, 1f, 0f), new Vector2(8f, 5f), new[] { new Vector3(-3f, -1.5f), new Vector3(3f, -1.5f) }, 1, enemies.transform, "PF_Enemy_Bomber");
+            CreateEncounter("Encounter_Rooftop", new Vector3(77f, 1f, 0f), new Vector2(8f, 5f), new[] { new Vector3(-3f, -1.5f), new Vector3(2f, -1.5f) }, 1, enemies.transform, "PF_Enemy_Bomber");
             var boss = InstantiatePrefab("PF_MiniBoss_Shadow", "Enemies", enemies.transform); boss.name = "MiniBoss"; boss.transform.position = new Vector3(96f, .4f, 0f); boss.SetActive(false);
             var player = InstantiatePrefab("PF_Player", "Player", null); player.name = "Player"; player.transform.position = new Vector3(1f, .5f, 0f);
 
@@ -143,9 +146,13 @@ namespace BurnOut.Editor
             var ui = CreateLevelUi(manager, player.GetComponent<PlayerHealth>());
             var arena = new GameObject("BossArenaTrigger"); arena.transform.SetParent(interactables.transform); arena.transform.position = new Vector3(89f, 1f, 0f); var trigger = arena.AddComponent<BoxCollider2D>(); trigger.size = new Vector2(2f, 5f); trigger.isTrigger = true;
             var arenaComponent = arena.AddComponent<BossArenaTrigger>();
-            var arenaData = new SerializedObject(arenaComponent); arenaData.FindProperty("boss").objectReferenceValue = boss.GetComponent<MiniBossController>(); arenaData.FindProperty("bossHud").objectReferenceValue = ui.GetComponentInChildren<BossHUD>(true); arenaData.ApplyModifiedPropertiesWithoutUndo();
+            // No top-of-screen boss HUD: the boss shows only its own over-head health bar (bossHud left null).
+            var arenaData = new SerializedObject(arenaComponent); arenaData.FindProperty("boss").objectReferenceValue = boss.GetComponent<MiniBossController>(); arenaData.ApplyModifiedPropertiesWithoutUndo();
             // The boss drops the key on death; carrying it to the single gate wins the level.
-            var miniBoss = boss.GetComponent<MiniBossController>(); var bossData = new SerializedObject(miniBoss); bossData.FindProperty("mentalFragmentPrefab").objectReferenceValue = BurnOutPrefabBuilder.LoadPrefab("PF_Key", "Items"); bossData.ApplyModifiedPropertiesWithoutUndo();
+            var miniBoss = boss.GetComponent<MiniBossController>(); var bossData = new SerializedObject(miniBoss); bossData.FindProperty("mentalFragmentPrefab").objectReferenceValue = BurnOutPrefabBuilder.LoadPrefab("PF_Key", "Items"); bossData.FindProperty("slamDamage").intValue = 3; bossData.FindProperty("contactDamage").intValue = 2; bossData.ApplyModifiedPropertiesWithoutUndo();
+            // The boss is the only enemy in maps 3–4, so make it a proper set-piece: bigger, tankier, harder-hitting.
+            var bossScale = boss.transform.localScale; boss.transform.localScale = new Vector3(Mathf.Abs(bossScale.x) * 1.4f, Mathf.Abs(bossScale.y) * 1.4f, bossScale.z);
+            var bossHealthData = new SerializedObject(boss.GetComponent<EnemyHealth>()); bossHealthData.FindProperty("maxHealth").intValue = 28; bossHealthData.ApplyModifiedPropertiesWithoutUndo();
             CreateWorldText("Move: A/D or Arrows\nJump / Double Jump: Space     Dash: Left Ctrl", new Vector3(4f, 2.6f, 0f), 14f);
             CreateWorldText("Attack: Left Shift / LMB\nSkills:  Z Shockwave    X Aura (heal+shield)    C Rush (lunge)", new Vector3(4f, 1.4f, 0f), 16f);
             CreateWorldText("Slaying shadows restores sanity. The lower your sanity, the harder you hit.", new Vector3(23f, 4.4f, 0f));
@@ -193,7 +200,7 @@ namespace BurnOut.Editor
             var key = CreateHudArtwork("KeyIcon", canvas.transform, keySprite, new Vector2(-64, -52), new Vector2(58, 58), true).gameObject; key.SetActive(false);
             var overlay = CreatePanel("LowSanityOverlay", canvas.transform, new Vector2(1800, 1000)); overlay.GetComponent<Image>().color = new Color(.22f, 0f, .35f, .18f); overlay.SetActive(false);
             var hudData = new SerializedObject(hud); hudData.FindProperty("playerHealth").objectReferenceValue = player; hudData.FindProperty("playerSanity").objectReferenceValue = player.GetComponent<PlayerSanity>(); hudData.FindProperty("inventory").objectReferenceValue = player.GetComponent<PlayerInventory>(); hudData.FindProperty("healthBar").objectReferenceValue = health; hudData.FindProperty("sanityBar").objectReferenceValue = sanityMeter; hudData.FindProperty("healthText").objectReferenceValue = healthText; hudData.FindProperty("sanityText").objectReferenceValue = sanityText; hudData.FindProperty("keyIcon").objectReferenceValue = key; hudData.FindProperty("lowSanityOverlay").objectReferenceValue = overlay; hudData.ApplyModifiedPropertiesWithoutUndo();
-            var bossPanel = CreatePanel("BossHUD", canvas.transform, new Vector2(450, 70)); bossPanel.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 245); var bossSlider = CreateSlider("BossHealth", bossPanel.transform, Vector2.zero); var bossHud = bossPanel.AddComponent<BossHUD>(); var bossData = new SerializedObject(bossHud); bossData.FindProperty("panel").objectReferenceValue = bossPanel; bossData.FindProperty("healthBar").objectReferenceValue = bossSlider; bossData.ApplyModifiedPropertiesWithoutUndo(); bossPanel.SetActive(false);
+            // Top-of-screen boss HUD removed by request; the boss uses its own over-head health bar instead.
             // Skill cooldown bar at the bottom so the three abilities read clearly.
             var skillBar = new GameObject("SkillCooldownHUD", typeof(RectTransform)); skillBar.transform.SetParent(canvas.transform, false);
             var skillRect = skillBar.GetComponent<RectTransform>(); skillRect.anchorMin = skillRect.anchorMax = new Vector2(.5f, 0f); skillRect.anchoredPosition = Vector2.zero; skillRect.sizeDelta = new Vector2(400, 160);
@@ -205,9 +212,9 @@ namespace BurnOut.Editor
             var completeRestart = CreateButton("CompleteRestart", complete.transform, "PLAY AGAIN", new Vector2(0, -20)); UnityEventTools.AddPersistentListener(completeRestart.onClick, manager.RestartLevel);
             var completeMenu = CreateButton("CompleteMenu", complete.transform, "MAIN MENU", new Vector2(0, -90)); UnityEventTools.AddPersistentListener(completeMenu.onClick, manager.GoToMainMenu);
             complete.SetActive(false);
-            var over = CreatePanel("GameOverPanel", canvas.transform, new Vector2(450, 250)); CreateLabel("Over", over.transform, "LOST IN THE VOID", 32, new Vector2(0, 40), new Vector2(400, 100)); over.SetActive(false);
+            // No "LOST IN THE VOID" game-over panel by request; death just fades and respawns at the checkpoint.
             CreatePaperMessageBox(canvas.transform);
-            var managerData = new SerializedObject(manager); managerData.FindProperty("pausePanel").objectReferenceValue = pause; managerData.FindProperty("gameOverPanel").objectReferenceValue = over; managerData.FindProperty("levelCompletePanel").objectReferenceValue = complete; managerData.ApplyModifiedPropertiesWithoutUndo();
+            var managerData = new SerializedObject(manager); managerData.FindProperty("pausePanel").objectReferenceValue = pause; managerData.FindProperty("levelCompletePanel").objectReferenceValue = complete; managerData.ApplyModifiedPropertiesWithoutUndo();
             return canvas.gameObject;
         }
 
@@ -298,9 +305,54 @@ namespace BurnOut.Editor
             return go.GetComponent<Button>();
         }
 
+        // A fully visible, interactive volume slider: a dark track, a purple fill that grows with the
+        // value, and a light draggable handle. The old version created a bare Slider with no graphics,
+        // so it worked (dragging changed volume) but was completely invisible.
         private static Slider CreateSlider(string name, Transform parent, Vector2 position)
         {
-            var go = new GameObject(name, typeof(RectTransform), typeof(Slider)); go.transform.SetParent(parent, false); var rect = go.GetComponent<RectTransform>(); rect.anchoredPosition = position; rect.sizeDelta = new Vector2(200, 20); return go.GetComponent<Slider>();
+            var go = new GameObject(name, typeof(RectTransform), typeof(Slider));
+            go.transform.SetParent(parent, false);
+            var rect = go.GetComponent<RectTransform>();
+            rect.anchoredPosition = position; rect.sizeDelta = new Vector2(200, 20);
+
+            // Background track.
+            var background = new GameObject("Background", typeof(RectTransform), typeof(Image));
+            background.transform.SetParent(go.transform, false);
+            var bgRect = background.GetComponent<RectTransform>();
+            bgRect.anchorMin = Vector2.zero; bgRect.anchorMax = Vector2.one; bgRect.sizeDelta = Vector2.zero; bgRect.anchoredPosition = Vector2.zero;
+            background.GetComponent<Image>().color = new Color(.08f, .05f, .14f, 1f);
+
+            // Fill area + fill: the coloured portion left of the handle.
+            var fillArea = new GameObject("Fill Area", typeof(RectTransform));
+            fillArea.transform.SetParent(go.transform, false);
+            var fillAreaRect = fillArea.GetComponent<RectTransform>();
+            fillAreaRect.anchorMin = new Vector2(0f, .5f); fillAreaRect.anchorMax = new Vector2(1f, .5f);
+            fillAreaRect.offsetMin = new Vector2(5f, -8f); fillAreaRect.offsetMax = new Vector2(-15f, 8f);
+            var fill = new GameObject("Fill", typeof(RectTransform), typeof(Image));
+            fill.transform.SetParent(fillArea.transform, false);
+            var fillRect = fill.GetComponent<RectTransform>();
+            fillRect.anchorMin = Vector2.zero; fillRect.anchorMax = new Vector2(0f, 1f); fillRect.sizeDelta = new Vector2(10f, 0f);
+            fill.GetComponent<Image>().color = new Color(.55f, .38f, .85f, 1f);
+
+            // Handle slide area + handle: the draggable grip.
+            var handleArea = new GameObject("Handle Slide Area", typeof(RectTransform));
+            handleArea.transform.SetParent(go.transform, false);
+            var handleAreaRect = handleArea.GetComponent<RectTransform>();
+            handleAreaRect.anchorMin = Vector2.zero; handleAreaRect.anchorMax = Vector2.one;
+            handleAreaRect.offsetMin = new Vector2(10f, 0f); handleAreaRect.offsetMax = new Vector2(-10f, 0f);
+            var handle = new GameObject("Handle", typeof(RectTransform), typeof(Image));
+            handle.transform.SetParent(handleArea.transform, false);
+            var handleRect = handle.GetComponent<RectTransform>();
+            handleRect.sizeDelta = new Vector2(20f, 20f);
+            handle.GetComponent<Image>().color = new Color(.92f, .88f, .98f, 1f);
+
+            var slider = go.GetComponent<Slider>();
+            slider.fillRect = fillRect;
+            slider.handleRect = handleRect;
+            slider.targetGraphic = handle.GetComponent<Image>();
+            slider.direction = Slider.Direction.LeftToRight;
+            slider.minValue = 0f; slider.maxValue = 1f;
+            return slider;
         }
 
         private static GameObject Parent(string name, Transform parent = null) { var go = new GameObject(name); if (parent != null) go.transform.SetParent(parent); return go; }
@@ -316,7 +368,7 @@ namespace BurnOut.Editor
             for (var i = 0; i < count; i++)
                 CreateStepIsland($"{name}{i:00}", new Vector2(start.x + dx * i, start.y + dy * i), parent, width);
         }
-        private static void CreateEncounter(string name, Vector3 position, Vector2 size, Vector3[] spawnOffsets, int waves, Transform parent) { var go = new GameObject(name); go.transform.SetParent(parent); go.transform.position = position; var trigger = go.AddComponent<BoxCollider2D>(); trigger.size = size; trigger.isTrigger = true; var encounter = go.AddComponent<EncounterSpawner>(); var data = new SerializedObject(encounter); data.FindProperty("enemyPrefab").objectReferenceValue = BurnOutPrefabBuilder.LoadPrefab("PF_Enemy_Shadow", "Enemies"); data.FindProperty("rewardPrefab").objectReferenceValue = BurnOutPrefabBuilder.LoadPrefab("PF_SanityOrb", "Items"); data.FindProperty("waveCount").intValue = waves; var offsets = data.FindProperty("spawnOffsets"); offsets.arraySize = spawnOffsets.Length; for (var i = 0; i < spawnOffsets.Length; i++) offsets.GetArrayElementAtIndex(i).vector3Value = spawnOffsets[i]; data.ApplyModifiedPropertiesWithoutUndo(); }
+        private static void CreateEncounter(string name, Vector3 position, Vector2 size, Vector3[] spawnOffsets, int waves, Transform parent, string enemyPrefabName = "PF_Enemy_Shadow") { var go = new GameObject(name); go.transform.SetParent(parent); go.transform.position = position; var trigger = go.AddComponent<BoxCollider2D>(); trigger.size = size; trigger.isTrigger = true; var encounter = go.AddComponent<EncounterSpawner>(); var data = new SerializedObject(encounter); var enemyPrefab = BurnOutPrefabBuilder.LoadPrefab(enemyPrefabName, "Enemies") ?? BurnOutPrefabBuilder.LoadPrefab("PF_Enemy_Shadow", "Enemies"); data.FindProperty("enemyPrefab").objectReferenceValue = enemyPrefab; data.FindProperty("rewardPrefab").objectReferenceValue = BurnOutPrefabBuilder.LoadPrefab("PF_SanityOrb", "Items"); data.FindProperty("waveCount").intValue = waves; var offsets = data.FindProperty("spawnOffsets"); offsets.arraySize = spawnOffsets.Length; for (var i = 0; i < spawnOffsets.Length; i++) offsets.GetArrayElementAtIndex(i).vector3Value = spawnOffsets[i]; data.ApplyModifiedPropertiesWithoutUndo(); }
         // Every zone backdrop is stretched to this exact world height and vertical centre so the four
         // rooms line up flush after stitching (no jagged top edge) and always overfill the camera's
         // vertical view (orthographicSize 5.5 → 11 tall, plus headroom for jumps) — no black band above.

@@ -1,0 +1,1599 @@
+fileFormatVersion: 2
+guid: 66db800e0bc86cc47b08e1512bc3d54f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 108853448490059753
+    second: monster-map-2_0
+  - first:
+      213: 1567234413699807382
+    second: monster-map-2_1
+  - first:
+      213: 787363629734156496
+    second: monster-map-2_2
+  - first:
+      213: 5840067152481300341
+    second: monster-map-2_3
+  - first:
+      213: 8962532080257835343
+    second: monster-map-2_4
+  - first:
+      213: 4518550612994516745
+    second: monster-map-2_5
+  - first:
+      213: -4830251162124085414
+    second: monster-map-2_6
+  - first:
+      213: 8179208225149941594
+    second: monster-map-2_7
+  - first:
+      213: 8337539551075483301
+    second: monster-map-2_8
+  - first:
+      213: -8270237043360548693
+    second: monster-map-2_9
+  - first:
+      213: -7106249132055494602
+    second: monster-map-2_10
+  - first:
+      213: -400869779721066939
+    second: monster-map-2_11
+  - first:
+      213: 5407012593809633836
+    second: monster-map-2_12
+  - first:
+      213: 8642170202602788235
+    second: monster-map-2_13
+  - first:
+      213: -3735283997048180377
+    second: monster-map-2_14
+  - first:
+      213: 2437520330019282184
+    second: monster-map-2_15
+  - first:
+      213: -4550452643609189710
+    second: monster-map-2_16
+  - first:
+      213: 1726902080969809494
+    second: monster-map-2_17
+  - first:
+      213: 8451500320710430972
+    second: monster-map-2_18
+  - first:
+      213: 7381146069478528845
+    second: monster-map-2_19
+  - first:
+      213: 136690035313438639
+    second: monster-map-2_20
+  - first:
+      213: 8134538236232280403
+    second: monster-map-2_21
+  - first:
+      213: -2373760912451600899
+    second: monster-map-2_22
+  - first:
+      213: -1338188667585126977
+    second: monster-map-2_23
+  - first:
+      213: -2530749012997321470
+    second: monster-map-2_24
+  - first:
+      213: -2543036650586139547
+    second: monster-map-2_25
+  - first:
+      213: 803145444610314720
+    second: monster-map-2_26
+  - first:
+      213: -7744104811972901793
+    second: monster-map-2_27
+  - first:
+      213: 4093776870168956096
+    second: monster-map-2_28
+  - first:
+      213: -4591402305718701107
+    second: monster-map-2_29
+  - first:
+      213: -6982265900856981923
+    second: monster-map-2_30
+  - first:
+      213: -5560753636697693908
+    second: monster-map-2_31
+  - first:
+      213: -9005519891413284316
+    second: monster-map-2_32
+  - first:
+      213: -858802447602094980
+    second: monster-map-2_33
+  - first:
+      213: 5032862876351031533
+    second: monster-map-2_34
+  - first:
+      213: -6219521930040750542
+    second: monster-map-2_35
+  - first:
+      213: 6532275742816810752
+    second: monster-map-2_36
+  - first:
+      213: -495841360867786574
+    second: monster-map-2_37
+  - first:
+      213: -2024918169167250315
+    second: monster-map-2_38
+  - first:
+      213: 9082567464513688782
+    second: monster-map-2_39
+  - first:
+      213: -4809029229302056655
+    second: monster-map-2_40
+  - first:
+      213: 7247293190665127205
+    second: monster-map-2_41
+  - first:
+      213: 3222022465323122509
+    second: monster-map-2_42
+  - first:
+      213: -6027655892963574961
+    second: monster-map-2_43
+  - first:
+      213: 897372359936429978
+    second: monster-map-2_44
+  - first:
+      213: -9082007186725753049
+    second: monster-map-2_45
+  - first:
+      213: -4202493421238421384
+    second: monster-map-2_46
+  - first:
+      213: 1628382431471838082
+    second: monster-map-2_47
+  - first:
+      213: -9037333504752149495
+    second: monster-map-2_48
+  - first:
+      213: 8399580156102183798
+    second: monster-map-2_49
+  - first:
+      213: -4387896651023032862
+    second: monster-map-2_50
+  - first:
+      213: -7283393737310442949
+    second: monster-map-2_51
+  - first:
+      213: 8742815238831612839
+    second: monster-map-2_52
+  - first:
+      213: -7680218886384416477
+    second: monster-map-2_53
+  - first:
+      213: 5339460952093726262
+    second: monster-map-2_54
+  - first:
+      213: -361571544987643703
+    second: monster-map-2_55
+  - first:
+      213: 1277789947319135280
+    second: monster-map-2_56
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 0
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: monster-map-2_0
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 478
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e783d972a9b28100800000000000000
+      internalID: 108853448490059753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_1
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 480
+        width: 21
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 698385c456fefb510800000000000000
+      internalID: 1567234413699807382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_2
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 478
+        width: 6
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d8dd53bc074dea00800000000000000
+      internalID: 787363629734156496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_3
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 478
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57f231812261c0150800000000000000
+      internalID: 5840067152481300341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_4
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 401
+        width: 56
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f41afc3017f416c70800000000000000
+      internalID: 8962532080257835343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_5
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 402
+        width: 52
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 907692b97dd15be30800000000000000
+      internalID: 4518550612994516745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_6
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 402
+        width: 53
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a571da9e82087fcb0800000000000000
+      internalID: -4830251162124085414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_7
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 402
+        width: 51
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a57f304ab82628170800000000000000
+      internalID: 8179208225149941594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_8
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 371
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5aebf9a2c04e4b370800000000000000
+      internalID: 8337539551075483301
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_9
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 372
+        width: 26
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba8b7360a373a3d80800000000000000
+      internalID: -8270237043360548693
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_10
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 371
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 630876e9018816d90800000000000000
+      internalID: -7106249132055494602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_11
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 372
+        width: 56
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 546698a2f03df6af0800000000000000
+      internalID: -400869779721066939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_12
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 370
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2236167e41990b40800000000000000
+      internalID: 5407012593809633836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_13
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 303
+        width: 57
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b85da96d2082fe770800000000000000
+      internalID: 8642170202602788235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_14
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 297
+        width: 31
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 761fdbcbefa992cc0800000000000000
+      internalID: -3735283997048180377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_15
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 297
+        width: 55
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80d979b53dfc3d120800000000000000
+      internalID: 2437520330019282184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_16
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 297
+        width: 57
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b2ef621e6b89d0c0800000000000000
+      internalID: -4550452643609189710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_17
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 304
+        width: 59
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65e961a0b4037f710800000000000000
+      internalID: 1726902080969809494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_18
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 297
+        width: 32
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf09b0383c2c94570800000000000000
+      internalID: 8451500320710430972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_19
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 266
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d47d9824e391f6660800000000000000
+      internalID: 7381146069478528845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_20
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 268
+        width: 36
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: faf6137ecde95e100800000000000000
+      internalID: 136690035313438639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_21
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 267
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 359257e5d6fa3e070800000000000000
+      internalID: 8134538236232280403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_22
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 268
+        width: 23
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfd7d9fd605be0fd0800000000000000
+      internalID: -2373760912451600899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_23
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 268
+        width: 48
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbd92223f7ccd6de0800000000000000
+      internalID: -1338188667585126977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_24
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 268
+        width: 26
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20dcf906e29f0ecd0800000000000000
+      internalID: -2530749012997321470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_25
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 266
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 564930fc3a155bcd0800000000000000
+      internalID: -2543036650586139547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_26
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 195
+        width: 61
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e198f0d688552b00800000000000000
+      internalID: 803145444610314720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_27
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 195
+        width: 66
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5446fa14b9678490800000000000000
+      internalID: -7744104811972901793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_28
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 195
+        width: 74
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0cc8128af5400d830800000000000000
+      internalID: 4093776870168956096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_29
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 195
+        width: 76
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc33ab2edef0840c0800000000000000
+      internalID: -4591402305718701107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_30
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 195
+        width: 73
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d56c81428220a1f90800000000000000
+      internalID: -6982265900856981923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_31
+      rect:
+        serializedVersion: 2
+        x: 394
+        y: 195
+        width: 68
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c212c21970c34d2b0800000000000000
+      internalID: -5560753636697693908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_32
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 205
+        width: 40
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42ac89e3f57f50380800000000000000
+      internalID: -9005519891413284316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_33
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 224
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7ce07a59bbe414f0800000000000000
+      internalID: -858802447602094980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_34
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 163
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de8672cee1258d540800000000000000
+      internalID: 5032862876351031533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_35
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 165
+        width: 49
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23e4b2fc1c1dfa9a0800000000000000
+      internalID: -6219521930040750542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_36
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 165
+        width: 33
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0073f79bd2e47aa50800000000000000
+      internalID: 6532275742816810752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_37
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 107
+        width: 87
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b0878cc8ea6e19f0800000000000000
+      internalID: -495841360867786574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_38
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 163
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57c3d8357ab06e3e0800000000000000
+      internalID: -2024918169167250315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_39
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 106
+        width: 89
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec4dbdaccf2cb0e70800000000000000
+      internalID: 9082567464513688782
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_40
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 158
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 139faf03565e24db0800000000000000
+      internalID: -4809029229302056655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_41
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 109
+        width: 59
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 525c3b452ce839460800000000000000
+      internalID: 7247293190665127205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_42
+      rect:
+        serializedVersion: 2
+        x: 297
+        y: 107
+        width: 74
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4fb9e77c5ce6bc20800000000000000
+      internalID: 3222022465323122509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_43
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 150
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4bbd97b6e6795ca0800000000000000
+      internalID: -6027655892963574961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_44
+      rect:
+        serializedVersion: 2
+        x: 381
+        y: 107
+        width: 76
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9fc349286b147c00800000000000000
+      internalID: 897372359936429978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_45
+      rect:
+        serializedVersion: 2
+        x: 402
+        y: 153
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 72faaab059a36f180800000000000000
+      internalID: -9082007186725753049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_46
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 157
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 878fa28cf7ebda5c0800000000000000
+      internalID: -4202493421238421384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_47
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 76
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 283ad52a13d299610800000000000000
+      internalID: 1628382431471838082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_48
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 77
+        width: 26
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90c138c2f01f49280800000000000000
+      internalID: -9037333504752149495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_49
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 76
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67b04ea26ad419470800000000000000
+      internalID: 8399580156102183798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_50
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 77
+        width: 30
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ed55a47e3f0b13c0800000000000000
+      internalID: -4387896651023032862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_51
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 76
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3a6e482cff2cea90800000000000000
+      internalID: -7283393737310442949
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_52
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 16
+        width: 56
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a32e676328b45970800000000000000
+      internalID: 8742815238831612839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_53
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 15
+        width: 66
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3298fc74d916a6590800000000000000
+      internalID: -7680218886384416477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_54
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 16
+        width: 59
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6369d9d3273991a40800000000000000
+      internalID: 5339460952093726262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_55
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 40
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c05f1478907bfaf0800000000000000
+      internalID: -361571544987643703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: monster-map-2_56
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 15
+        width: 67
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03ca583ef2f9bb110800000000000000
+      internalID: 1277789947319135280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      monster-map-2_0: 108853448490059753
+      monster-map-2_1: 1567234413699807382
+      monster-map-2_10: -7106249132055494602
+      monster-map-2_11: -400869779721066939
+      monster-map-2_12: 5407012593809633836
+      monster-map-2_13: 8642170202602788235
+      monster-map-2_14: -3735283997048180377
+      monster-map-2_15: 2437520330019282184
+      monster-map-2_16: -4550452643609189710
+      monster-map-2_17: 1726902080969809494
+      monster-map-2_18: 8451500320710430972
+      monster-map-2_19: 7381146069478528845
+      monster-map-2_2: 787363629734156496
+      monster-map-2_20: 136690035313438639
+      monster-map-2_21: 8134538236232280403
+      monster-map-2_22: -2373760912451600899
+      monster-map-2_23: -1338188667585126977
+      monster-map-2_24: -2530749012997321470
+      monster-map-2_25: -2543036650586139547
+      monster-map-2_26: 803145444610314720
+      monster-map-2_27: -7744104811972901793
+      monster-map-2_28: 4093776870168956096
+      monster-map-2_29: -4591402305718701107
+      monster-map-2_3: 5840067152481300341
+      monster-map-2_30: -6982265900856981923
+      monster-map-2_31: -5560753636697693908
+      monster-map-2_32: -9005519891413284316
+      monster-map-2_33: -858802447602094980
+      monster-map-2_34: 5032862876351031533
+      monster-map-2_35: -6219521930040750542
+      monster-map-2_36: 6532275742816810752
+      monster-map-2_37: -495841360867786574
+      monster-map-2_38: -2024918169167250315
+      monster-map-2_39: 9082567464513688782
+      monster-map-2_4: 8962532080257835343
+      monster-map-2_40: -4809029229302056655
+      monster-map-2_41: 7247293190665127205
+      monster-map-2_42: 3222022465323122509
+      monster-map-2_43: -6027655892963574961
+      monster-map-2_44: 897372359936429978
+      monster-map-2_45: -9082007186725753049
+      monster-map-2_46: -4202493421238421384
+      monster-map-2_47: 1628382431471838082
+      monster-map-2_48: -9037333504752149495
+      monster-map-2_49: 8399580156102183798
+      monster-map-2_5: 4518550612994516745
+      monster-map-2_50: -4387896651023032862
+      monster-map-2_51: -7283393737310442949
+      monster-map-2_52: 8742815238831612839
+      monster-map-2_53: -7680218886384416477
+      monster-map-2_54: 5339460952093726262
+      monster-map-2_55: -361571544987643703
+      monster-map-2_56: 1277789947319135280
+      monster-map-2_6: -4830251162124085414
+      monster-map-2_7: 8179208225149941594
+      monster-map-2_8: 8337539551075483301
+      monster-map-2_9: -8270237043360548693
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

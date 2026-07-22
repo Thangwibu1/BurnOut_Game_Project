@@ -196,7 +196,148 @@ namespace BurnOut.Editor
             return frames.ToArray();
         }
 
-        private static Sprite GetCroppedSprite(string sourcePath, string outputPath, int x, int y, int width, int height, float pixelsPerUnit)
+        /// <summary>Frames for a multi-row monster sheet, one array per animation. Empty arrays are safe.</summary>
+        public readonly struct MonsterFrames
+        {
+            public MonsterFrames(Sprite[] idle, Sprite[] move, Sprite[] attack, Sprite[] death, Sprite[] explosion)
+            { Idle = idle; Move = move; Attack = attack; Death = death; Explosion = explosion; }
+            public readonly Sprite[] Idle;
+            public readonly Sprite[] Move;
+            public readonly Sprite[] Attack;
+            public readonly Sprite[] Death;
+            public readonly Sprite[] Explosion; // null/empty for sheets without an explosion row
+        }
+
+        // monster-map-1.png — 5 rows, top→bottom: idle, move, attack, hurt, death. No explosion.
+        // Frame counts per row (adjust here if an animation looks sheared/misaligned after a rebuild).
+        public static MonsterFrames GetMap1Frames()
+        {
+            var counts = new[] { 4, 6, 6, 2, 6 };
+            var rows = GetAnimationRows("Assets/_Project/Art/Characters/Enemies/monster-map-1.png", "Assets/_Project/Art/Characters/Enemies/Frames/Map1", 96f, counts);
+            return new MonsterFrames(Row(rows, 0), Row(rows, 1), Row(rows, 2), Row(rows, 4), System.Array.Empty<Sprite>());
+        }
+
+        // monster-map-2.png — 5 labelled rows, top→bottom: idle, move, attack, EXPLOSION, hurt/death.
+        // The explosion is its own row (index 3); death is the final row (index 4).
+        public static MonsterFrames GetMap2Frames()
+        {
+            var counts = new[] { 4, 4, 6, 5, 4 };
+            var rows = GetAnimationRows("Assets/_Project/Art/Characters/Enemies/monster-map-2.png", "Assets/_Project/Art/Characters/Enemies/Frames/Map2", 96f, counts);
+            return new MonsterFrames(Row(rows, 0), Row(rows, 1), Row(rows, 2), Row(rows, 4), Row(rows, 3));
+        }
+
+        private static Sprite[] Row(List<Sprite[]> rows, int index)
+            => index >= 0 && index < rows.Count ? rows[index] : System.Array.Empty<Sprite>();
+
+        /// <summary>
+        /// Slices a multi-row sprite sheet into one frame-array per animation row. Detects the horizontal
+        /// bands (skipping thin text labels by pixel mass), then divides each band into <paramref name="frameCounts"/>
+        /// EQUAL-WIDTH cells — the frames in these sheets touch edge-to-edge, so gap-based splitting fails
+        /// and would return the whole row as one image. Each cell is exported with a shared bottom-anchored
+        /// height so the animation doesn't jump, and a white-matte knockout.
+        /// Returned top-to-bottom in visual order (index 0 = topmost row).
+        /// </summary>
+        public static List<Sprite[]> GetAnimationRows(string sourcePath, string outputFolder, float pixelsPerUnit, int[] frameCounts)
+        {
+            var result = new List<Sprite[]>();
+            var importer = AssetImporter.GetAtPath(sourcePath) as TextureImporter;
+            if (importer == null) { Debug.LogWarning($"[SpriteFactory] No importer for {sourcePath}"); return result; }
+            importer.isReadable = true;
+            importer.textureType = TextureImporterType.Default;
+            importer.SaveAndReimport();
+            var source = AssetDatabase.LoadAssetAtPath<Texture2D>(sourcePath);
+            if (source == null) { Debug.LogWarning($"[SpriteFactory] Could not load {sourcePath}"); return result; }
+
+            var pixels = source.GetPixels32();
+            int w = source.width, h = source.height;
+
+            // Per-row foreground-pixel count. A COUNT (not "any pixel") ignores stray wisps and the thin
+            // text labels on the sheet, which carry little mass.
+            var rowMass = new int[h];
+            for (int y = 0; y < h; y++)
+            {
+                int m = 0, rowBase = y * w;
+                for (int x = 0; x < w; x++) if (IsForeground(pixels[rowBase + x])) m++;
+                rowMass[y] = m;
+            }
+
+            int rowMassFloor = Mathf.Max(6, w / 120);
+            var occupiedRows = new bool[h];
+            for (int y = 0; y < h; y++) occupiedRows[y] = rowMass[y] >= rowMassFloor;
+
+            // Group scanlines into vertical bands (one per animation row).
+            const int rowGap = 8;
+            int minBandHeight = Mathf.Max(40, h / 20);
+            var bands = new List<(int start, int end)>();
+            int start = -1, end = -1, gap = 0;
+            for (int y = 0; y < h; y++)
+            {
+                if (occupiedRows[y]) { if (start < 0) start = y; end = y; gap = 0; }
+                else if (start >= 0 && ++gap >= rowGap) { bands.Add((start, end)); start = -1; end = -1; gap = 0; }
+            }
+            if (start >= 0) bands.Add((start, end));
+            bands.RemoveAll(b => b.end - b.start + 1 < minBandHeight);
+            bands.Reverse(); // texture y=0 is the bottom; we want visual top-to-bottom
+
+            Directory.CreateDirectory(Path.Combine(Application.dataPath, outputFolder.Substring("Assets/".Length)));
+            var log = new List<string>();
+            for (int b = 0; b < bands.Count; b++)
+            {
+                int count = b < frameCounts.Length ? frameCounts[b] : 1;
+                var frames = SliceBandEqual(sourcePath, source, pixels, w, bands[b].start, bands[b].end, count, $"{outputFolder}/Row{b:00}", pixelsPerUnit);
+                log.Add($"row{b}: y={bands[b].start}-{bands[b].end} → {frames.Length}/{count} frames");
+                result.Add(frames);
+            }
+            Debug.Log($"[SpriteFactory] {Path.GetFileName(sourcePath)}: {bands.Count} rows → {string.Join(", ", log)}");
+            return result;
+        }
+
+        // Background = near-transparent OR near-white. Handles sheets on a white matte as well as ones with
+        // a real alpha channel — an alpha-only test collapses white-backed sheets into one giant frame.
+        private static bool IsForeground(Color32 p)
+        {
+            if (p.a < 24) return false;
+            return !(p.r >= 244 && p.g >= 244 && p.b >= 244);
+        }
+
+        // Divides one band into `count` equal-width cells. First finds the band's true horizontal extent
+        // (trimming empty left/right margin), then cuts evenly. Every frame keeps the SAME crop height
+        // (the band's full vertical extent) so the sprite's feet stay put and the animation doesn't bob.
+        private static Sprite[] SliceBandEqual(string sourcePath, Texture2D source, Color32[] pixels, int w, int bandBottom, int bandTop, int count, string outputFolder, float pixelsPerUnit)
+        {
+            if (count < 1) count = 1;
+
+            // Trim empty columns at the band's left/right so equal division lands on the actual frames.
+            int contentLeft = w, contentRight = -1;
+            for (int x = 0; x < w; x++)
+                for (int y = bandBottom; y <= bandTop; y++)
+                    if (IsForeground(pixels[y * w + x])) { contentLeft = Mathf.Min(contentLeft, x); contentRight = Mathf.Max(contentRight, x); break; }
+            if (contentRight < contentLeft) return System.Array.Empty<Sprite>();
+
+            // Shared vertical crop for the whole row → consistent frame height, feet aligned.
+            int top = Mathf.Min(source.height - 1, bandTop + 2);
+            int bottom = Mathf.Max(0, bandBottom - 2);
+            int cropHeight = top - bottom + 1;
+
+            float cellWidth = (contentRight - contentLeft + 1) / (float)count;
+            Directory.CreateDirectory(Path.Combine(Application.dataPath, outputFolder.Substring("Assets/".Length)));
+
+            var frames = new List<Sprite>();
+            for (int i = 0; i < count; i++)
+            {
+                int cellLeft = contentLeft + Mathf.RoundToInt(i * cellWidth);
+                int cellRight = contentLeft + Mathf.RoundToInt((i + 1) * cellWidth) - 1;
+                cellRight = Mathf.Min(cellRight, w - 1);
+                int cellW = cellRight - cellLeft + 1;
+                if (cellW < 2) continue;
+                var outputPath = $"{outputFolder}/Frame_{i:00}.png";
+                var frame = GetCroppedSprite(sourcePath, outputPath, cellLeft, bottom, cellW, cropHeight, pixelsPerUnit, true, new Vector2(.5f, 0f));
+                if (frame != null) frames.Add(frame);
+            }
+            return frames.ToArray();
+        }
+
+        private static Sprite GetCroppedSprite(string sourcePath, string outputPath, int x, int y, int width, int height, float pixelsPerUnit, bool knockOutWhite = false, Vector2? pivot = null)
         {
             var existing = AssetDatabase.LoadAssetAtPath<Sprite>(outputPath);
             if (existing != null) return existing;
@@ -210,7 +351,16 @@ namespace BurnOut.Editor
             var source = AssetDatabase.LoadAssetAtPath<Texture2D>(sourcePath);
             if (source == null) return null;
             var cropped = new Texture2D(width, height, TextureFormat.RGBA32, false);
-            cropped.SetPixels(source.GetPixels(x, y, width, height));
+            var block = source.GetPixels(x, y, width, height);
+            // Sheets exported on a white matte have no alpha, so make near-white pixels transparent —
+            // otherwise every frame carries an opaque white box behind the sprite.
+            if (knockOutWhite)
+                for (int i = 0; i < block.Length; i++)
+                {
+                    var c = block[i];
+                    if (c.r >= .957f && c.g >= .957f && c.b >= .957f) block[i] = new Color(c.r, c.g, c.b, 0f);
+                }
+            cropped.SetPixels(block);
             cropped.Apply();
             File.WriteAllBytes(Path.Combine(Application.dataPath, outputPath.Substring("Assets/".Length)), cropped.EncodeToPNG());
             Object.DestroyImmediate(cropped);
@@ -223,6 +373,15 @@ namespace BurnOut.Editor
             outputImporter.alphaIsTransparency = true;
             outputImporter.filterMode = FilterMode.Point;
             outputImporter.textureCompression = TextureImporterCompression.Uncompressed;
+            // Custom pivot (e.g. bottom-centre) so animation frames of varying content keep their feet planted.
+            if (pivot.HasValue)
+            {
+                var settings = new TextureImporterSettings();
+                outputImporter.ReadTextureSettings(settings);
+                settings.spriteAlignment = (int)SpriteAlignment.Custom;
+                settings.spritePivot = pivot.Value;
+                outputImporter.SetTextureSettings(settings);
+            }
             outputImporter.SaveAndReimport();
             return AssetDatabase.LoadAssetAtPath<Sprite>(outputPath);
         }

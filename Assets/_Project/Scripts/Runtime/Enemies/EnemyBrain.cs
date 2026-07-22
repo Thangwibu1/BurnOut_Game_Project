@@ -22,6 +22,9 @@ namespace BurnOut.Enemies
         // Keep ranged pressure readable: one deliberate shot every three seconds,
         // instead of a stream that makes dodging feel random.
         [SerializeField] private float projectileCooldown = 3f;
+        // The shadow enemy is a flat silhouette that reads well with a cool/warm colour wash. Detailed
+        // sheet-art monsters look wrong tinted, so they switch this off and keep only speed/size variety.
+        [SerializeField] private bool tintVariety = true;
         private Transform player;
         private EnemyHealth health;
         private float direction = 1f;
@@ -49,6 +52,7 @@ namespace BurnOut.Enemies
             var scale = transform.localScale;
             float size = Mathf.Lerp(1.15f, .88f, v);
             transform.localScale = new Vector3(Mathf.Abs(scale.x) * size, Mathf.Abs(scale.y) * size, scale.z);
+            if (!tintVariety) return;
             var renderer = GetComponent<SpriteRenderer>();
             if (renderer != null) renderer.color = Color.Lerp(new Color(1f, .88f, .88f), new Color(.82f, .86f, 1f), v);
         }

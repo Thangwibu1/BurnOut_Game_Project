@@ -23,6 +23,10 @@ namespace BurnOut.Audio
         private static AudioClip ambienceClip;
         private static SfxPlayer player;
 
+        // Global SFX level (0..1) driven by the settings SFX slider. Applied to every one-shot the
+        // pool plays, so the slider affects all real sound effects — footsteps, hits, UI, dialogue.
+        public static float Volume { get; set; } = .8f;
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Bootstrap()
         {
@@ -205,7 +209,8 @@ namespace BurnOut.Audio
             var s = pool[index];
             index = (index + 1) % pool.Count;
             s.pitch = 1f;
-            s.PlayOneShot(clip, Mathf.Clamp01(volume) * 0.8f);
+            // Scale by the global SFX setting so the settings slider controls every effect.
+            s.PlayOneShot(clip, Mathf.Clamp01(volume) * Mathf.Clamp01(RuntimeSfx.Volume));
         }
     }
 }

@@ -38,6 +38,12 @@ namespace BurnOut.Editor
             CreateEnemyProjectile();
             CreateEnemy("PF_Enemy_Shadow", false);
             CreateEnemy("PF_MiniBoss_Shadow", true);
+            // Per-map monsters from the new art sheets. Explosion prefab first so the bomber can reference it.
+            var map1 = BurnOutSpriteFactory.GetMap1Frames();
+            var map2 = BurnOutSpriteFactory.GetMap2Frames();
+            CreateExplosion(map2.Explosion);
+            CreateSheetMonster("PF_Enemy_Melee", map1, 3, 1.4f, false);
+            CreateSheetMonster("PF_Enemy_Bomber", map2, 2, 1.45f, true);
             CreatePickup<SanityPickup>("PF_SanityOrb", "Items", Color.cyan, "SanityItem");
             CreatePickup<HealthPickup>("PF_HealthPickup", "Items", Color.red, "Untagged");
             CreatePickup<KeyPickup>("PF_Key", "Items", Color.yellow, "Key");
@@ -52,6 +58,7 @@ namespace BurnOut.Editor
             var generatedPrefabs = new[]
             {
                 "Player/PF_Player", "Player/PF_Shockwave", "Enemies/PF_Enemy_Shadow", "Enemies/PF_MiniBoss_Shadow", "Enemies/PF_EnemyProjectile",
+                "Enemies/PF_Explosion", "Enemies/PF_Enemy_Melee", "Enemies/PF_Enemy_Bomber",
                 "Items/PF_SanityOrb", "Items/PF_HealthPickup", "Items/PF_Key", "Items/PF_MentalFragment",
                 "Environment/PF_Checkpoint", "Environment/PF_LockedDoor", "Environment/PF_LevelExit", "Environment/PF_Hazard_Spikes",
                 "Systems/PF_GameManager", "Systems/PF_AudioManager", "UI/PF_PlayerHUD", "UI/PF_BossHUD"
@@ -180,6 +187,76 @@ namespace BurnOut.Editor
             go.AddComponent<EnemyHealthBar>();
             var healthData = new SerializedObject(health); healthData.FindProperty("maxHealth").intValue = boss ? 12 : 1; healthData.ApplyModifiedPropertiesWithoutUndo();
             if (brain != null) { var brainData = new SerializedObject(brain); brainData.FindProperty("energyProjectilePrefab").objectReferenceValue = LoadPrefab("PF_EnemyProjectile", "Enemies"); brainData.ApplyModifiedPropertiesWithoutUndo(); }
+            SavePrefab(go, path);
+        }
+
+        // Builds a monster from a multi-row art sheet: melee AI (no projectile), sliced animations, and
+        // optionally an on-death explosion. Used for the per-map enemies (map 1 melee, map 2 bomber).
+        // targetHeight is the desired WORLD height in units (>= the player's ~1.3 so the monster reads big).
+        private static void CreateSheetMonster(string name, BurnOutSpriteFactory.MonsterFrames frames, int maxHealth, float targetHeight, bool explodes)
+        {
+            var path = Root + "/Prefabs/Enemies/" + name + ".prefab";
+            if (AssetDatabase.LoadAssetAtPath<GameObject>(path) != null) return;
+
+            var go = new GameObject(name); go.layer = LayerMask.NameToLayer("Enemy"); go.tag = "Enemy";
+            var renderer = go.AddComponent<SpriteRenderer>();
+            var first = frames.Idle.Length > 0 ? frames.Idle[0] : frames.Move.Length > 0 ? frames.Move[0] : GetWhiteSprite();
+            renderer.sprite = first; renderer.color = Color.white;
+
+            // Frames share a bottom-centre pivot, so the transform origin sits at the monster's feet.
+            // Scale uniformly so the sprite reaches targetHeight in world units — bigger than the player.
+            float nativeHeight = first != null ? first.bounds.size.y : 1f;
+            float scale = nativeHeight > 0f ? targetHeight / nativeHeight : 1f;
+            go.transform.localScale = new Vector3(scale, scale, 1f);
+
+            // Body collider sits ABOVE the feet origin (pivot is at the bottom), sized to the sprite body.
+            var box = go.AddComponent<BoxCollider2D>();
+            float bodyW = first != null ? first.bounds.size.x : 1f;
+            box.size = new Vector2(bodyW * .5f, nativeHeight * .82f);
+            box.offset = new Vector2(0f, nativeHeight * .5f);
+            var health = go.AddComponent<EnemyHealth>();
+            var brain = go.AddComponent<EnemyBrain>();      // melee by default: energyProjectilePrefab left null
+            var brainData = new SerializedObject(brain); brainData.FindProperty("tintVariety").boolValue = false; brainData.ApplyModifiedPropertiesWithoutUndo();
+            var animator = go.AddComponent<EnemyVisualAnimator>();
+            var bar = go.AddComponent<EnemyHealthBar>();
+            // The bar scales up with the (large) monster scale, so give it a small base so it stays a
+            // thin sliver over the head rather than a big block.
+            var barData = new SerializedObject(bar); barData.FindProperty("pivotAtFeet").boolValue = true; barData.FindProperty("width").floatValue = .5f; barData.FindProperty("height").floatValue = .08f; barData.ApplyModifiedPropertiesWithoutUndo();
+
+            var animData = new SerializedObject(animator);
+            animData.FindProperty("spriteRenderer").objectReferenceValue = renderer;
+            SetSprites(animData, "idleFrames", frames.Idle.Length > 0 ? frames.Idle : (frames.Move.Length > 0 ? new[] { frames.Move[0] } : System.Array.Empty<Sprite>()));
+            SetSprites(animData, "moveFrames", frames.Move);
+            SetSprites(animData, "attackFrames", frames.Attack);
+            SetSprites(animData, "deathFrames", frames.Death);
+            animData.ApplyModifiedPropertiesWithoutUndo();
+
+            var healthData = new SerializedObject(health); healthData.FindProperty("maxHealth").intValue = maxHealth; healthData.ApplyModifiedPropertiesWithoutUndo();
+
+            if (explodes)
+            {
+                var explode = go.AddComponent<ExplodeOnDeath>();
+                var explodeData = new SerializedObject(explode);
+                explodeData.FindProperty("explosionVisualPrefab").objectReferenceValue = LoadPrefab("PF_Explosion", "Enemies");
+                explodeData.ApplyModifiedPropertiesWithoutUndo();
+            }
+            SavePrefab(go, path);
+        }
+
+        // A cosmetic explosion animation prefab, fed the monster-map-2 explosion row frames.
+        private static void CreateExplosion(Sprite[] frames)
+        {
+            const string path = Root + "/Prefabs/Enemies/PF_Explosion.prefab";
+            if (AssetDatabase.LoadAssetAtPath<GameObject>(path) != null) return;
+            var go = new GameObject("PF_Explosion");
+            var renderer = go.AddComponent<SpriteRenderer>();
+            if (frames.Length > 0) renderer.sprite = frames[0];
+            renderer.sortingOrder = 42;
+            var visual = go.AddComponent<ExplosionVisual>();
+            var data = new SerializedObject(visual);
+            data.FindProperty("spriteRenderer").objectReferenceValue = renderer;
+            SetSprites(data, "frames", frames);
+            data.ApplyModifiedPropertiesWithoutUndo();
             SavePrefab(go, path);
         }
 
