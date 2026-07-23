@@ -312,7 +312,7 @@ namespace BurnOut.Editor
             var collider = go.AddComponent<CircleCollider2D>(); collider.isTrigger = true; collider.radius = .28f;
             var hitbox = go.AddComponent<Hitbox2D>(); go.AddComponent<Projectile>(); go.AddComponent<EnemyProjectile>();
             var hitboxData = new SerializedObject(hitbox); hitboxData.FindProperty("damage").intValue = 1; hitboxData.FindProperty("knockback").floatValue = 5f; hitboxData.FindProperty("targetLayers").intValue = 1 << LayerMask.NameToLayer("Player"); hitboxData.FindProperty("hitboxCollider").objectReferenceValue = collider; hitboxData.ApplyModifiedPropertiesWithoutUndo();
-            var trail = go.AddComponent<TrailRenderer>(); trail.time = .22f; trail.startWidth = .22f; trail.endWidth = .02f; trail.startColor = new Color(.35f, .85f, 1f, .8f); trail.endColor = new Color(.2f, .4f, 1f, 0f); trail.sortingOrder = 34;
+            // No trail — the flame ball flies clean (user removed the pink tail).
             SavePrefab(go, path);
         }
 
