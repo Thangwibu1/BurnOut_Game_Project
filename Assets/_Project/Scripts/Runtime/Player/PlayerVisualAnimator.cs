@@ -138,14 +138,17 @@ namespace BurnOut.Player
             if (activeFrames != frames) { activeFrames = frames; frameIndex = 0; frameTimer = 0f; spriteRenderer.sprite = frames[0]; }
 
             bool isYawnAnim = yawning && frames == yawnFrames;
+            // The shockwave (Z) knee-slam plays through exactly once and freezes on its final frame,
+            // so the slow-mo cast shows one clean slam instead of looping into a second partial one.
+            bool holdOnLast = isYawnAnim || frames == shockwaveFrames;
             float interval = isYawnAnim ? yawnFrameDuration : 1f / frameRate;
             frameTimer += Time.deltaTime;
             if (frameTimer < interval) return;
             frameTimer = 0f;
 
-            if (isYawnAnim)
+            if (holdOnLast)
             {
-                // Advance until the last frame then freeze there — player must move to break out.
+                // Advance until the last frame then freeze there.
                 if (frameIndex < frames.Length - 1)
                 {
                     frameIndex++;
