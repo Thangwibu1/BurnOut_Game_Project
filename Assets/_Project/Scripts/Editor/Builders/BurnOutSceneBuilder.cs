@@ -57,10 +57,12 @@ namespace BurnOut.Editor
             // Four painted interiors placed edge to edge as fixed world backdrops — travelling right walks
             // Lily through four rooms of a derelict multi-storey building. Platforms below echo each room's floors.
             var bgTint = new Color(.88f, .9f, 1f);
-            CreateZoneBackground("BG_Zone1_ArrivalHall", "Assets/_Project/Art/Backgrounds/BG_Scene1.png", 13.5f, 4f, 53f, backgrounds.transform, bgTint);
-            CreateZoneBackground("BG_Zone2_Atrium", "Assets/_Project/Art/Backgrounds/BG_Scene2.png", 60f, 4f, 40f, backgrounds.transform, bgTint);
-            CreateZoneBackground("BG_Zone3_Corridor", "Assets/_Project/Art/Backgrounds/BG_Scene3.png", 100f, 4f, 40f, backgrounds.transform, bgTint);
-            CreateZoneBackground("BG_Zone4_Catacomb", "Assets/_Project/Art/Backgrounds/BG_Scene4.png", 145f, 4f, 50f, backgrounds.transform, bgTint);
+            // Single new backdrop (bg.jpg) tiled across all four zones so the whole level shares one look.
+            const string mainBg = "Assets/_Project/Art/Backgrounds/BG_Main.jpg";
+            CreateZoneBackground("BG_Zone1_ArrivalHall", mainBg, 13.5f, 4f, 53f, backgrounds.transform, bgTint);
+            CreateZoneBackground("BG_Zone2_Atrium", mainBg, 60f, 4f, 40f, backgrounds.transform, bgTint);
+            CreateZoneBackground("BG_Zone3_Corridor", mainBg, 100f, 4f, 40f, backgrounds.transform, bgTint);
+            CreateZoneBackground("BG_Zone4_Catacomb", mainBg, 145f, 4f, 50f, backgrounds.transform, bgTint);
             var environment = Parent("Environment"); var groundParent = Parent("Ground", environment.transform); var platforms = Parent("Platforms", environment.transform);
             // Solid landing floors are the safe beats; the connectors between them are staircases with real
             // gaps. A missed jump drops Lily off-screen and respawns her at the last checkpoint — a setback, not a soft-lock.

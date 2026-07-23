@@ -28,6 +28,15 @@ namespace BurnOut.Editor
             return GetCroppedSprite(src, outPath, 1096, 588, 268, 340, 420f);
         }
 
+        // The enemy energy ball — blue flame cropped from element/fire.png (white matte knocked out).
+        public static Sprite GetFireProjectileSprite()
+        {
+            const string src = "Assets/_Project/Art/Enemies/Enemy_Projectile_Fire.png";
+            const string outPath = "Assets/_Project/Art/Enemies/Enemy_Projectile_Fire_Cropped.png";
+            // Sheet 1920x1080; flame blob at PIL(x685,y301,549x499). GetPixels uses bottom-left origin.
+            return GetCroppedSprite(src, outPath, 655, 250, 609, 559, 800f, knockOutWhite: true);
+        }
+
         public static Sprite GetPlatformSprite()
         {
             // Main wide platform: x 390–1090, y 78–220 in the original 1920x1080 sheet.

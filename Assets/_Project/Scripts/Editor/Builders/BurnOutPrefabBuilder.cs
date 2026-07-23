@@ -305,10 +305,14 @@ namespace BurnOut.Editor
             const string path = Root + "/Prefabs/Enemies/PF_EnemyProjectile.prefab";
             if (AssetDatabase.LoadAssetAtPath<GameObject>(path) != null) return;
             var go = CreateVisual("PF_EnemyProjectile", Color.magenta, "EnemyAttack", "Untagged", new Vector2(.3f, .3f));
-            var collider = go.AddComponent<CircleCollider2D>(); collider.isTrigger = true;
+            // Swap the placeholder box for the blue flame energy-ball art.
+            var renderer = go.GetComponent<SpriteRenderer>();
+            var fire = BurnOutSpriteFactory.GetFireProjectileSprite();
+            if (fire != null) { renderer.sprite = fire; renderer.color = Color.white; renderer.drawMode = SpriteDrawMode.Simple; renderer.sortingOrder = 35; go.transform.localScale = Vector3.one; }
+            var collider = go.AddComponent<CircleCollider2D>(); collider.isTrigger = true; collider.radius = .28f;
             var hitbox = go.AddComponent<Hitbox2D>(); go.AddComponent<Projectile>(); go.AddComponent<EnemyProjectile>();
             var hitboxData = new SerializedObject(hitbox); hitboxData.FindProperty("damage").intValue = 1; hitboxData.FindProperty("knockback").floatValue = 5f; hitboxData.FindProperty("targetLayers").intValue = 1 << LayerMask.NameToLayer("Player"); hitboxData.FindProperty("hitboxCollider").objectReferenceValue = collider; hitboxData.ApplyModifiedPropertiesWithoutUndo();
-            var trail = go.AddComponent<TrailRenderer>(); trail.time = .28f; trail.startWidth = .18f; trail.endWidth = .02f; trail.startColor = new Color(.25f, .95f, 1f, .9f); trail.endColor = new Color(.5f, .1f, 1f, 0f);
+            var trail = go.AddComponent<TrailRenderer>(); trail.time = .22f; trail.startWidth = .22f; trail.endWidth = .02f; trail.startColor = new Color(.35f, .85f, 1f, .8f); trail.endColor = new Color(.2f, .4f, 1f, 0f); trail.sortingOrder = 34;
             SavePrefab(go, path);
         }
 

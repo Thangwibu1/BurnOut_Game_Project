@@ -40,7 +40,16 @@ namespace BurnOut.Editor
             ["bg1.png"] = "Art/Backgrounds/BG_Scene1.png",
             ["bg2.png"] = "Art/Backgrounds/BG_Scene2.png",
             ["bg3.png"] = "Art/Backgrounds/BG_Scene3.png",
-            ["bg4.png"] = "Art/Backgrounds/BG_Scene4.png"
+            ["bg4.png"] = "Art/Backgrounds/BG_Scene4.png",
+            // New single backdrop used for all zones.
+            ["bg.jpg"] = "Art/Backgrounds/BG_Main.jpg"
+        };
+
+        // Extra art placed directly into the project (already copied by setup).
+        private static readonly Dictionary<string, string> ExtraAssets = new()
+        {
+            // Enemy energy-ball projectile (white-matte source; knockOut handled in sprite factory).
+            ["element/fire.png"] = "Art/Enemies/Enemy_Projectile_Fire.png"
         };
 
         [MenuItem("BurnOut/02 Import And Organize Assets")]
@@ -56,6 +65,8 @@ namespace BurnOut.Editor
                 if (!File.Exists(destination)) File.Copy(source, destination, false);
             }
             ImportFolder(BackgroundSourceDirectory, BackgroundImports);
+            // Extra pre-placed assets (already in Assets folder; just ensure import settings are correct).
+            foreach (var v in ExtraAssets.Values) ApplySettings("Assets/_Project/" + v);
             AssetDatabase.Refresh();
             foreach (var relative in Imports.Values) ApplySettings("Assets/_Project/" + relative);
             foreach (var relative in BackgroundImports.Values) ApplySettings("Assets/_Project/" + relative);
@@ -79,12 +90,14 @@ namespace BurnOut.Editor
         {
             var importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
             if (importer == null) return;
+            bool isBackground = assetPath.Contains("Backgrounds");
+            bool isJpg = assetPath.EndsWith(".jpg") || assetPath.EndsWith(".jpeg");
             importer.textureType = TextureImporterType.Sprite;
-            importer.spriteImportMode = assetPath.Contains("Backgrounds") ? SpriteImportMode.Single : SpriteImportMode.Multiple;
+            importer.spriteImportMode = isBackground ? SpriteImportMode.Single : SpriteImportMode.Multiple;
             importer.filterMode = FilterMode.Bilinear;
             importer.wrapMode = TextureWrapMode.Clamp;
-            importer.alphaIsTransparency = !assetPath.Contains("Backgrounds");
-            importer.textureCompression = assetPath.Contains("Backgrounds") ? TextureImporterCompression.CompressedHQ : TextureImporterCompression.Uncompressed;
+            importer.alphaIsTransparency = !isBackground && !isJpg;
+            importer.textureCompression = isBackground ? TextureImporterCompression.CompressedHQ : TextureImporterCompression.Uncompressed;
             importer.SaveAndReimport();
         }
     }
