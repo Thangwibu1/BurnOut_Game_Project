@@ -25,6 +25,9 @@ namespace BurnOut.Player
         public bool IsDashing => dashTimer > 0f;
         public bool FacingRight { get; private set; } = true;
         public float HorizontalSpeed => body == null ? 0f : body.linearVelocity.x;
+        // Exposed so the skill bar can mirror the dash cooldown when C shares the dash.
+        public float DashCooldownRemaining => dashCooldownTimer;
+        public float DashCooldownDuration => config != null ? config.DashCooldown : 0f;
         public event System.Action Dashed;
         public event System.Action Jumped;
 
@@ -90,7 +93,8 @@ namespace BurnOut.Player
             Jumped?.Invoke();
         }
 
-        private void TryDash()
+        // Public so skill C (PlayerCombat.Rush) can trigger the exact same dash as the Ctrl key.
+        public void TryDash()
         {
             if (dashCooldownTimer > 0f || IsDashing) return;
             dashTimer = config.DashDuration;

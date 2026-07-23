@@ -23,11 +23,7 @@ namespace BurnOut.Player
         [SerializeField] private float auraSanityRestore = 30f;
         [SerializeField] private float auraShieldTime = 2.5f;
 
-        [Header("Skill 2 - Rush (lunge strike)")]
-        [SerializeField] private Hitbox2D rushHitbox;
-        [SerializeField] private float rushCooldown = 2.5f;
-        [SerializeField] private float rushLungeSpeed = 13f;
-        [SerializeField] private float rushActiveTime = .32f; // stays live for the whole lunge so it always connects
+        // Skill C is a dash (see Rush()); it borrows PlayerMovement's dash config, so no fields needed here.
 
         [Header("Skill 3 - Shockwave (ground wave)")]
         [SerializeField] private GameObject shockwavePrefab;
@@ -39,10 +35,8 @@ namespace BurnOut.Player
         private PlayerMovement movement;
         private PlayerSanity sanity;
         private PlayerHealth health;
-        private Rigidbody2D body;
         private float attackCooldownTimer;
         private float auraCooldownTimer;
-        private float rushCooldownTimer;
         private float shockwaveCooldownTimer;
         private float attackVisualTimer;
         private float skillVisualTimer;
@@ -52,11 +46,12 @@ namespace BurnOut.Player
         public bool IsUsingSkill => skillVisualTimer > 0f;
         public SkillId ActiveSkill => activeSkill;
         public float AuraCooldownRemaining => auraCooldownTimer;
-        public float RushCooldownRemaining => rushCooldownTimer;
+        // Skill C is now the dash, so its cooldown mirrors PlayerMovement's dash cooldown.
+        public float RushCooldownRemaining => movement != null ? movement.DashCooldownRemaining : 0f;
         public float ShockwaveCooldownRemaining => shockwaveCooldownTimer;
         // Full cooldown durations, so the HUD can show a 0..1 fill for each skill.
         public float AuraCooldown => auraCooldown;
-        public float RushCooldown => rushCooldown;
+        public float RushCooldown => movement != null ? movement.DashCooldownDuration : 0f;
         public float ShockwaveCooldown => shockwaveCooldown;
         public event System.Action AttackPerformed;
         public event System.Action SkillPerformed;
@@ -67,7 +62,6 @@ namespace BurnOut.Player
             movement = GetComponent<PlayerMovement>();
             sanity = GetComponent<PlayerSanity>();
             health = GetComponent<PlayerHealth>();
-            body = GetComponent<Rigidbody2D>();
         }
 
         private void OnEnable()
@@ -75,7 +69,7 @@ namespace BurnOut.Player
             input.AttackPressed += Attack;
             input.Skill1Pressed += Shockwave; // Z — ground slash wave (art: skill 1)
             input.Skill2Pressed += Aura;      // X — focus aura (art: skill 2)
-            input.Skill3Pressed += Rush;      // C — lunging rush (art: skill 3)
+            input.Skill3Pressed += Rush;      // C — dash (art: skill 3)
         }
 
         private void OnDisable()
@@ -90,7 +84,6 @@ namespace BurnOut.Player
         {
             attackCooldownTimer = Mathf.Max(0f, attackCooldownTimer - Time.deltaTime);
             auraCooldownTimer = Mathf.Max(0f, auraCooldownTimer - Time.deltaTime);
-            rushCooldownTimer = Mathf.Max(0f, rushCooldownTimer - Time.deltaTime);
             shockwaveCooldownTimer = Mathf.Max(0f, shockwaveCooldownTimer - Time.deltaTime);
             attackVisualTimer = Mathf.Max(0f, attackVisualTimer - Time.deltaTime);
             skillVisualTimer = Mathf.Max(0f, skillVisualTimer - Time.deltaTime);
@@ -99,7 +92,6 @@ namespace BurnOut.Player
             // Focus: as sanity collapses, desperation makes Lily's strikes hit far harder.
             float focus = sanity != null && sanity.IsLow ? lowSanityDamageBonus : 1f;
             if (normalAttackHitbox != null) normalAttackHitbox.DamageMultiplier = focus;
-            if (rushHitbox != null) rushHitbox.DamageMultiplier = focus * 1.5f;
         }
 
         private void Attack()
@@ -130,20 +122,18 @@ namespace BurnOut.Player
             Juice.Shake(.1f, .12f);
         }
 
-        // Skill 2 — Rush: a committed lunging strike with a shockwave ring.
+        // Skill 3 (C) — Dash: an evasive burst, identical to the Ctrl dash. Pure movement, no damage.
         private void Rush()
         {
-            if (rushCooldownTimer > 0f || rushHitbox == null) return;
-            rushCooldownTimer = rushCooldown;
-            skillVisualTimer = attackActiveTime + .3f;
+            if (movement == null || movement.IsDashing || movement.DashCooldownRemaining > 0f) return;
+            skillVisualTimer = .3f;
             activeSkill = SkillId.Rush;
             SkillPerformed?.Invoke();
+            movement.TryDash();
             float dir = movement.FacingRight ? 1f : -1f;
-            if (body != null) body.linearVelocity = new Vector2(dir * rushLungeSpeed, Mathf.Max(body.linearVelocity.y, 1.5f));
-            ImpactFX.Expand(transform.position + Vector3.right * dir * .6f, new Color(.4f, 1f, .85f), 1.9f);
+            ImpactFX.Expand(transform.position + Vector3.right * dir * .6f, new Color(.4f, 1f, .85f), 1.6f);
             RuntimeSfx.Play(RuntimeSfx.Sound.Skill);
-            Juice.Shake(.24f, .2f);
-            StartCoroutine(ActivateHitbox(rushHitbox, rushActiveTime));
+            Juice.Shake(.14f, .14f);
         }
 
         // Skill 3 — Shockwave: slam the ground and send a travelling wave that hits everything ahead.
@@ -175,4 +165,3 @@ namespace BurnOut.Player
         }
     }
 }
-

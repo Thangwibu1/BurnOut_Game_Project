@@ -18,7 +18,7 @@ namespace BurnOut.UI
         private readonly Image[] frames = new Image[3];
 
         private static readonly string[] Keys = { "Z", "X", "C" };
-        private static readonly string[] Names = { "WAVE", "AURA", "RUSH" };
+        private static readonly string[] Names = { "WAVE", "AURA", "DASH" };
         private static readonly Color[] Tints =
         {
             new(1f, .6f, .3f),   // Shockwave

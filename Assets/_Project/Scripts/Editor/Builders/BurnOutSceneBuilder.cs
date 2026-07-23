@@ -154,7 +154,7 @@ namespace BurnOut.Editor
             var bossScale = boss.transform.localScale; boss.transform.localScale = new Vector3(Mathf.Abs(bossScale.x) * 1.4f, Mathf.Abs(bossScale.y) * 1.4f, bossScale.z);
             var bossHealthData = new SerializedObject(boss.GetComponent<EnemyHealth>()); bossHealthData.FindProperty("maxHealth").intValue = 28; bossHealthData.ApplyModifiedPropertiesWithoutUndo();
             CreateWorldText("Move: A/D or Arrows\nJump / Double Jump: Space     Dash: Left Ctrl", new Vector3(4f, 2.6f, 0f), 14f);
-            CreateWorldText("Attack: Left Shift / LMB\nSkills:  Z Shockwave    X Aura (heal+shield)    C Rush (lunge)", new Vector3(4f, 1.4f, 0f), 16f);
+            CreateWorldText("Attack: Left Shift / LMB\nSkills:  Z Shockwave    X Aura (heal+shield)    C Dash", new Vector3(4f, 1.4f, 0f), 16f);
             CreateWorldText("Slaying shadows restores sanity. The lower your sanity, the harder you hit.", new Vector3(23f, 4.4f, 0f));
             CreateWorldText("Climb the ruins. Watch your footing over the spikes.", new Vector3(31f, 4f, 0f));
             CreateWorldText("Survive the pressure hall. The rooftop is close.", new Vector3(68f, 4f, 0f));

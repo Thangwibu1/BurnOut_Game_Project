@@ -36,6 +36,11 @@ namespace BurnOut.Editor
             CreateShockwave();
             CreatePlayer();
             CreateEnemyProjectile();
+            // Pickups first: enemies reference PF_HealthPickup as their death drop, so it must already exist.
+            CreatePickup<SanityPickup>("PF_SanityOrb", "Items", Color.cyan, "SanityItem");
+            CreatePickup<HealthPickup>("PF_HealthPickup", "Items", Color.red, "Untagged");
+            CreatePickup<KeyPickup>("PF_Key", "Items", Color.yellow, "Key");
+            CreatePickup<MentalFragmentPickup>("PF_MentalFragment", "Items", new Color(.85f, .35f, 1f), "MentalFragment");
             CreateEnemy("PF_Enemy_Shadow", false);
             CreateEnemy("PF_MiniBoss_Shadow", true);
             // Per-map monsters from the new art sheets. Explosion prefab first so the bomber can reference it.
@@ -44,10 +49,6 @@ namespace BurnOut.Editor
             CreateExplosion(map2.Explosion);
             CreateSheetMonster("PF_Enemy_Melee", map1, 3, 1.4f, false);
             CreateSheetMonster("PF_Enemy_Bomber", map2, 2, 1.45f, true);
-            CreatePickup<SanityPickup>("PF_SanityOrb", "Items", Color.cyan, "SanityItem");
-            CreatePickup<HealthPickup>("PF_HealthPickup", "Items", Color.red, "Untagged");
-            CreatePickup<KeyPickup>("PF_Key", "Items", Color.yellow, "Key");
-            CreatePickup<MentalFragmentPickup>("PF_MentalFragment", "Items", new Color(.85f, .35f, 1f), "MentalFragment");
             CreateCheckpoint(); CreateDoor(); CreateExit(); CreateHazard(); CreateManager<GameManager>("PF_GameManager"); CreateManager<AudioManager>("PF_AudioManager");
             CreateUiPrefab<PlayerHUD>("PF_PlayerHUD"); CreateUiPrefab<BossHUD>("PF_BossHUD");
             AssetDatabase.SaveAssets();
@@ -105,9 +106,8 @@ namespace BurnOut.Editor
             var visualAnimator = go.AddComponent<PlayerVisualAnimator>();
             go.AddComponent<PlayerFeedbackFX>();
             var ground = new GameObject("GroundCheck").transform; ground.SetParent(go.transform); ground.localPosition = new Vector3(0f, -.72f, 0f);
-            // Hitbox reach tuned to the visible slash/lunge arcs so strikes land where the animation shows them.
+            // Normal-attack hitbox reach tuned to the visible slash arc. (Skill C is now a dash — no hitbox.)
             var attack = CreateHitbox("AttackHitbox", go.transform, 2, .8f, 1.5f); attack.transform.localPosition = new Vector3(.85f, .05f, 0f);
-            var rush = CreateHitbox("RushHitbox", go.transform, 2, 1.2f, 2.2f); rush.transform.localPosition = new Vector3(1f, .05f, 0f);
             var movementObject = new SerializedObject(movement);
             movementObject.FindProperty("config").objectReferenceValue = AssetDatabase.LoadAssetAtPath<PlayerMovementConfig>(Root + "/ScriptableObjects/PlayerMovementConfig.asset");
             movementObject.FindProperty("groundCheck").objectReferenceValue = ground;
@@ -116,7 +116,6 @@ namespace BurnOut.Editor
             movementObject.ApplyModifiedPropertiesWithoutUndo();
             var combatObject = new SerializedObject(combat);
             combatObject.FindProperty("normalAttackHitbox").objectReferenceValue = attack;
-            combatObject.FindProperty("rushHitbox").objectReferenceValue = rush;
             combatObject.FindProperty("shockwavePrefab").objectReferenceValue = LoadPrefab("PF_Shockwave", "Player");
             combatObject.ApplyModifiedPropertiesWithoutUndo();
             ConfigurePlayerAnimation(visualAnimator, go.GetComponent<SpriteRenderer>());
@@ -185,7 +184,10 @@ namespace BurnOut.Editor
             }
             if (!boss) { var animator = go.AddComponent<EnemyVisualAnimator>(); ConfigureEnemyAnimation(animator, go.GetComponent<SpriteRenderer>()); }
             go.AddComponent<EnemyHealthBar>();
-            var healthData = new SerializedObject(health); healthData.FindProperty("maxHealth").intValue = boss ? 12 : 1; healthData.ApplyModifiedPropertiesWithoutUndo();
+            var healthData = new SerializedObject(health); healthData.FindProperty("maxHealth").intValue = boss ? 12 : 1;
+            // Regular shadows drop a health orb on death; the boss drops the key (wired in the scene builder).
+            if (!boss) healthData.FindProperty("deathDropPrefab").objectReferenceValue = LoadPrefab("PF_HealthPickup", "Items");
+            healthData.ApplyModifiedPropertiesWithoutUndo();
             if (brain != null) { var brainData = new SerializedObject(brain); brainData.FindProperty("energyProjectilePrefab").objectReferenceValue = LoadPrefab("PF_EnemyProjectile", "Enemies"); brainData.ApplyModifiedPropertiesWithoutUndo(); }
             SavePrefab(go, path);
         }
@@ -231,7 +233,9 @@ namespace BurnOut.Editor
             SetSprites(animData, "deathFrames", frames.Death);
             animData.ApplyModifiedPropertiesWithoutUndo();
 
-            var healthData = new SerializedObject(health); healthData.FindProperty("maxHealth").intValue = maxHealth; healthData.ApplyModifiedPropertiesWithoutUndo();
+            var healthData = new SerializedObject(health); healthData.FindProperty("maxHealth").intValue = maxHealth;
+            healthData.FindProperty("deathDropPrefab").objectReferenceValue = LoadPrefab("PF_HealthPickup", "Items"); // sheet monsters drop a health orb too
+            healthData.ApplyModifiedPropertiesWithoutUndo();
 
             if (explodes)
             {
@@ -370,7 +374,9 @@ namespace BurnOut.Editor
                 ? BurnOutSpriteFactory.GetTrimmedSprite("Assets/_Project/Art/Items/ITEM_Key.png", "Assets/_Project/Art/Items/ITEM_Key_Cropped.png", 56f)
                 : name == "PF_SanityOrb"
                     ? BurnOutSpriteFactory.GetTrimmedSprite("Assets/_Project/Art/Items/ITEM_SanityOrb.png", "Assets/_Project/Art/Items/ITEM_SanityOrb_Cropped.png", 56f)
-                    : null;
+                    : name == "PF_HealthPickup"
+                        ? BurnOutSpriteFactory.GetHealthOrbSprite()
+                        : null;
             var environmentSprite = name == "PF_Enemy_Shadow" || name == "PF_MiniBoss_Shadow" ? BurnOutSpriteFactory.GetEnemySprite()
                 : name == "PF_Checkpoint" ? BurnOutSpriteFactory.GetCheckpointInactiveSprite()
                 : name == "PF_LockedDoor" || name == "PF_LevelExit" ? BurnOutSpriteFactory.GetDoorSprite()

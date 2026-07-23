@@ -19,6 +19,15 @@ namespace BurnOut.Editor
             return GetCroppedSprite(SourcePath, OutputPath, 518, 634, 48, 84, 48f);
         }
 
+        // One blue orb cropped from the 3x2 element sheet — the health drop enemies leave behind.
+        public static Sprite GetHealthOrbSprite()
+        {
+            const string src = "Assets/_Project/Art/Items/Item_HealthOrb_Sheet.png";
+            const string outPath = "Assets/_Project/Art/Items/Item_HealthOrb_Cropped.png";
+            // Sheet is 1920x1080; blob at PIL (x1108,y_top164,244x316). GetPixels uses bottom-left origin.
+            return GetCroppedSprite(src, outPath, 1096, 588, 268, 340, 420f);
+        }
+
         public static Sprite GetPlatformSprite()
         {
             // Main wide platform: x 390–1090, y 78–220 in the original 1920x1080 sheet.
