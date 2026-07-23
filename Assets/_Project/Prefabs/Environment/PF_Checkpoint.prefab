@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5451481132154285989
+--- !u!1 &3186800111560653002
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,10 +8,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6570791117910844406}
-  - component: {fileID: 4316640201371596922}
-  - component: {fileID: 6600885593413502831}
-  - component: {fileID: 7191841985442202949}
+  - component: {fileID: 5477092128276225502}
+  - component: {fileID: 8208717628987045614}
+  - component: {fileID: 8739938906528117307}
+  - component: {fileID: 3653513296842327874}
   m_Layer: 14
   m_Name: PF_Checkpoint
   m_TagString: Checkpoint
@@ -19,13 +19,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6570791117910844406
+--- !u!4 &5477092128276225502
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5451481132154285989}
+  m_GameObject: {fileID: 3186800111560653002}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -34,14 +34,14 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &4316640201371596922
+--- !u!212 &8208717628987045614
 SpriteRenderer:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5451481132154285989}
+  m_GameObject: {fileID: 3186800111560653002}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -94,13 +94,13 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
---- !u!61 &6600885593413502831
+--- !u!61 &8739938906528117307
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5451481132154285989}
+  m_GameObject: {fileID: 3186800111560653002}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -140,18 +140,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 2.65, y: 3.15}
   m_EdgeRadius: 0
---- !u!114 &7191841985442202949
+--- !u!114 &3653513296842327874
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5451481132154285989}
+  m_GameObject: {fileID: 3186800111560653002}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d0eca7aae5398b4cb013e80a7330a0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BurnOut.World.Checkpoint
-  visual: {fileID: 4316640201371596922}
+  visual: {fileID: 8208717628987045614}
   activeSprite: {fileID: 21300000, guid: 759561179e44f7d4886337b6efa595ab, type: 3}
   activeColor: {r: 1, g: 1, b: 1, a: 1}
