@@ -125,7 +125,8 @@ namespace BurnOut.Player
         {
             return skill switch
             {
-                PlayerCombat.SkillId.Aura => auraFrames != null && auraFrames.Length > 0 ? auraFrames : attackFrames,
+                // Aura casts with the quick attack swing (like Shift), not a separate long pose.
+                PlayerCombat.SkillId.Aura => attackFrames,
                 PlayerCombat.SkillId.Shockwave => shockwaveFrames != null && shockwaveFrames.Length > 0 ? shockwaveFrames : attackFrames,
                 _ => rushFrames != null && rushFrames.Length > 0 ? rushFrames : attackFrames
             };

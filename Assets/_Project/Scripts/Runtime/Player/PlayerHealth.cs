@@ -68,11 +68,59 @@ namespace BurnOut.Player
             StartCoroutine(ShieldRoutine(seconds));
         }
 
+        private static Sprite bubbleSprite;
+
         private IEnumerator ShieldRoutine(float seconds)
         {
             invincible = true;
-            yield return new WaitForSeconds(seconds);
+            var bubble = CreateShieldBubble();
+            var r = bubble.GetComponent<SpriteRenderer>();
+            float elapsed = 0f;
+            while (elapsed < seconds)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / seconds;
+                // Gentle pulse for the whole duration, then fade out over the final 0.6s.
+                float pulse = 1f + Mathf.Sin(elapsed * 9f) * .05f;
+                bubble.transform.localScale = Vector3.one * (2.15f * pulse);
+                float fade = t > .88f ? Mathf.InverseLerp(1f, .88f, t) : 1f;
+                if (r != null) r.color = new Color(.45f, .85f, 1f, .38f * fade + .12f * Mathf.Abs(Mathf.Sin(elapsed * 6f)) * fade);
+                yield return null;
+            }
             invincible = false;
+            if (bubble != null) Destroy(bubble);
+        }
+
+        private GameObject CreateShieldBubble()
+        {
+            if (bubbleSprite == null) bubbleSprite = MakeBubbleSprite();
+            var go = new GameObject("~shield");
+            go.transform.SetParent(transform, false);
+            go.transform.localScale = Vector3.one * 2.15f;
+            var r = go.AddComponent<SpriteRenderer>();
+            r.sprite = bubbleSprite;
+            r.sortingOrder = 25; // above the player, below the HUD
+            r.color = new Color(.45f, .85f, 1f, .4f);
+            return go;
+        }
+
+        private static Sprite MakeBubbleSprite()
+        {
+            const int size = 96;
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false) { filterMode = FilterMode.Bilinear };
+            float c = (size - 1) / 2f;
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                float d = Mathf.Sqrt((x - c) * (x - c) + (y - c) * (y - c)) / c;
+                // Bright thin rim near the edge, faint fill inside — a soap-bubble shield.
+                float rim = Mathf.Exp(-Mathf.Pow((d - .92f) * 9f, 2f));
+                float fill = d < 1f ? .12f : 0f;
+                float a = Mathf.Clamp01(rim + fill) * (d <= 1f ? 1f : 0f);
+                tex.SetPixel(x, y, new Color(1f, 1f, 1f, a));
+            }
+            tex.Apply();
+            return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(.5f, .5f), size);
         }
 
         public void RestoreFull()

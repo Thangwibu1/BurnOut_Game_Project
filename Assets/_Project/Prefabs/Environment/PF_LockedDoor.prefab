@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4006918895818225904
+--- !u!1 &6708141780290075913
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,10 +8,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5756054957521315053}
-  - component: {fileID: 5090388498513415490}
-  - component: {fileID: 5578037543669261979}
-  - component: {fileID: 9043116186941330162}
+  - component: {fileID: 8538651042804393}
+  - component: {fileID: 223765263258026253}
+  - component: {fileID: 3986588272804485520}
+  - component: {fileID: 6790146124090935887}
   m_Layer: 14
   m_Name: PF_LockedDoor
   m_TagString: Untagged
@@ -19,13 +19,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5756054957521315053
+--- !u!4 &8538651042804393
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4006918895818225904}
+  m_GameObject: {fileID: 6708141780290075913}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -34,14 +34,14 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &5090388498513415490
+--- !u!212 &223765263258026253
 SpriteRenderer:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4006918895818225904}
+  m_GameObject: {fileID: 6708141780290075913}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -94,13 +94,13 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
---- !u!61 &5578037543669261979
+--- !u!61 &3986588272804485520
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4006918895818225904}
+  m_GameObject: {fileID: 6708141780290075913}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -140,19 +140,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 2.65, y: 3.8}
   m_EdgeRadius: 0
---- !u!114 &9043116186941330162
+--- !u!114 &6790146124090935887
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4006918895818225904}
+  m_GameObject: {fileID: 6708141780290075913}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 499597524df96ad45b5ade858990363b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BurnOut.World.LockedDoor
-  blockingCollider: {fileID: 5578037543669261979}
-  visual: {fileID: 5090388498513415490}
+  blockingCollider: {fileID: 3986588272804485520}
+  visual: {fileID: 223765263258026253}
   openSprite: {fileID: 21300000, guid: dbb19b7fa40e94548a7967499249cacc, type: 3}
   openColor: {r: 1, g: 1, b: 1, a: 1}

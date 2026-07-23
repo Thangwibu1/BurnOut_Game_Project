@@ -21,7 +21,7 @@ namespace BurnOut.Player
         [SerializeField] private float auraCooldown = 9f;
         [SerializeField] private int auraHealAmount = 3;
         [SerializeField] private float auraSanityRestore = 30f;
-        [SerializeField] private float auraShieldTime = 2.5f;
+        [SerializeField] private float auraShieldTime = 5f; // temporary shield lasts ~5 seconds
 
         // Skill C is a dash (see Rush()); it borrows PlayerMovement's dash config, so no fields needed here.
 
@@ -105,17 +105,17 @@ namespace BurnOut.Player
             StartCoroutine(ActivateHitbox(normalAttackHitbox));
         }
 
-        // Skill 1 — Aura: a defensive focus. Restores health + sanity and grants a brief shield.
+        // Skill 2 (X) — Aura: a quick attack-like cast that heals and raises a ~5s temporary shield.
         private void Aura()
         {
             if (auraCooldownTimer > 0f) return;
             auraCooldownTimer = auraCooldown;
-            skillVisualTimer = .6f;
+            skillVisualTimer = attackActiveTime + .12f; // brief, snappy cast like the Shift attack
             activeSkill = SkillId.Aura;
             SkillPerformed?.Invoke();
             health?.Heal(auraHealAmount);
             sanity?.Restore(auraSanityRestore);
-            health?.GrantShield(auraShieldTime);
+            health?.GrantShield(auraShieldTime); // spawns a visible bubble that lasts auraShieldTime
             ImpactFX.Expand(transform.position, new Color(1f, .95f, .5f), 2.6f);
             ImpactFX.Burst(transform.position, new Color(1f, .92f, .55f), 16, 5f, .35f);
             RuntimeSfx.Play(RuntimeSfx.Sound.Checkpoint, .9f);
