@@ -31,11 +31,20 @@ namespace BurnOut.Core
             if (runner == null) Bootstrap();
             if (runner != null) runner.HitStop(seconds);
         }
+
+        /// <summary>Cinematic beat: slows time and zooms the camera onto the player, holds, then eases back.
+        /// Used to show off big skill casts (e.g. the Z shockwave).</summary>
+        public static void Cinematic(float timeScale, float zoomSize, float holdSeconds)
+        {
+            if (runner == null) Bootstrap();
+            if (runner != null) runner.Cinematic(timeScale, zoomSize, holdSeconds);
+        }
     }
 
     public sealed class JuiceRunner : MonoBehaviour
     {
         private Coroutine hitStopRoutine;
+        private Coroutine cinematicRoutine;
 
         public void HitStop(float seconds)
         {
@@ -53,6 +62,33 @@ namespace BurnOut.Core
             // Only hand time back if nobody else paused the game meanwhile.
             if (GameManager.Instance == null || !GameManager.Instance.IsPaused) Time.timeScale = 1f;
             hitStopRoutine = null;
+        }
+
+        public void Cinematic(float timeScale, float zoomSize, float holdSeconds)
+        {
+            if (GameManager.Instance != null && GameManager.Instance.IsPaused) return;
+            if (cinematicRoutine != null) StopCoroutine(cinematicRoutine);
+            cinematicRoutine = StartCoroutine(CinematicRoutine(timeScale, zoomSize, holdSeconds));
+        }
+
+        private IEnumerator CinematicRoutine(float timeScale, float zoomSize, float holdSeconds)
+        {
+            // Slow time so the cast animation reads clearly, and punch the camera in.
+            Time.timeScale = Mathf.Clamp(timeScale, 0.05f, 1f);
+            CameraFollow2D.Zoom(zoomSize, .1f);
+            yield return new WaitForSecondsRealtime(holdSeconds);
+            // Ease time and framing back to normal.
+            CameraFollow2D.ResetZoom(.22f);
+            float t = 0f;
+            while (t < .18f)
+            {
+                t += Time.unscaledDeltaTime;
+                if (GameManager.Instance != null && GameManager.Instance.IsPaused) { cinematicRoutine = null; yield break; }
+                Time.timeScale = Mathf.Lerp(timeScale, 1f, t / .18f);
+                yield return null;
+            }
+            if (GameManager.Instance == null || !GameManager.Instance.IsPaused) Time.timeScale = 1f;
+            cinematicRoutine = null;
         }
     }
 }

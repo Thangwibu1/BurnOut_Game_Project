@@ -141,7 +141,7 @@ namespace BurnOut.Player
         {
             if (shockwaveCooldownTimer > 0f || shockwavePrefab == null) return;
             shockwaveCooldownTimer = shockwaveCooldown;
-            skillVisualTimer = .5f;
+            skillVisualTimer = .9f; // held longer so the slow-mo cast reads fully
             activeSkill = SkillId.Shockwave;
             SkillPerformed?.Invoke();
             float dir = movement.FacingRight ? 1f : -1f;
@@ -154,7 +154,8 @@ namespace BurnOut.Player
             ImpactFX.Expand(transform.position, new Color(1f, .6f, .35f), 2.2f);
             RuntimeSfx.Play(RuntimeSfx.Sound.BossSlam, .8f);
             Juice.Shake(.3f, .25f);
-            Juice.HitStop(.04f);
+            // Cinematic beat: slow time and zoom onto Lily so the knee-slam cast is clearly visible.
+            Juice.Cinematic(.3f, 3.2f, .55f);
         }
 
         private IEnumerator ActivateHitbox(Hitbox2D hitbox, float activeTime = -1f)

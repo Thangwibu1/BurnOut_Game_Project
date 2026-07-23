@@ -15,16 +15,43 @@ namespace BurnOut.World
         private float shakeAmount;
         private float shakeDecay;
 
+        private Camera cam;
+        private float baseOrthoSize;
+        private float targetOrthoSize;
+        private float zoomSpeed;
+
         /// <summary>Adds a decaying positional shake to whichever gameplay camera is active.</summary>
         public static void Shake(float amount, float duration = .25f)
         {
             if (Instance != null) Instance.AddShake(amount, duration);
         }
 
+        /// <summary>Eases the camera to a tighter orthographic size (cinematic zoom-in).</summary>
+        public static void Zoom(float orthoSize, float duration)
+        {
+            if (Instance != null) Instance.SetZoom(orthoSize, duration);
+        }
+
+        /// <summary>Eases the camera back to its default framing.</summary>
+        public static void ResetZoom(float duration)
+        {
+            if (Instance != null) Instance.SetZoom(Instance.baseOrthoSize, duration);
+        }
+
         private void Awake()
         {
             Instance = this;
             basePosition = transform.position;
+            cam = GetComponent<Camera>();
+            baseOrthoSize = cam != null ? cam.orthographicSize : 5.5f;
+            targetOrthoSize = baseOrthoSize;
+        }
+
+        private void SetZoom(float orthoSize, float duration)
+        {
+            if (cam == null) return;
+            targetOrthoSize = orthoSize;
+            zoomSpeed = duration <= 0f ? 999f : Mathf.Abs(cam.orthographicSize - orthoSize) / duration;
         }
 
         private void OnDestroy()
@@ -52,6 +79,10 @@ namespace BurnOut.World
             }
 
             transform.position = basePosition + shake;
+
+            // Cinematic zoom runs on unscaled time so it stays smooth during slow-mo.
+            if (cam != null && !Mathf.Approximately(cam.orthographicSize, targetOrthoSize))
+                cam.orthographicSize = Mathf.MoveTowards(cam.orthographicSize, targetOrthoSize, zoomSpeed * Time.unscaledDeltaTime);
         }
     }
 }
