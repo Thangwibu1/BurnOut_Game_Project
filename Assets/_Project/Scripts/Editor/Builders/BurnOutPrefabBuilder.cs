@@ -428,7 +428,8 @@ namespace BurnOut.Editor
             SetSprites(data, "attackFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Skill01.png", "Assets/_Project/Art/Characters/Player/Frames/Attack", 48f));
             SetSprites(data, "auraFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Skill02.png", "Assets/_Project/Art/Characters/Player/Frames/Aura", 48f));
             SetSprites(data, "rushFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Skill03.png", "Assets/_Project/Art/Characters/Player/Frames/Rush", 48f));
-            SetSprites(data, "shockwaveFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Skill01.png", "Assets/_Project/Art/Characters/Player/Frames/Shockwave", 48f));
+            // Skip the 3 stand/step-up wind-up frames so Z goes straight into the knee-slam (no "running" look).
+            SetSprites(data, "shockwaveFrames", DropLeadingFrames(BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Skill01.png", "Assets/_Project/Art/Characters/Player/Frames/Shockwave", 48f), 3));
             SetSprites(data, "dashFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Skill03.png", "Assets/_Project/Art/Characters/Player/Frames/Dash", 48f));
             SetSprites(data, "deathFrames", BurnOutSpriteFactory.GetAnimationFrames("Assets/_Project/Art/Characters/Player/Player_Death.png", "Assets/_Project/Art/Characters/Player/Frames/Death", 48f));
             data.ApplyModifiedPropertiesWithoutUndo();
@@ -463,6 +464,16 @@ namespace BurnOut.Editor
             var property = target.FindProperty(propertyName);
             property.arraySize = sprites.Length;
             for (var i = 0; i < sprites.Length; i++) property.GetArrayElementAtIndex(i).objectReferenceValue = sprites[i];
+        }
+
+        // Drops the first `skip` frames (e.g. the shockwave's stand/step-up wind-up that looks like running),
+        // so the animation starts straight on the meaningful pose. Guards against slicing away everything.
+        private static Sprite[] DropLeadingFrames(Sprite[] sprites, int skip)
+        {
+            if (sprites == null || sprites.Length <= skip + 1) return sprites;
+            var result = new Sprite[sprites.Length - skip];
+            System.Array.Copy(sprites, skip, result, 0, result.Length);
+            return result;
         }
 
         private static void SavePrefab(GameObject go, string path)
