@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8086817661098248845
+--- !u!1 &164613436214375686
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,14 +8,14 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5218521915624610469}
-  - component: {fileID: 2941117694567652544}
-  - component: {fileID: 8430335019652570432}
-  - component: {fileID: 8648417692988145102}
-  - component: {fileID: 807370766420938772}
-  - component: {fileID: 7208302700758934751}
-  - component: {fileID: 5908555121884123919}
-  - component: {fileID: 4312883861839164925}
+  - component: {fileID: 3887135505172691626}
+  - component: {fileID: 7472612394829692116}
+  - component: {fileID: 1207836029547337184}
+  - component: {fileID: 8578945550220192815}
+  - component: {fileID: 6683972994055391531}
+  - component: {fileID: 6717182391989870039}
+  - component: {fileID: 1436571442082716122}
+  - component: {fileID: 2244233016631219743}
   m_Layer: 9
   m_Name: PF_Enemy_Bomber
   m_TagString: Enemy
@@ -23,29 +23,29 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5218521915624610469
+--- !u!4 &3887135505172691626
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8086817661098248845}
+  m_GameObject: {fileID: 164613436214375686}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.1415386, y: 2.1415386, z: 1}
+  m_LocalScale: {x: 2.139741, y: 2.139741, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &2941117694567652544
+--- !u!212 &7472612394829692116
 SpriteRenderer:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8086817661098248845}
+  m_GameObject: {fileID: 164613436214375686}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -88,7 +88,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: d2b18e9ed343b6a48b2e06f5c73ca693, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.8994404, g: 0.86882675, b: 0.9470397, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -98,13 +98,13 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
---- !u!61 &8430335019652570432
+--- !u!61 &1207836029547337184
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8086817661098248845}
+  m_GameObject: {fileID: 164613436214375686}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -144,29 +144,29 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.30208334, y: 0.5552083}
   m_EdgeRadius: 0
---- !u!114 &8648417692988145102
+--- !u!114 &8578945550220192815
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8086817661098248845}
+  m_GameObject: {fileID: 164613436214375686}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 03ab39fa413a0a24a90058b7ab4dcdd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BurnOut.Enemies.EnemyHealth
   maxHealth: 2
-  deathDropPrefab: {fileID: 6689649903804991885, guid: 9162cc8c49b0456498399094d1645fdd, type: 3}
+  deathDropPrefab: {fileID: 4940364331103480989, guid: 9162cc8c49b0456498399094d1645fdd, type: 3}
   deathAnimationDuration: 0.42
   sanityRewardOnKill: 10
---- !u!114 &807370766420938772
+--- !u!114 &6683972994055391531
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8086817661098248845}
+  m_GameObject: {fileID: 164613436214375686}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 256ffb26296724547afe223f169ccb01, type: 3}
@@ -174,29 +174,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BurnOut.Enemies.EnemyBrain
   patrolLeft: {fileID: 0}
   patrolRight: {fileID: 0}
-  patrolSpeed: 1.6
-  chaseSpeed: 2.7
+  patrolSpeed: 1.7175452
+  chaseSpeed: 3.1841967
   detectionRange: 6
   attackRange: 1.05
   contactDamage: 1
-  attackCooldown: 1
+  attackCooldown: 0.9544675
   energyProjectilePrefab: {fileID: 0}
   projectileRange: 5.5
   projectileCooldown: 3
   tintVariety: 0
---- !u!114 &7208302700758934751
+--- !u!114 &6717182391989870039
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8086817661098248845}
+  m_GameObject: {fileID: 164613436214375686}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c3f7ecca9787d445b18567e97c1f70c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BurnOut.Enemies.EnemyVisualAnimator
-  spriteRenderer: {fileID: 2941117694567652544}
+  spriteRenderer: {fileID: 7472612394829692116}
   idleFrames:
   - {fileID: 21300000, guid: d2b18e9ed343b6a48b2e06f5c73ca693, type: 3}
   moveFrames:
@@ -218,13 +218,13 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ca2d18b40fedbe94694c502dc785b545, type: 3}
   - {fileID: 21300000, guid: a56df632f66e88549880474ea22518a9, type: 3}
   frameRate: 9
---- !u!114 &5908555121884123919
+--- !u!114 &1436571442082716122
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8086817661098248845}
+  m_GameObject: {fileID: 164613436214375686}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9fc614fa618d9d4a92921c84202aa38, type: 3}
@@ -232,16 +232,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BurnOut.Enemies.EnemyHealthBar
   width: 0.5
   height: 0.08
-  heightAbove: 1.15
+  heightAbove: 2.460702
   fillColor: {r: 0.95, g: 0.25, b: 0.3, a: 1}
   pivotAtFeet: 1
---- !u!114 &4312883861839164925
+--- !u!114 &2244233016631219743
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8086817661098248845}
+  m_GameObject: {fileID: 164613436214375686}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c537e0390be66144fb753b66cd7082d3, type: 3}
@@ -251,4 +251,4 @@ MonoBehaviour:
   explosionRadius: 2.4
   knockback: 10
   blastColor: {r: 1, g: 0.55, b: 0.2, a: 1}
-  explosionVisualPrefab: {fileID: 5936091643264167267, guid: b3e58142294d3fe459e1b56282a67270, type: 3}
+  explosionVisualPrefab: {fileID: 4754542569308731610, guid: b3e58142294d3fe459e1b56282a67270, type: 3}

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5790910985474569472
+--- !u!1 &1400157241427796029
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,13 +8,13 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7515947739121339351}
-  - component: {fileID: 9172154646793868946}
-  - component: {fileID: 277996665588785953}
-  - component: {fileID: 4223481383180123255}
-  - component: {fileID: 4128548103875919875}
-  - component: {fileID: 4425998940821574600}
-  - component: {fileID: 6208062113319867974}
+  - component: {fileID: 5473608401732654182}
+  - component: {fileID: 2958033764669439581}
+  - component: {fileID: 1907726395706868033}
+  - component: {fileID: 7030888793979141922}
+  - component: {fileID: 725623084743246547}
+  - component: {fileID: 3096171360645409441}
+  - component: {fileID: 5073225534458041083}
   m_Layer: 9
   m_Name: PF_Enemy_Melee
   m_TagString: Enemy
@@ -22,29 +22,29 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7515947739121339351
+--- !u!4 &5473608401732654182
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5790910985474569472}
+  m_GameObject: {fileID: 1400157241427796029}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.0676923, y: 2.0676923, z: 1}
+  m_LocalScale: {x: 1.9665494, y: 1.9665494, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &9172154646793868946
+--- !u!212 &2958033764669439581
 SpriteRenderer:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5790910985474569472}
+  m_GameObject: {fileID: 1400157241427796029}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -87,7 +87,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: d2b18e9ed343b6a48b2e06f5c73ca693, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.86738944, g: 0.8652655, b: 0.96840703, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -97,13 +97,13 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
---- !u!61 &277996665588785953
+--- !u!61 &1907726395706868033
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5790910985474569472}
+  m_GameObject: {fileID: 1400157241427796029}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -143,29 +143,29 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.30208334, y: 0.5552083}
   m_EdgeRadius: 0
---- !u!114 &4223481383180123255
+--- !u!114 &7030888793979141922
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5790910985474569472}
+  m_GameObject: {fileID: 1400157241427796029}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 03ab39fa413a0a24a90058b7ab4dcdd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BurnOut.Enemies.EnemyHealth
   maxHealth: 3
-  deathDropPrefab: {fileID: 6689649903804991885, guid: 9162cc8c49b0456498399094d1645fdd, type: 3}
+  deathDropPrefab: {fileID: 4940364331103480989, guid: 9162cc8c49b0456498399094d1645fdd, type: 3}
   deathAnimationDuration: 0.42
   sanityRewardOnKill: 10
---- !u!114 &4128548103875919875
+--- !u!114 &725623084743246547
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5790910985474569472}
+  m_GameObject: {fileID: 1400157241427796029}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 256ffb26296724547afe223f169ccb01, type: 3}
@@ -173,29 +173,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BurnOut.Enemies.EnemyBrain
   patrolLeft: {fileID: 0}
   patrolRight: {fileID: 0}
-  patrolSpeed: 1.6
-  chaseSpeed: 2.7
+  patrolSpeed: 1.8315042
+  chaseSpeed: 3.4245791
   detectionRange: 6
   attackRange: 1.05
   contactDamage: 1
-  attackCooldown: 1
+  attackCooldown: 0.89214617
   energyProjectilePrefab: {fileID: 0}
   projectileRange: 5.5
   projectileCooldown: 3
   tintVariety: 0
---- !u!114 &4425998940821574600
+--- !u!114 &3096171360645409441
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5790910985474569472}
+  m_GameObject: {fileID: 1400157241427796029}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c3f7ecca9787d445b18567e97c1f70c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BurnOut.Enemies.EnemyVisualAnimator
-  spriteRenderer: {fileID: 9172154646793868946}
+  spriteRenderer: {fileID: 2958033764669439581}
   idleFrames:
   - {fileID: 21300000, guid: d2b18e9ed343b6a48b2e06f5c73ca693, type: 3}
   moveFrames:
@@ -217,13 +217,13 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ca2d18b40fedbe94694c502dc785b545, type: 3}
   - {fileID: 21300000, guid: a56df632f66e88549880474ea22518a9, type: 3}
   frameRate: 9
---- !u!114 &6208062113319867974
+--- !u!114 &5073225534458041083
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5790910985474569472}
+  m_GameObject: {fileID: 1400157241427796029}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9fc614fa618d9d4a92921c84202aa38, type: 3}
@@ -231,6 +231,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BurnOut.Enemies.EnemyHealthBar
   width: 0.5
   height: 0.08
-  heightAbove: 1.15
+  heightAbove: 2.2615318
   fillColor: {r: 0.95, g: 0.25, b: 0.3, a: 1}
   pivotAtFeet: 1

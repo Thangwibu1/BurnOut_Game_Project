@@ -84,6 +84,23 @@ namespace BurnOut.Editor
             if (AssetDatabase.LoadAssetAtPath<PlayerMovementConfig>(path) == null) AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<PlayerMovementConfig>(), path);
         }
 
+        // Robustly assigns the input actions asset to a PlayerInput. LoadAssetAtPath can transiently return
+        // null mid-setup (asset not yet imported), which left m_Actions null and broke all player input.
+        // Force-import first, then write m_Actions directly via SerializedObject so it always persists.
+        private static void AssignInputActions(PlayerInput playerInput)
+        {
+            const string actionsPath = Root + "/Input/BurnOutInputActions.inputactions";
+            AssetDatabase.ImportAsset(actionsPath, ImportAssetOptions.ForceUpdate);
+            var actions = AssetDatabase.LoadAssetAtPath<InputActionAsset>(actionsPath);
+            if (actions == null) { Debug.LogError($"[PrefabBuilder] Could not load input actions at {actionsPath}"); return; }
+            var so = new SerializedObject(playerInput);
+            var prop = so.FindProperty("m_Actions");
+            if (prop != null) { prop.objectReferenceValue = actions; so.ApplyModifiedPropertiesWithoutUndo(); }
+            playerInput.actions = actions; // also via setter so the in-memory instance is initialised
+            playerInput.defaultActionMap = "Gameplay";
+            playerInput.notificationBehavior = PlayerNotifications.InvokeCSharpEvents;
+        }
+
         private static void CreatePlayer()
         {
             const string path = Root + "/Prefabs/Player/PF_Player.prefab";
@@ -96,9 +113,7 @@ namespace BurnOut.Editor
             var body = go.AddComponent<Rigidbody2D>(); body.gravityScale = 3f; body.freezeRotation = true;
             go.AddComponent<CapsuleCollider2D>().size = new Vector2(.72f, 1.35f);
             var playerInput = go.AddComponent<PlayerInput>();
-            playerInput.actions = AssetDatabase.LoadAssetAtPath<InputActionAsset>(Root + "/Input/BurnOutInputActions.inputactions");
-            playerInput.defaultActionMap = "Gameplay";
-            playerInput.notificationBehavior = PlayerNotifications.InvokeCSharpEvents;
+            AssignInputActions(playerInput);
             go.AddComponent<PlayerInputReader>();
             var movement = go.AddComponent<PlayerMovement>();
             var sanity = go.AddComponent<PlayerSanity>();
@@ -130,12 +145,7 @@ namespace BurnOut.Editor
             try
             {
                 var playerInput = root.GetComponent<PlayerInput>();
-                if (playerInput != null)
-                {
-                    playerInput.actions = AssetDatabase.LoadAssetAtPath<InputActionAsset>(Root + "/Input/BurnOutInputActions.inputactions");
-                    playerInput.defaultActionMap = "Gameplay";
-                    playerInput.notificationBehavior = PlayerNotifications.InvokeCSharpEvents;
-                }
+                if (playerInput != null) AssignInputActions(playerInput);
 
                 var movement = root.GetComponent<PlayerMovement>();
                 if (movement != null)
