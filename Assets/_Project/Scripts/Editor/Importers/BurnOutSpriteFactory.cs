@@ -247,6 +247,19 @@ namespace BurnOut.Editor
         private static Sprite[] Row(List<Sprite[]> rows, int index)
             => index >= 0 && index < rows.Count ? rows[index] : System.Array.Empty<Sprite>();
 
+        // New small-monster art: LittleMonster_Move.png (walk) + LittleMonster_Attack.png (attack),
+        // each a single row of 5 frames on a transparent background. Idle reuses the first move frame;
+        // death reuses the move loop (no dedicated death sheet). Explosion frames are passed in for bombers.
+        public static MonsterFrames GetLittleMonsterFrames(Sprite[] explosion)
+        {
+            var move = GetAnimationRows("Assets/_Project/Art/Characters/Enemies/LittleMonster_Move.png", "Assets/_Project/Art/Characters/Enemies/Frames/Little/Move", 96f, new[] { 5 });
+            var attack = GetAnimationRows("Assets/_Project/Art/Characters/Enemies/LittleMonster_Attack.png", "Assets/_Project/Art/Characters/Enemies/Frames/Little/Attack", 96f, new[] { 5 });
+            var moveFrames = Row(move, 0);
+            var attackFrames = Row(attack, 0);
+            var idle = moveFrames.Length > 0 ? new[] { moveFrames[0] } : System.Array.Empty<Sprite>();
+            return new MonsterFrames(idle, moveFrames, attackFrames, moveFrames, explosion ?? System.Array.Empty<Sprite>());
+        }
+
         /// <summary>
         /// Slices a multi-row sprite sheet into one frame-array per animation row. Detects the horizontal
         /// bands (skipping thin text labels by pixel mass), then divides each band into <paramref name="frameCounts"/>

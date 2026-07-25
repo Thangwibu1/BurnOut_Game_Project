@@ -43,12 +43,14 @@ namespace BurnOut.Editor
             CreatePickup<MentalFragmentPickup>("PF_MentalFragment", "Items", new Color(.85f, .35f, 1f), "MentalFragment");
             CreateEnemy("PF_Enemy_Shadow", false);
             CreateEnemy("PF_MiniBoss_Shadow", true);
-            // Per-map monsters from the new art sheets. Explosion prefab first so the bomber can reference it.
-            var map1 = BurnOutSpriteFactory.GetMap1Frames();
+            // Small monsters now use the new LittleMonster art (move + attack sheets). The bomber keeps
+            // its map2 explosion; the big boss (PF_MiniBoss_Shadow) is left on its own art untouched.
             var map2 = BurnOutSpriteFactory.GetMap2Frames();
             CreateExplosion(map2.Explosion);
-            CreateSheetMonster("PF_Enemy_Melee", map1, 3, 1.4f, false);
-            CreateSheetMonster("PF_Enemy_Bomber", map2, 2, 1.45f, true);
+            var little = BurnOutSpriteFactory.GetLittleMonsterFrames(null);
+            var littleBomber = BurnOutSpriteFactory.GetLittleMonsterFrames(map2.Explosion);
+            CreateSheetMonster("PF_Enemy_Melee", little, 3, 1.4f, false);
+            CreateSheetMonster("PF_Enemy_Bomber", littleBomber, 2, 1.45f, true);
             CreateCheckpoint(); CreateDoor(); CreateExit(); CreateHazard(); CreateManager<GameManager>("PF_GameManager"); CreateManager<AudioManager>("PF_AudioManager");
             CreateUiPrefab<PlayerHUD>("PF_PlayerHUD"); CreateUiPrefab<BossHUD>("PF_BossHUD");
             AssetDatabase.SaveAssets();
