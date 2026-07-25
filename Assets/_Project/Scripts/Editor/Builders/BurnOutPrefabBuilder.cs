@@ -399,7 +399,7 @@ namespace BurnOut.Editor
                     : itemSprite != null ? .85f
                     : name == "PF_MiniBoss_Shadow" ? 1.25f
                     : name == "PF_Enemy_Shadow" ? .8f
-                    : name == "PF_Checkpoint" ? .44f
+                    : name == "PF_Checkpoint" ? .38f
                     : name == "PF_LockedDoor" || name == "PF_LevelExit" ? .72f
                     : name == "PF_MentalFragment" ? .68f
                     : name == "PF_Hazard_Spikes" ? .8f : 1f;
