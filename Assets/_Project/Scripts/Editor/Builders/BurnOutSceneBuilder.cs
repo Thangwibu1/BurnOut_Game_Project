@@ -194,10 +194,12 @@ namespace BurnOut.Editor
             // Use one clear live meter instead, so players never see two conflicting HP bars.
             var portrait = BurnOutSpriteFactory.GetPlayerIdleSprite();
             CreateHudArtwork("Portrait", canvas.transform, portrait, new Vector2(34, -28), new Vector2(54, 54));
-            var health = CreateHudMeter("HealthMeter", canvas.transform, new Vector2(98, -34), new Vector2(350, 24), new Color(.9f, .18f, .23f, .96f));
-            var sanityMeter = CreateHudMeter("SanityMeter", canvas.transform, new Vector2(98, -66), new Vector2(350, 12), new Color(.16f, .9f, .92f, .92f));
-            var healthText = CreateHudCounter("HealthText", canvas.transform, new Vector2(108, -37), new Vector2(220, 22));
-            var sanityText = CreateHudCounter("SanityText", canvas.transform, new Vector2(108, -68), new Vector2(220, 18));
+            // Ornate gold twin-slot frame behind the meters (created first → renders behind). Top slot = HP, bottom = sanity.
+            CreateHudArtwork("HudFrame", canvas.transform, BurnOutSpriteFactory.GetHealthFrameSprite(), new Vector2(94, -14), new Vector2(380, 94));
+            var health = CreateHudMeter("HealthMeter", canvas.transform, new Vector2(140, -31), new Vector2(288, 22), new Color(.9f, .18f, .23f, .96f));
+            var sanityMeter = CreateHudMeter("SanityMeter", canvas.transform, new Vector2(140, -76), new Vector2(288, 12), new Color(.16f, .9f, .92f, .92f));
+            var healthText = CreateHudCounter("HealthText", canvas.transform, new Vector2(150, -33), new Vector2(220, 22));
+            var sanityText = CreateHudCounter("SanityText", canvas.transform, new Vector2(150, -75), new Vector2(220, 16));
             var keySprite = BurnOutSpriteFactory.GetTrimmedSprite("Assets/_Project/Art/Items/ITEM_Key.png", "Assets/_Project/Art/Items/ITEM_Key_Cropped.png", 56f);
             var key = CreateHudArtwork("KeyIcon", canvas.transform, keySprite, new Vector2(-64, -52), new Vector2(58, 58), true).gameObject; key.SetActive(false);
             var overlay = CreatePanel("LowSanityOverlay", canvas.transform, new Vector2(1800, 1000)); overlay.GetComponent<Image>().color = new Color(.22f, 0f, .35f, .18f); overlay.SetActive(false);

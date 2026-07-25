@@ -13,6 +13,14 @@ namespace BurnOut.Editor
         private const string PlatformOutputPath = "Assets/_Project/Art/Environment/Platforms/ENV_Platform_Main_Cropped.png";
         private const string EnemySourcePath = "Assets/_Project/Art/Characters/Enemies/Enemy_Move.png";
         private const string InteractableSourcePath = "Assets/_Project/Art/Environment/Interactables/ENV_Interactables.png";
+        private const string CheckpointPillowPath = "Assets/_Project/Art/Environment/Interactables/Checkpoint_Pillow.png";
+
+        // Ornate gold twin-slot HUD frame (ano/thanh_mau.png). Transparent bg; content bbox 542x134 (~4:1).
+        // Top slot = health bar, bottom slot = sanity bar. Used as a decorative border behind the meters.
+        public static Sprite GetHealthFrameSprite()
+        {
+            return GetCroppedSprite("Assets/_Project/Art/UI/UI_HealthFrame.png", "Assets/_Project/Art/UI/UI_HealthFrame_Cropped.png", 715, 482, 542, 134, 100f);
+        }
 
         public static Sprite GetPlayerIdleSprite()
         {
@@ -53,13 +61,13 @@ namespace BurnOut.Editor
 
         public static Sprite GetCheckpointSprite()
         {
-            return GetCroppedSprite(InteractableSourcePath, "Assets/_Project/Art/Environment/Interactables/ENV_Checkpoint_Cropped.png", 748, 325, 265, 315, 100f);
+            return GetCroppedSprite(CheckpointPillowPath, "Assets/_Project/Art/Environment/Interactables/Checkpoint_Pillow_Cropped.png", 228, 194, 594, 674, 214f);
         }
 
         // The dim, unlit resting shrine on the left of the interactables sheet — the checkpoint before it is touched.
         public static Sprite GetCheckpointInactiveSprite()
         {
-            return GetCroppedSprite(InteractableSourcePath, "Assets/_Project/Art/Environment/Interactables/ENV_Checkpoint_Inactive_Cropped.png", 470, 325, 265, 315, 100f);
+            return GetCheckpointSprite(); // same pillow; Checkpoint component tints/swaps on activation
         }
 
         // A standalone rubble rock used to dress the ground so the route is not a bare slab.

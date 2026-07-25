@@ -140,7 +140,8 @@ namespace BurnOut.Player
             bool isYawnAnim = yawning && frames == yawnFrames;
             // The shockwave (Z) knee-slam plays through exactly once and freezes on its final frame,
             // so the slow-mo cast shows one clean slam instead of looping into a second partial one.
-            bool holdOnLast = isYawnAnim || frames == shockwaveFrames;
+            // Death and the Z knee-slam play once then freeze on the last frame; the yawn holds too.
+            bool holdOnLast = isYawnAnim || frames == shockwaveFrames || (!health.IsAlive && frames == deathFrames);
             float interval = isYawnAnim ? yawnFrameDuration : 1f / frameRate;
             frameTimer += Time.deltaTime;
             if (frameTimer < interval) return;

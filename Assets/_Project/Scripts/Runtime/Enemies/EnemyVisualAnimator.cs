@@ -25,7 +25,16 @@ namespace BurnOut.Enemies
             if (activeFrames != frames) { activeFrames = frames; frameIndex = 0; timer = 0f; spriteRenderer.sprite = frames[0]; }
             timer += Time.deltaTime;
             if (timer < 1f / frameRate) return;
-            timer = 0f; frameIndex = (frameIndex + 1) % frames.Length; spriteRenderer.sprite = frames[frameIndex];
+            timer = 0f;
+            // Death plays through once then freezes on the last frame (no looping); everything else loops.
+            if (!health.IsAlive)
+            {
+                if (frameIndex < frames.Length - 1) { frameIndex++; spriteRenderer.sprite = frames[frameIndex]; }
+            }
+            else
+            {
+                frameIndex = (frameIndex + 1) % frames.Length; spriteRenderer.sprite = frames[frameIndex];
+            }
         }
     }
 }

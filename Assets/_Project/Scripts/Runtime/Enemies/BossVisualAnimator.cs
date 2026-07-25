@@ -47,8 +47,16 @@ namespace BurnOut.Enemies
             timer += Time.deltaTime;
             if (timer < 1f / frameRate) return;
             timer = 0f;
-            frameIndex = (frameIndex + 1) % frames.Length;
-            spriteRenderer.sprite = frames[frameIndex];
+            // Death plays once then freezes on the last frame; other states loop.
+            if (boss.State == MiniBossController.BossState.Dead)
+            {
+                if (frameIndex < frames.Length - 1) { frameIndex++; spriteRenderer.sprite = frames[frameIndex]; }
+            }
+            else
+            {
+                frameIndex = (frameIndex + 1) % frames.Length;
+                spriteRenderer.sprite = frames[frameIndex];
+            }
         }
     }
 }
