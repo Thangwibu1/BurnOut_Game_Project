@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6922233648231836624
+--- !u!1 &4975414247804059809
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,14 +8,14 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6338135736294706801}
-  - component: {fileID: 7623898235550179855}
-  - component: {fileID: 3358021805261187374}
-  - component: {fileID: 6299402967569992487}
-  - component: {fileID: 7913242410720573958}
-  - component: {fileID: 7503419780402969241}
-  - component: {fileID: 8456051216006686560}
-  - component: {fileID: 24566061419019794}
+  - component: {fileID: 6098476248932647038}
+  - component: {fileID: 8981955094909863407}
+  - component: {fileID: 4712430117085468699}
+  - component: {fileID: 1970237968996543942}
+  - component: {fileID: 1683419362010615181}
+  - component: {fileID: 4494256144834505910}
+  - component: {fileID: 32533831175992574}
+  - component: {fileID: 1300060812193705728}
   m_Layer: 9
   m_Name: PF_Enemy_Bomber
   m_TagString: Enemy
@@ -23,13 +23,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6338135736294706801
+--- !u!4 &6098476248932647038
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6922233648231836624}
+  m_GameObject: {fileID: 4975414247804059809}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -38,14 +38,14 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &7623898235550179855
+--- !u!212 &8981955094909863407
 SpriteRenderer:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6922233648231836624}
+  m_GameObject: {fileID: 4975414247804059809}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -98,13 +98,13 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
---- !u!61 &3358021805261187374
+--- !u!61 &4712430117085468699
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6922233648231836624}
+  m_GameObject: {fileID: 4975414247804059809}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -144,29 +144,29 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.30208334, y: 0.5552083}
   m_EdgeRadius: 0
---- !u!114 &6299402967569992487
+--- !u!114 &1970237968996543942
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6922233648231836624}
+  m_GameObject: {fileID: 4975414247804059809}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 03ab39fa413a0a24a90058b7ab4dcdd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BurnOut.Enemies.EnemyHealth
   maxHealth: 2
-  deathDropPrefab: {fileID: 5746090191967049876, guid: 9162cc8c49b0456498399094d1645fdd, type: 3}
+  deathDropPrefab: {fileID: 6257302433131451452, guid: 9162cc8c49b0456498399094d1645fdd, type: 3}
   deathAnimationDuration: 0.42
   sanityRewardOnKill: 10
---- !u!114 &7913242410720573958
+--- !u!114 &1683419362010615181
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6922233648231836624}
+  m_GameObject: {fileID: 4975414247804059809}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 256ffb26296724547afe223f169ccb01, type: 3}
@@ -184,19 +184,19 @@ MonoBehaviour:
   projectileRange: 5.5
   projectileCooldown: 3
   tintVariety: 0
---- !u!114 &7503419780402969241
+--- !u!114 &4494256144834505910
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6922233648231836624}
+  m_GameObject: {fileID: 4975414247804059809}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c3f7ecca9787d445b18567e97c1f70c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BurnOut.Enemies.EnemyVisualAnimator
-  spriteRenderer: {fileID: 7623898235550179855}
+  spriteRenderer: {fileID: 8981955094909863407}
   idleFrames:
   - {fileID: 21300000, guid: d2b18e9ed343b6a48b2e06f5c73ca693, type: 3}
   moveFrames:
@@ -218,13 +218,13 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ca2d18b40fedbe94694c502dc785b545, type: 3}
   - {fileID: 21300000, guid: a56df632f66e88549880474ea22518a9, type: 3}
   frameRate: 9
---- !u!114 &8456051216006686560
+--- !u!114 &32533831175992574
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6922233648231836624}
+  m_GameObject: {fileID: 4975414247804059809}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9fc614fa618d9d4a92921c84202aa38, type: 3}
@@ -235,13 +235,13 @@ MonoBehaviour:
   heightAbove: 1.15
   fillColor: {r: 0.95, g: 0.25, b: 0.3, a: 1}
   pivotAtFeet: 1
---- !u!114 &24566061419019794
+--- !u!114 &1300060812193705728
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6922233648231836624}
+  m_GameObject: {fileID: 4975414247804059809}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c537e0390be66144fb753b66cd7082d3, type: 3}
@@ -251,4 +251,4 @@ MonoBehaviour:
   explosionRadius: 2.4
   knockback: 10
   blastColor: {r: 1, g: 0.55, b: 0.2, a: 1}
-  explosionVisualPrefab: {fileID: 4578689020652375768, guid: b3e58142294d3fe459e1b56282a67270, type: 3}
+  explosionVisualPrefab: {fileID: 1403055480195433801, guid: b3e58142294d3fe459e1b56282a67270, type: 3}

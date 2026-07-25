@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8781054470186174820
+--- !u!1 &1738280700349863710
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,10 +8,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7480853547431854794}
-  - component: {fileID: 1923151459723658379}
-  - component: {fileID: 6558141449846364318}
-  - component: {fileID: 7616324181917479388}
+  - component: {fileID: 9028936990078667087}
+  - component: {fileID: 942886559182656847}
+  - component: {fileID: 7177029221767499584}
+  - component: {fileID: 1857947307485628320}
   m_Layer: 13
   m_Name: PF_SanityOrb
   m_TagString: SanityItem
@@ -19,13 +19,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7480853547431854794
+--- !u!4 &9028936990078667087
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781054470186174820}
+  m_GameObject: {fileID: 1738280700349863710}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -34,14 +34,14 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &1923151459723658379
+--- !u!212 &942886559182656847
 SpriteRenderer:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781054470186174820}
+  m_GameObject: {fileID: 1738280700349863710}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -94,13 +94,13 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
---- !u!58 &6558141449846364318
+--- !u!58 &7177029221767499584
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781054470186174820}
+  m_GameObject: {fileID: 1738280700349863710}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -130,13 +130,13 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5357142
---- !u!114 &7616324181917479388
+--- !u!114 &1857947307485628320
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8781054470186174820}
+  m_GameObject: {fileID: 1738280700349863710}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a7f35293571bf30479b29f348758c478, type: 3}

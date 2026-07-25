@@ -22,6 +22,50 @@ namespace BurnOut.Editor
             return GetCroppedSprite("Assets/_Project/Art/UI/UI_HealthFrame.png", "Assets/_Project/Art/UI/UI_HealthFrame_Cropped.png", 715, 482, 542, 134, 100f);
         }
 
+        // A white horizontal capsule (fully rounded ends) for HUD bars, so the red HP / cyan sanity fills
+        // sit rounded inside the gold frame's pill slots. 9-slice border = radius on left/right, so the
+        // rounded caps stay fixed while the middle stretches with the slider value. Tinted via Image.color.
+        public static Sprite GetRoundedBarSprite(int height)
+        {
+            if (height < 4) height = 4;
+            var outputPath = $"Assets/_Project/Art/UI/UI_Bar_Rounded_{height}.png";
+            var existing = AssetDatabase.LoadAssetAtPath<Sprite>(outputPath);
+            if (existing != null) return existing;
+
+            int radius = height / 2;
+            int width = radius * 2 + 4;              // two caps + a 4px stretchable middle
+            float cy = (height - 1) * .5f;
+            var tex = new Texture2D(width, height, TextureFormat.RGBA32, false);
+            var px = new Color[width * height];
+            for (int y = 0; y < height; y++)
+                for (int x = 0; x < width; x++)
+                {
+                    // Distance to the capsule spine (a horizontal segment between the two cap centres).
+                    float sx = Mathf.Clamp(x, radius, width - 1 - radius);
+                    float d = Mathf.Sqrt((x - sx) * (x - sx) + (y - cy) * (y - cy));
+                    float a = Mathf.Clamp01(radius - d + .5f);   // 1px soft edge
+                    px[y * width + x] = new Color(1f, 1f, 1f, a);
+                }
+            tex.SetPixels(px); tex.Apply();
+            File.WriteAllBytes(Path.Combine(Application.dataPath, outputPath.Substring("Assets/".Length)), tex.EncodeToPNG());
+            Object.DestroyImmediate(tex);
+            AssetDatabase.ImportAsset(outputPath, ImportAssetOptions.ForceUpdate);
+
+            var imp = (TextureImporter)AssetImporter.GetAtPath(outputPath);
+            imp.textureType = TextureImporterType.Sprite;
+            imp.spriteImportMode = SpriteImportMode.Single;
+            imp.spritePixelsPerUnit = 100f;
+            imp.alphaIsTransparency = true;
+            imp.filterMode = FilterMode.Bilinear;
+            imp.textureCompression = TextureImporterCompression.Uncompressed;
+            var settings = new TextureImporterSettings();
+            imp.ReadTextureSettings(settings);
+            settings.spriteBorder = new Vector4(radius, 0, radius, 0);   // left/right caps fixed, middle stretches
+            imp.SetTextureSettings(settings);
+            imp.SaveAndReimport();
+            return AssetDatabase.LoadAssetAtPath<Sprite>(outputPath);
+        }
+
         public static Sprite GetPlayerIdleSprite()
         {
             return GetCroppedSprite(SourcePath, OutputPath, 518, 634, 48, 84, 48f);
